@@ -1,3 +1,5 @@
+#pragma once
+
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 class SDLBackend {

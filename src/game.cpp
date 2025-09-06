@@ -16,10 +16,9 @@ void Game::handle_events() {
   }
 }
 
-void Game::update() {
-  // float deltaTime = /* calcula o tempo entre frames */;
+void Game::update(float dt) {
   if (current_state) {
-    current_state->update(0);
+    current_state->update(dt);
   }
 }
 

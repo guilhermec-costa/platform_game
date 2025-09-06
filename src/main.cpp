@@ -3,6 +3,7 @@
 #include "../include/sdl_backend.hpp"
 
 #include <SDL2/SDL_timer.h>
+#include <memory>
 
 int main() {
   if (SDLBackend::init_subsytems() == -1) {
@@ -10,10 +11,11 @@ int main() {
   }
   auto        window   = SDLBackend::create_window(900, 600);
   auto        renderer = SDLBackend::create_renderer(window);
-  GameContext ctx(window, renderer);
 
+  GameContext ctx(window, renderer);
   Game game(ctx);
-  game.set_fps(120);
+  game.change_state(std::make_unique<PlayState>(ctx));
+  game.set_fps(60);
   game.run();
   return 0;
 }

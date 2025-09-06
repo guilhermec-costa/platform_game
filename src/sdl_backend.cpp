@@ -7,11 +7,12 @@
 
 SDL_Window* SDLBackend::create_window(int width, int height) {
   auto window = SDL_CreateWindow("Platform game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                 width, height, SDL_WINDOW_RESIZABLE);
+                                 width, height, 0);
   if (!window) {
     std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     throw std::runtime_error("Failed to create window");
   }
+  std::cout << "[SDLBackend] SDL Window created\n";
   return window;
 }
 
@@ -24,6 +25,7 @@ SDL_Renderer* SDLBackend::create_renderer(SDL_Window* window) {
     std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     throw std::runtime_error("Failed to create renderer");
   }
+  std::cout << "[SDLBackend] SDL Renderer created\n";
   return renderer;
 }
 
@@ -31,8 +33,11 @@ int SDLBackend::init_subsytems() {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     return -1;
   }
+  std::cout << "[SDLBackend] SDL Video subystem initialized\n";
   if (TTF_Init() < 0) {
     return -1;
   }
+  std::cout << "[SDLBackend] SDL TTF subystem initialized\n";
+  std::cout << "[SDLBackend] Finished initializing SDL subsystems\n";
   return 0;
 }
