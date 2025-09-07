@@ -18,5 +18,5 @@ public:
   };
   inline SDL_Window*   window() const { return m_window; }
   inline SDL_Renderer* renderer() const { return m_renderer; }
-  void end();
+  void                 end();
 };

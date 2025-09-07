@@ -1,6 +1,7 @@
 #include "../include/sdl_backend.hpp"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <stdexcept>
@@ -31,10 +32,17 @@ SDL_Renderer* SDLBackend::create_renderer(SDL_Window* window) {
 
 int SDLBackend::init_subsytems() {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    std::cout << "[SDLBackend] SDL Video subystem initialization failed\n";
     return -1;
   }
   std::cout << "[SDLBackend] SDL Video subystem initialized\n";
+  if(!(IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG)) {
+    std::cout << "[SDLBackend] SDL Image subystem initialization failed\n";
+    return -1;
+  }
+  std::cout << "[SDLBackend] SDL Image subystem initialized\n";
   if (TTF_Init() < 0) {
+    std::cout << "[SDLBackend] SDL TTF subystem initialization failed\n";
     return -1;
   }
   std::cout << "[SDLBackend] SDL TTF subystem initialized\n";

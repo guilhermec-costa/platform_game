@@ -1,7 +1,7 @@
 #pragma once
 
-#include "game_context.hpp"
 #include "entity_manager.hpp"
+#include "game_context.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
@@ -10,7 +10,7 @@
 
 class GameState {
 protected:
-  GameContext& context;
+  GameContext&  context;
   EntityManager entity_manager;
 
 public:

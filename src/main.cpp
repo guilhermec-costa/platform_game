@@ -9,11 +9,11 @@ int main() {
   if (SDLBackend::init_subsytems() == -1) {
     return -1;
   }
-  auto        window   = SDLBackend::create_window(900, 600);
-  auto        renderer = SDLBackend::create_renderer(window);
+  auto window   = SDLBackend::create_window(900, 600);
+  auto renderer = SDLBackend::create_renderer(window);
 
   GameContext ctx(window, renderer);
-  Game game(ctx);
+  Game        game(ctx);
   game.change_state(std::make_unique<PlayState>(ctx));
   game.set_fps(60);
   game.run();
