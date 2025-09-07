@@ -5,7 +5,7 @@
         "name": "Debug Pong",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/debug/bin/game",
+        "program": "${workspaceFolder}/build/debug/bin/platform",
         "args": [],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",

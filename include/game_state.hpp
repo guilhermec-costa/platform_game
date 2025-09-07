@@ -1,5 +1,6 @@
 #pragma once
 
+#include "bg_parallax.hpp"
 #include "entity_manager.hpp"
 #include "game_context.hpp"
 
@@ -23,6 +24,8 @@ public:
 };
 
 class PlayState : public GameState {
+private:
+  BackgroundParallax bg_parallax;
 public:
   PlayState(GameContext& ctx);
   void handle_event(SDL_Event& event) override;

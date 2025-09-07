@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_video.h>
 #include <iostream>
 #include <stdexcept>
 
@@ -36,7 +37,7 @@ int SDLBackend::init_subsytems() {
     return -1;
   }
   std::cout << "[SDLBackend] SDL Video subystem initialized\n";
-  if(!(IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG)) {
+  if (!(IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG)) {
     std::cout << "[SDLBackend] SDL Image subystem initialization failed\n";
     return -1;
   }
@@ -48,4 +49,10 @@ int SDLBackend::init_subsytems() {
   std::cout << "[SDLBackend] SDL TTF subystem initialized\n";
   std::cout << "[SDLBackend] Finished initializing SDL subsystems\n";
   return 0;
+}
+
+Vector2D SDLBackend::get_window_dimension(SDL_Window* window) {
+  int w, h;
+  SDL_GetWindowSize(window, &w, &h);
+  return Vector2D(w, h);
 }

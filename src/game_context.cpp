@@ -4,9 +4,9 @@
 #include <SDL2/SDL_video.h>
 
 void GameContext::end() {
-  SDL_DestroyRenderer(m_renderer);
+  SDL_DestroyRenderer(renderer);
   std::cout << "[GameContext] SDL Renderer destroyed\n";
-  SDL_DestroyWindow(m_window);
+  SDL_DestroyWindow(window);
   std::cout << "[GameContext] SDL Window destroyed\n";
   std::cout << "[GameContext] GameContext ended\n";
 }

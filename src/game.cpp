@@ -1,5 +1,10 @@
 #include "../include/game.hpp"
 
+#include "../include/sdl_backend.hpp"
+#include "../include/texture_manager.hpp"
+
+#include <SDL2/SDL_render.h>
+
 Game::Game(GameContext& ctx) : running(true), current_state(nullptr), context(ctx) {
   fps_counter = FPSCounter();
 }
@@ -23,12 +28,12 @@ void Game::update(float dt) {
 }
 
 void Game::render() {
-  SDL_SetRenderDrawColor(context.renderer(), 0, 0, 0, 255);
-  SDL_RenderClear(context.renderer());
+  SDL_SetRenderDrawColor(context.renderer, 255, 255, 255, 255);
+  SDL_RenderClear(context.renderer);
 
   if (current_state) {
     current_state->render();
   }
 
-  SDL_RenderPresent(context.renderer());
+  SDL_RenderPresent(context.renderer);
 }
