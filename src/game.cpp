@@ -1,8 +1,5 @@
 #include "../include/game.hpp"
 
-#include "../include/sdl_backend.hpp"
-#include "../include/texture_manager.hpp"
-
 #include <SDL2/SDL_render.h>
 
 Game::Game(GameContext& ctx) : running(true), current_state(nullptr), context(ctx) {

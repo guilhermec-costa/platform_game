@@ -21,8 +21,8 @@ public:
     for (auto& e : entities)
       e->update(dt);
   }
-  void renderAll() {
+  void renderAll(SDL_Renderer* renderer, const Camera& camera) {
     for (auto& e : entities)
-      e->render();
+      e->render(renderer, camera);
   }
 };

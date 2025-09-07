@@ -3,6 +3,7 @@
 #include "bg_parallax.hpp"
 #include "entity_manager.hpp"
 #include "game_context.hpp"
+#include "objects/game_object.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
@@ -26,8 +27,11 @@ public:
 class PlayState : public GameState {
 private:
   BackgroundParallax bg_parallax;
+  PlayerObject*      player;
+
 public:
   PlayState(GameContext& ctx);
+  ~PlayState() override { delete player; }
   void handle_event(SDL_Event& event) override;
   void update(float dt) override;
   void render() override;
