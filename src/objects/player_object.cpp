@@ -19,15 +19,11 @@ void PlayerObject::update(float dt) {
 }
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
-    SDL_Rect rect1 = {
-        (int)(position.x - camera.x),
-        (int)(position.y - camera.y),
-        (int)dimension.x,
-        (int)dimension.y
-    };
+  SDL_Rect rect1 = {(int)(position.x - camera.x), (int)(position.y - camera.y), (int)dimension.x,
+                    (int)dimension.y};
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-    SDL_RenderFillRect(renderer, &rect1);
+  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+  SDL_RenderFillRect(renderer, &rect1);
 }
 
 void PlayerObject::handle_event(PlayerEvent event) {

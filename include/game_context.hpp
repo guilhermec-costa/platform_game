@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sdl_backend.hpp"
 #include "camera.hpp"
+#include "sdl_backend.hpp"
 
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>

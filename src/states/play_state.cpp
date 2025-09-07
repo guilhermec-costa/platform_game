@@ -6,7 +6,7 @@
 
 PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
   bg_parallax = BackgroundParallax(ctx.renderer);
-  player      = new PlayerObject(Vector2D(0, 200), Vector2D(100, 100));
+  player      = new PlayerObject(Vector2D(300, 200), Vector2D(100, 100));
   entity_manager.add_entity(player);
 }
 
@@ -20,6 +20,12 @@ void PlayState::update(float dt) {
     context.camera.x = player->position.x - left_margin;
   } else if (player->position.x - context.camera.x > right_margin) {
     context.camera.x = player->position.x - right_margin;
+  }
+  if (player->position.x < 0) {
+    player->position.x = 0;
+}
+  if (context.camera.x < 0) {
+    context.camera.x = 0;
   }
 
   bg_parallax.update(context.camera.x);
