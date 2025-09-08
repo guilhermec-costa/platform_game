@@ -1,12 +1,14 @@
 #include "../../include/game_state.hpp"
-#include "../../include/objects/game_object.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_render.h>
 
 PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
-  bg_parallax = BackgroundParallax(ctx.renderer);
-  player      = new PlayerObject(Vector2D(300, 200), Vector2D(100, 100));
+  bg_parallax    = BackgroundParallax(ctx.renderer);
+  float ground_y = SDLBackend::get_window_dimension(ctx.window).y - 64;
+  ground = Ground(ctx.renderer, ground_y, (int)SDLBackend::get_window_dimension(ctx.window).x);
+  player = new PlayerObject(Vector2D(300, 200), Vector2D(100, 100));
   entity_manager.add_entity(player);
 }
 
@@ -23,7 +25,7 @@ void PlayState::update(float dt) {
   }
   if (player->position.x < 0) {
     player->position.x = 0;
-}
+  }
   if (context.camera.x < 0) {
     context.camera.x = 0;
   }
@@ -33,6 +35,7 @@ void PlayState::update(float dt) {
 
 void PlayState::render() {
   bg_parallax.render(context.window, context.renderer);
+  ground.render(context.renderer, context.camera);
   entity_manager.renderAll(context.renderer, context.camera);
 }
 

@@ -3,7 +3,8 @@
 #include "bg_parallax.hpp"
 #include "entity_manager.hpp"
 #include "game_context.hpp"
-#include "objects/game_object.hpp"
+#include "ground.hpp"
+#include "objects/player_object.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
@@ -27,6 +28,7 @@ public:
 class PlayState : public GameState {
 private:
   BackgroundParallax bg_parallax;
+  Ground             ground;
   PlayerObject*      player;
 
 public:

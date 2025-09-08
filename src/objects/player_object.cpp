@@ -1,4 +1,4 @@
-#include "../../include/objects/game_object.hpp"
+#include "../../include/objects/player_object.hpp"
 
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
