@@ -3,31 +3,39 @@
 #include "texture_manager.hpp"
 
 #include <SDL2/SDL_render.h>
+#include <vector>
 
 class Ground {
 public:
   Ground() = default;
   Ground(SDL_Renderer* renderer, float y_pos, int screen_width, int tile_width = 64)
       : y(y_pos), width(screen_width), tile_width(tile_width) {
-    ground_tile = TextureManager::get_instance().load_texture("assets/grass.png", renderer);
+    ground_tile_texture = TextureManager::get_instance().load_texture("assets/grass.png", renderer);
+    int num_tiles       = (width / tile_width) + 2;
+    tiles.reserve(num_tiles);
+
+    for (int i = 0; i < num_tiles; ++i) {
+      Vector2D pos(i * tile_width, y);
+      Vector2D dim(tile_width, tile_width);
+      tiles.emplace_back(ground_tile_texture, pos, dim);
+    }
   }
 
   void render(SDL_Renderer* renderer, const Camera& camera) {
-    if (!ground_tile)
+    if (!ground_tile_texture)
       return;
 
-    int num_tiles = (width / tile_width) + 5;
-
-    for (int i = 0; i < num_tiles; ++i) {
-      int      x    = i * tile_width - ((int)camera.x % tile_width);
-      TileComponent tile(ground_tile, {x * 1.0f, y}, {tile_width * 1.0f, tile_width * 1.0f});
+    for (auto& tile : tiles) {
       tile.render(renderer, camera);
     }
   }
 
+  std::vector<TileComponent> get_tiles() { return tiles; }
+
 private:
-  SDL_Texture* ground_tile = nullptr;
-  float        y           = 0;
-  int          width       = 0;
-  int          tile_width  = 64;
+  SDL_Texture*               ground_tile_texture = nullptr;
+  float                      y                   = 0;
+  int                        width               = 0;
+  int                        tile_width          = 64;
+  std::vector<TileComponent> tiles;
 };

@@ -16,6 +16,8 @@ void PlayerObject::update(float dt) {
     velocity.y = 0;
     on_ground  = true;
   }
+
+  this->collider_comp.set_position(position);
 }
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {

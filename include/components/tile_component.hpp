@@ -5,25 +5,27 @@
 
 class TileComponent {
 public:
-    TileComponent(SDL_Texture* texture, Vector2D pos, Vector2D dim)
-        : texture_comp(texture, pos, dim),
-          collider_comp(pos, dim)
-    {}
+  TileComponent(SDL_Texture* texture, Vector2D pos, Vector2D dim)
+      : texture_comp(texture, pos, dim), collider_comp(pos, dim) {}
 
-    void render(SDL_Renderer* renderer, const Camera& camera) {
-        texture_comp.render(renderer, camera);
-    }
+  void update(float dt) {
+      collider_comp.position = texture_comp.get_pos();
+  }
 
-    bool check_collision(const Vector2D& player_pos, const Vector2D& player_dim) {
-        return collider_comp.check_collision(player_pos, player_dim);
-    }
+  void render(SDL_Renderer* renderer, const Camera& camera) {
+    texture_comp.render(renderer, camera);
+  }
 
-    void set_position(Vector2D pos) {
-        texture_comp.set_position(pos);
-        collider_comp.position = pos;
-    }
+  void set_position(Vector2D pos) {
+    texture_comp.set_position(pos);
+    collider_comp.set_position(pos);
+  }
 
-private:
-    TextureComponent texture_comp;
-    ColliderComponent collider_comp;
+  ColliderComponent& get_collider() { return collider_comp; }
+
+  TextureComponent& get_texture_component() { return texture_comp; }
+
+public:
+  TextureComponent  texture_comp;
+  ColliderComponent collider_comp;
 };

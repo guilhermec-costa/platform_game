@@ -1,17 +1,48 @@
+#pragma once
+
 #include "../shared.hpp"
+#include "../camera.hpp"
+
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 
 class ColliderComponent {
 
 public:
   ColliderComponent() = default;
-  ColliderComponent(Vector2D pos, Vector2D dim) : position(pos), dimension(dim) {};
+  ColliderComponent(Vector2D pos, Vector2D dim) : position(pos), dimension(dim) {
+    collision_box = {(int)position.x, (int)position.y, (int)dim.x, (int)dim.y};
+  };
 
 public:
   Vector2D position;
   Vector2D dimension;
+  SDL_Rect collision_box;
 
-  bool check_collision(const Vector2D& other_pos, const Vector2D& other_size) {
-    return !(other_pos.x + other_size.x < position.x || other_pos.x > position.x + dimension.x ||
-             other_pos.y + other_size.y < position.y || other_pos.y > position.y + dimension.y);
+public:
+  bool check_collision(const SDL_Rect& other) const {
+    SDL_Rect self = get_rect(); 
+    return !(other.x + other.w < self.x || // está completamente à esquerda
+             other.x > self.x + self.w ||  // está completamente à direita
+             other.y + other.h < self.y || // está completamente acima
+             other.y > self.y + self.h);   // está completamente abaixo
+  }
+
+  SDL_Rect get_rect() const {
+    return SDL_Rect{(int)position.x, (int)position.y, (int)dimension.x, (int)dimension.y};
+  }
+
+  void render_collision_box(SDL_Renderer* renderer, const Camera& camera, const bool follow_camera = true) {
+    collision_box = get_rect();
+    if(follow_camera) {
+      collision_box.x -= camera.x;
+      collision_box.y -= camera.y;
+    }
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderDrawRect(renderer, &collision_box);
+  }
+
+  void set_position(const Vector2D& pos) {
+    position = pos;
   }
 };

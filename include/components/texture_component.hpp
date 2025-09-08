@@ -10,7 +10,7 @@ class TextureComponent {
 public:
   TextureComponent() : m_texture(nullptr) {}
 
-  TextureComponent(SDL_Texture* texture, Vector2D pos, Vector2D dim) : m_texture(texture) {
+  TextureComponent(SDL_Texture* texture, Vector2D pos, Vector2D dim) : m_texture(texture), pos(pos) {
     src_rect    = {0, 0, (int)dim.x, (int)dim.y};
     target_rect = {(int)pos.x, (int)pos.y, (int)dim.x, (int)dim.y};
   }
@@ -19,11 +19,7 @@ public:
     if (!m_texture)
       return;
 
-    SDL_Rect screen_rect = target_rect;
-    screen_rect.x -= (int)camera.x;
-    screen_rect.y -= (int)camera.y;
-
-    SDL_RenderCopy(renderer, m_texture, &src_rect, &screen_rect);
+    SDL_RenderCopy(renderer, m_texture, &src_rect, &target_rect);
   }
 
   void set_position(Vector2D pos) {
@@ -41,19 +37,12 @@ public:
     target_rect.h = (int)(target_rect.h * proportion);
   }
 
-  void rotate(double angle, SDL_Renderer* renderer, const Camera& camera) {
-    if (!m_texture)
-      return;
-
-    SDL_Rect screen_rect = target_rect;
-    screen_rect.x -= (int)camera.x;
-    screen_rect.y -= (int)camera.y;
-
-    SDL_RenderCopyEx(renderer, m_texture, &src_rect, &screen_rect, angle, nullptr, SDL_FLIP_NONE);
-  }
-
+  const Vector2D& get_pos() const {
+    return pos;
+  };
 private:
   SDL_Texture* m_texture;
   SDL_Rect     src_rect;
   SDL_Rect     target_rect;
+  Vector2D pos;
 };
