@@ -56,3 +56,11 @@ Vector2D SDLBackend::get_window_dimension(SDL_Window* window) {
   SDL_GetWindowSize(window, &w, &h);
   return Vector2D(w, h);
 }
+
+int SDLBackend::get_window_width(SDL_Window* window) {
+  return get_window_dimension(window).x;
+}
+
+int SDLBackend::get_window_height(SDL_Window* window) {
+  return get_window_dimension(window).y;
+}

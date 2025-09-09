@@ -20,9 +20,9 @@ BackgroundParallax::BackgroundParallax(SDL_Renderer* renderer)
 }
 
 void BackgroundParallax::update(float camera_x) {
-  bg_x    = -camera_x * 0.2f;
-  mid_x   = -camera_x * 0.5f;
-  trees_x = -camera_x * 1.0f;
+  bg_x    = -camera_x * 0.1f;
+  mid_x   = -camera_x * 0.3f;
+  trees_x = -camera_x * 0.9f;
 }
 
 void BackgroundParallax::render(SDL_Window* window, SDL_Renderer* renderer) {

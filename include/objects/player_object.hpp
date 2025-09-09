@@ -10,7 +10,7 @@ public:
   PlayerObject() = delete;
   PlayerObject(Vector2D pos, Vector2D dim)
       : GameObject(pos, {0, 0}, dim), on_ground(true), move_speed(300.0f), jump_force(600.0f),
-        gravity(1200.0f) {
+        base_height(pos.y), gravity(1200.0f) {
     collider_comp = ColliderComponent(pos, dim);
   }
 
@@ -21,6 +21,7 @@ public:
 
 public:
   ColliderComponent collider_comp;
+  float             base_height;
 
 private:
   bool  on_ground;
