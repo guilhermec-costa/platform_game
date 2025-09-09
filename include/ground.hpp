@@ -17,8 +17,10 @@ public:
         num_tiles(screen_width / tile_width + 2),
         screen_height(SDLBackend::get_window_height(window)), tile_width(tile_width) {
     ground_tile = TextureManager::get_instance().load_texture("assets/grass.png", renderer);
+
+    collision_offset = tile_width * 0.35;
     collider =
-        ColliderComponent({0, screen_height - 36 * 1.0f}, {screen_width * 1.0f, tile_width * 1.0f});
+        ColliderComponent({0, (screen_height - tile_width + collision_offset) * 1.0f}, {num_tiles * tile_width * 1.0f, (tile_width - collision_offset) * 1.0f});
   }
 
   void update() {
@@ -38,12 +40,14 @@ public:
 
   inline ColliderComponent& get_collider_component() { return collider; }
 
+public:
+  int               tile_width    = 64;
+  float collision_offset = 26;
 private:
   ColliderComponent collider;
   SDL_Texture*      ground_tile   = nullptr;
   float             y             = 0;
   int               screen_width  = 0;
   int               screen_height = 0;
-  int               tile_width    = 64;
   int               num_tiles     = 0;
 };

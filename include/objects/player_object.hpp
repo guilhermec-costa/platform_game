@@ -22,9 +22,9 @@ public:
 public:
   ColliderComponent collider_comp;
   float             base_height;
+  bool  on_ground;
 
 private:
-  bool  on_ground;
   float move_speed;
   float jump_force;
   float gravity;

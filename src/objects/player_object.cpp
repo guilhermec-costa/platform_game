@@ -4,12 +4,6 @@
 #include <SDL2/SDL_render.h>
 
 void PlayerObject::update(float dt) {
-  if (position.y >= base_height) {
-    position.y = base_height - dimension.y;
-    velocity.y = 0;
-    set_on_ground(true);
-  }
-
   if (!on_ground) {
     velocity.y += gravity * dt;
   }
@@ -18,10 +12,17 @@ void PlayerObject::update(float dt) {
   if (velocity.y > max_fall_speed) {
     velocity.y = max_fall_speed;
   }
+
   position.x += velocity.x * dt;
   position.y += velocity.y * dt;
-
   this->collider_comp.set_position(position);
+
+  if (position.y >= base_height) {
+    position.y = base_height;
+    velocity.y = 0;
+    set_on_ground(true);
+  }
+
 }
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
@@ -30,7 +31,7 @@ void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
   SDL_RenderFillRect(renderer, &rect1);
-  collider_comp.render_collision_box(renderer, camera, true);
+  // collider_comp.render_collision_box(renderer, camera, true);
 }
 
 void PlayerObject::handle_event(PlayerEvent event) {

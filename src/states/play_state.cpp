@@ -7,22 +7,25 @@
 PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
   bg_parallax       = BackgroundParallax(ctx.renderer);
   Vector2D win_dim  = SDLBackend::get_window_dimension(ctx.window);
-  float    ground_y = win_dim.y - 64;
-  ground            = Ground(ctx.renderer, ctx.window, ground_y);
-  player            = new PlayerObject(Vector2D(100, ground_y), Vector2D(80, 80));
+
+  const int tile_width = 64;
+  float    ground_y = win_dim.y - tile_width;
+  ground            = Ground(ctx.renderer, ctx.window, ground_y, tile_width);
+  const int player_height = 70;
+  player            = new PlayerObject(Vector2D(100, ground_y - player_height + ground.collision_offset), Vector2D(player_height, player_height));
 }
 
 void PlayState::update(float dt) {
   player->update(dt);
   SDL_Rect player_rect     = player->collider_comp.get_rect();
   auto&    ground_collider = ground.get_collider_component();
-  if (player->velocity.y > 0 && ground_collider.check_collision(player_rect)) {
+  if (!player->on_ground && ground_collider.check_collision(player_rect)) {
     player->position.y = ground_collider.get_rect().y - player->dimension.y;
     player->velocity.y = 0;
     player->set_on_ground(true);
   }
 
-  float left_margin  = 50;
+  float left_margin  = 100;
   float right_margin = 650;
 
   if (player->position.x - context.camera.x < left_margin) {
@@ -42,7 +45,7 @@ void PlayState::render() {
   bg_parallax.render(context.window, context.renderer);
   ground.render(context.renderer, context.camera);
   player->render(context.renderer, context.camera);
-  ground.get_collider_component().render_collision_box(context.renderer, context.camera, false);
+  // ground.get_collider_component().render_collision_box(context.renderer, context.camera, false);
 }
 
 void PlayState::handle_event(SDL_Event& event) {
