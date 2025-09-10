@@ -23,15 +23,11 @@ void PlayerObject::update(float dt) {
     set_on_ground(true);
   }
 
+  animated_sprite.update(dt);
 }
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
-  SDL_Rect rect1 = {(int)(position.x - camera.x), (int)(position.y - camera.y), (int)dimension.x,
-                    (int)dimension.y};
-
-  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-  SDL_RenderFillRect(renderer, &rect1);
-  // collider_comp.render_collision_box(renderer, camera, true);
+  animated_sprite.render(renderer, position, camera);
 }
 
 void PlayerObject::handle_event(PlayerEvent event) {

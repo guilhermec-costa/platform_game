@@ -40,6 +40,7 @@ public:
 
   const Vector2D& get_pos() const { return pos; };
   const Vector2D& get_dimension() const { return dim; };
+  SDL_Texture*    get_texture() { return m_texture; }
 
 private:
   SDL_Texture* m_texture;

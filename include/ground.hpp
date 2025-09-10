@@ -20,7 +20,8 @@ public:
 
     collision_offset = tile_width * 0.35;
     collider =
-        ColliderComponent({0, (screen_height - tile_width + collision_offset) * 1.0f}, {num_tiles * tile_width * 1.0f, (tile_width - collision_offset) * 1.0f});
+        ColliderComponent({0, (screen_height - tile_width + collision_offset) * 1.0f},
+                          {num_tiles * tile_width * 1.0f, (tile_width - collision_offset) * 1.0f});
   }
 
   void update() {
@@ -41,8 +42,9 @@ public:
   inline ColliderComponent& get_collider_component() { return collider; }
 
 public:
-  int               tile_width    = 64;
+  int   tile_width       = 64;
   float collision_offset = 26;
+
 private:
   ColliderComponent collider;
   SDL_Texture*      ground_tile   = nullptr;

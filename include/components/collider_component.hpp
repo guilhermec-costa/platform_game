@@ -21,7 +21,7 @@ public:
 
 public:
   bool check_collision(const SDL_Rect& other) const {
-    SDL_Rect self      = get_rect();
+    SDL_Rect self = get_rect();
     return SDL_HasIntersection(&self, &other);
   }
 
