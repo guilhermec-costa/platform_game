@@ -11,9 +11,9 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
   const int tile_width    = 64;
   float     ground_y      = win_dim.y - tile_width;
   ground                  = Ground(ctx.renderer, ctx.window, ground_y, tile_width);
-  const int player_height = 200;
+  const int player_height = 250;
   TextureManager::get_instance().load_texture("assets/nigthborne.png", ctx.renderer);
-  player = new PlayerObject(Vector2D(100, ground_y - player_height + ground.collision_offset),
+  player = new PlayerObject(Vector2D(100, ground_y - player_height + 80),
                             Vector2D(player_height, player_height));
 }
 
@@ -47,7 +47,7 @@ void PlayState::render() {
   bg_parallax.render(context.window, context.renderer);
   ground.render(context.renderer, context.camera);
   player->render(context.renderer, context.camera);
-  player->collider_comp.render_collision_box(context.renderer, context.camera);
+  //player->collider_comp.render_collision_box(context.renderer, context.camera);
 }
 
 void PlayState::handle_event(SDL_Event& event) {

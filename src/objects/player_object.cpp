@@ -15,12 +15,20 @@ void PlayerObject::update(float dt) {
 
   position.x += velocity.x * dt;
   position.y += velocity.y * dt;
-  this->collider_comp.set_position(position);
 
   if (position.y >= base_height) {
     position.y = base_height;
     velocity.y = 0;
     set_on_ground(true);
+  }
+
+  this->collider_comp.set_position({position.x, position.y });
+  if (on_ground && velocity.x != 0) {
+      animated_sprite.play_animation("run");
+  } else if (on_ground) {
+      animated_sprite.play_animation("idle");
+  } else {
+      animated_sprite.play_animation("jump");
   }
 
   animated_sprite.update(dt);
@@ -41,10 +49,12 @@ void PlayerObject::handle_event(PlayerEvent event) {
 
     case MOVE_LEFT:
       velocity.x = -move_speed;
+      animated_sprite.set_flipped(true);
       break;
 
     case MOVE_RIGHT:
       velocity.x = move_speed;
+      animated_sprite.set_flipped(false);
       break;
 
     case STOP_HORIZONTAL:

@@ -21,16 +21,14 @@ public:
     auto texture = TextureManager::get_instance().get_texture("assets/nigthborne.png");
     SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
 
-    int frame_width  = 80;
-    int frame_height = 80;
-    int num_columns  = tex_width / frame_width;
-    int num_rows     = tex_height / frame_height;
-    int total_frames = num_columns * num_rows;
-
     animated_sprite = AnimatedSpriteComponent(
-        TextureComponent(texture, {0, 0}, {tex_width * 1.0f, tex_height * 1.0f}), frame_width,
-        frame_height, 55, num_columns, 0.1, {dim.x, dim.y});
-    collider_comp = ColliderComponent(pos, dim);
+        TextureComponent(texture, {0, 0}, {tex_width * 1.0f, tex_height * 1.0f}), 80,
+        80, 0.1, {dim.x, dim.y});
+
+    animated_sprite.add_animation("idle", 0, 5, 0.1f);
+    animated_sprite.add_animation("run", 8, 16, 0.1f);
+    animated_sprite.add_animation("jump", 43, 54, 0.15f);
+    collider_comp = ColliderComponent({pos.x, pos.y}, {dim.x * 0.6f, dim.y * 0.6f});
   }
 
   void        handle_event(PlayerEvent event);
