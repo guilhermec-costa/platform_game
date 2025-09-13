@@ -28,7 +28,7 @@ public:
     collider_comp = ColliderComponent(pos + collider_offset, collider_dim);
 
     animated_sprite = AnimatedSpriteComponent(
-        TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}), 80, 80, 0.1, {dim.x, dim.y});
+        TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}), 80, 80, 0.1, dim);
 
     animated_sprite.add_animation(PlayerAnimation::IDLE, "idle", 0, 8, 0.099f);
     animated_sprite.add_animation(PlayerAnimation::RUNNING, "run", 8, 12, 0.1f);
