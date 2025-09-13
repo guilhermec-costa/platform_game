@@ -5,23 +5,23 @@
 
 #include <SDL2/SDL_render.h>
 
-BackgroundParallax::BackgroundParallax(SDL_Renderer* renderer) {
-  bg_layer = TextureManager::get_or_load(
+BackgroundParallax::BackgroundParallax() {
+  bg_layer = TextureManager::get_texture(
       TextureManager::asset_path(
-          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png"),
-      renderer);
-  far_trees_layer = TextureManager::get_or_load(
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png")
+      );
+  far_trees_layer = TextureManager::get_texture(
       TextureManager::asset_path(
-          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png"),
-      renderer);
-  mid_trees_layer = TextureManager::get_or_load(
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png")
+      );
+  mid_trees_layer = TextureManager::get_texture(
       TextureManager::asset_path(
-          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png"),
-      renderer);
-  close_trees_layer = TextureManager::get_or_load(
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png")
+      );
+  close_trees_layer = TextureManager::get_texture(
       TextureManager::asset_path(
-          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png"),
-      renderer);
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png")
+      );
   layers = {{bg_layer, 0.1f, 0.0f},
             {far_trees_layer, 0.3f, 0.0f},
             {mid_trees_layer, 0.5f, 0.0f},

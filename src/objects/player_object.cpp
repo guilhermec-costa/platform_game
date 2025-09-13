@@ -11,8 +11,7 @@ void PlayerObject::update(float dt) {
     }
   }
 
-  position.x += velocity.x * dt;
-  position.y += velocity.y * dt;
+  position += velocity * dt;
 
   if (position.y >= base_height_location) {
     position.y = base_height_location;
@@ -42,7 +41,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     case JUMP:
       if (on_ground) {
         velocity.y = -JUMP_FORCE;
-        on_ground  = false;
+        set_on_ground(false);
       }
       break;
 
@@ -62,7 +61,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
 
     case LAND:
       velocity.y = 0;
-      on_ground  = true;
+      set_on_ground(true);
       break;
   }
 }

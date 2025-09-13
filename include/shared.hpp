@@ -12,7 +12,12 @@ typedef struct Vector2D {
 
   Vector2D operator*(float scalar) const { return Vector2D(x * scalar, y * scalar); }
   Vector2D operator+(float sum) const { return Vector2D(x + sum, y + sum); };
-  Vector2D operator+(Vector2D vec) const { return Vector2D(x + vec.x, y + vec.y); };
+  Vector2D operator+(const Vector2D& vec) const { return Vector2D(x + vec.x, y + vec.y); };
+  Vector2D operator+=(const Vector2D& vec) {
+    x += vec.x;
+    y += vec.y;
+    return *this;
+  };
 
   friend std::ostream& operator<<(std::ostream& os, const Vector2D& v) {
     os << "X: " << v.x << " | Y: " << v.y << "\n";

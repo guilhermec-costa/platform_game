@@ -11,9 +11,8 @@ struct Layer {
 
 class BackgroundParallax {
 public:
-  BackgroundParallax()                          = default;
+  BackgroundParallax();
   BackgroundParallax(const BackgroundParallax&) = delete;
-  BackgroundParallax(SDL_Renderer* renderer);
   void update(float camera_x);
   void render(SDL_Window* window, SDL_Renderer* renderer);
 

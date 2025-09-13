@@ -3,9 +3,10 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
 
 PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
-  bg_parallax      = BackgroundParallax(ctx.renderer);
+  bg_parallax      = BackgroundParallax();
   Vector2D win_dim = SDLBackend::get_window_dimension(ctx.window);
 
   const int tile_width = 64;
@@ -37,10 +38,15 @@ void PlayState::update(float dt) {
     context.camera.x = player->position.x - right_margin;
   }
 
-  if (player->position.x < 0)
-    player->position.x = 0;
-  if (context.camera.x < 0)
+  if (player->collider_comp.position.x < 0) {
+    float delta = 0 - player->collider_comp.position.x;
+    player->collider_comp.position.x = 0;
+    player->position.x += delta;
+  }
+
+  if (context.camera.x < 0) {
     context.camera.x = 0;
+  }
   bg_parallax.update(context.camera.x);
 }
 
@@ -53,6 +59,14 @@ void PlayState::render() {
 
 void PlayState::handle_event(SDL_Event& event) {
   switch (event.type) {
+    case SDL_WINDOWEVENT: {
+      if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
+        int new_w = event.window.data1;
+        int new_h = event.window.data2;
+        ground.resize(new_w, new_h);
+      }
+      break;
+    }
     case SDL_KEYDOWN: {
       if (event.key.repeat == 0) {
         if (event.key.keysym.sym == SDLK_SPACE) {

@@ -33,6 +33,13 @@ public:
     }
   }
 
+  void resize(int new_width, int new_height) {
+    screen_width  = new_width;
+    screen_height = new_height;
+    update_collider();
+  }
+
+
   inline ColliderComponent&       get_collider_component() { return collider; }
   inline const ColliderComponent& get_collider_component() const { return collider; }
 
