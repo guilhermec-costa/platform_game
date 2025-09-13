@@ -5,12 +5,10 @@
 
 void PlayerObject::update(float dt) {
   if (!on_ground) {
-    velocity.y += gravity * dt;
-  }
-
-  float max_fall_speed = 800.0f;
-  if (velocity.y > max_fall_speed) {
-    velocity.y = max_fall_speed;
+    velocity.y += GRAVITY * dt;
+    if (velocity.y > MAX_FALL_SPEED) {
+      velocity.y = MAX_FALL_SPEED;
+    }
   }
 
   position.x += velocity.x * dt;
@@ -22,8 +20,8 @@ void PlayerObject::update(float dt) {
     set_on_ground(true);
   }
 
-  this->collider_comp.set_position(
-      {position.x + (dimension.x * .25f), position.y + (dimension.y * .25f)});
+  collider_comp.set_position(position + collider_offset);
+
   if (on_ground && velocity.x != 0) {
     animated_sprite.play_animation(PlayerAnimation::RUNNING);
   } else if (on_ground) {
@@ -43,18 +41,18 @@ void PlayerObject::handle_event(PlayerEvent event) {
   switch (event) {
     case JUMP:
       if (on_ground) {
-        velocity.y = -jump_force;
+        velocity.y = -JUMP_FORCE;
         on_ground  = false;
       }
       break;
 
     case MOVE_LEFT:
-      velocity.x = -move_speed;
+      velocity.x = -MOVE_SPEED;
       animated_sprite.set_flipped(true);
       break;
 
     case MOVE_RIGHT:
-      velocity.x = move_speed;
+      velocity.x = MOVE_SPEED;
       animated_sprite.set_flipped(false);
       break;
 

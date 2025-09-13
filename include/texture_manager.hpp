@@ -17,7 +17,7 @@ private:
   }
 
 public:
-  TextureManager(const TextureManager&) = delete;
+  TextureManager(const TextureManager&)            = delete;
   TextureManager& operator=(const TextureManager&) = delete;
 
   static TextureManager& get_instance() {

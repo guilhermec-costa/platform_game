@@ -10,6 +10,7 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
+#include <memory>
 
 class GameState {
 protected:
@@ -27,13 +28,12 @@ public:
 
 class PlayState : public GameState {
 private:
-  BackgroundParallax bg_parallax;
-  Ground             ground;
-  PlayerObject*      player;
+  BackgroundParallax            bg_parallax;
+  Ground                        ground;
+  std::unique_ptr<PlayerObject> player;
 
 public:
   PlayState(GameContext& ctx);
-  ~PlayState() override { delete player; }
   void handle_event(SDL_Event& event) override;
   void update(float dt) override;
   void render() override;

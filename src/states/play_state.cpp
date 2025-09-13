@@ -10,12 +10,12 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
 
   const int tile_width = 64;
   float     ground_y   = win_dim.y - tile_width;
-  ground               = Ground(ctx.renderer, ctx.window, ground_y, tile_width);
+  ground               = Ground(ctx.renderer, win_dim.x, win_dim.y, ground_y, tile_width);
 
   const int   player_height        = 250;
   const float base_height_location = ground_y - player_height + 80;
-  player =
-      new PlayerObject(Vector2D(100, base_height_location), Vector2D(player_height, player_height));
+  player = std::make_unique<PlayerObject>(Vector2D(100, base_height_location),
+                                          Vector2D(player_height, player_height));
 }
 
 void PlayState::update(float dt) {
@@ -28,8 +28,8 @@ void PlayState::update(float dt) {
     player->set_on_ground(true);
   }
 
-  float left_margin  = 100;
-  float right_margin = 650;
+  const float left_margin  = 100.0f;
+  const float right_margin = 650.0f;
 
   if (player->position.x - context.camera.x < left_margin) {
     context.camera.x = player->position.x - left_margin;
