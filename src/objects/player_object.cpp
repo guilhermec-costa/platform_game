@@ -16,19 +16,20 @@ void PlayerObject::update(float dt) {
   position.x += velocity.x * dt;
   position.y += velocity.y * dt;
 
-  if (position.y >= base_height) {
-    position.y = base_height;
+  if (position.y >= base_height_location) {
+    position.y = base_height_location;
     velocity.y = 0;
     set_on_ground(true);
   }
 
-  this->collider_comp.set_position({position.x, position.y });
+  this->collider_comp.set_position(
+      {position.x + (dimension.x * .25f), position.y + (dimension.y * .25f)});
   if (on_ground && velocity.x != 0) {
-      animated_sprite.play_animation("run");
+    animated_sprite.play_animation(PlayerAnimation::RUNNING);
   } else if (on_ground) {
-      animated_sprite.play_animation("idle");
+    animated_sprite.play_animation(PlayerAnimation::IDLE);
   } else {
-      animated_sprite.play_animation("jump");
+    animated_sprite.play_animation(PlayerAnimation::JUMPING);
   }
 
   animated_sprite.update(dt);

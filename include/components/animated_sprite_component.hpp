@@ -1,5 +1,5 @@
-#include "texture_component.hpp"
 #include "../animation.hpp"
+#include "texture_component.hpp"
 
 #include <SDL2/SDL_render.h>
 #include <unordered_map>
@@ -10,7 +10,8 @@ public:
   AnimatedSpriteComponent(TextureComponent texture, int frame_width, int frame_height,
                           float frame_time, Vector2D render_dim)
       : texture(texture), frame_width(frame_width), frame_height(frame_height),
-        frame_time(frame_time), current_frame(0), elapsed_time(0.0f), render_dim(render_dim), horizontally_flipped(false) {
+        frame_time(frame_time), current_frame(0), elapsed_time(0.0f), render_dim(render_dim),
+        horizontally_flipped(false) {
 
     int tex_width, tex_height;
     SDL_QueryTexture(texture.get_texture(), nullptr, nullptr, &tex_width, &tex_height);
@@ -20,14 +21,16 @@ public:
   }
 
   void update(float dt) {
-    if(current_animaton_name.empty()) return;
+    if (current_animaton_idx == -1) {
+      return;
+    }
 
     elapsed_time += dt;
-    Animation& anim = animations[current_animaton_name];
-    if(elapsed_time >= anim.frame_time) {
+    Animation& anim = animations[current_animaton_idx];
+    if (elapsed_time >= anim.frame_time) {
       elapsed_time = 0.0f;
       current_frame++;
-      if(current_frame > anim.end_frame) {
+      if (current_frame > anim.end_frame) {
         current_frame = anim.start_frame;
       }
     }
@@ -41,27 +44,28 @@ public:
     SDL_Rect dst_rect = {static_cast<int>(pos.x - camera.x), static_cast<int>(pos.y - camera.y),
                          static_cast<int>(render_dim.x), static_cast<int>(render_dim.y)};
 
-    if(horizontally_flipped) {
-      SDL_RenderCopyEx(renderer, texture.get_texture(), &src_rect, &dst_rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+    if (horizontally_flipped) {
+      SDL_RenderCopyEx(renderer, texture.get_texture(), &src_rect, &dst_rect, 0, NULL,
+                       SDL_FLIP_HORIZONTAL);
     } else {
       SDL_RenderCopy(renderer, texture.get_texture(), &src_rect, &dst_rect);
     }
   }
 
-  void add_animation(const std::string& name, int start_frame, int end_frame, float frame_time) {
-    animations[name] = {name, start_frame, end_frame, frame_time};
+  void add_animation(int animation_idx, const std::string& name, int start_frame, int end_frame,
+                     float frame_time) {
+    animations[animation_idx] = {name, start_frame, end_frame, frame_time};
   }
 
-  void play_animation(const std::string& name) {
-    if(current_animaton_name == name) return;
-    current_animaton_name = name;
-    current_frame = animations[name].start_frame;
-    elapsed_time = 0.0;
+  void play_animation(int animation_idx) {
+    if (current_animaton_idx == animation_idx)
+      return;
+    current_animaton_idx = animation_idx;
+    current_frame        = animations[animation_idx].start_frame;
+    elapsed_time         = 0.0;
   }
 
-  void set_flipped(bool flipped) {
-    horizontally_flipped = flipped;
-  }
+  void set_flipped(bool flipped) { horizontally_flipped = flipped; }
 
 private:
   TextureComponent texture;
@@ -74,8 +78,8 @@ private:
   int              num_rows;
   float            frame_time;
   float            elapsed_time;
-  bool horizontally_flipped;
+  bool             horizontally_flipped;
 
-  std::unordered_map<std::string, Animation> animations;
-  std::string current_animaton_name;
+  std::unordered_map<int, Animation> animations;
+  int                                current_animaton_idx;
 };

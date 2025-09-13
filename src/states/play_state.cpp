@@ -8,13 +8,14 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
   bg_parallax      = BackgroundParallax(ctx.renderer);
   Vector2D win_dim = SDLBackend::get_window_dimension(ctx.window);
 
-  const int tile_width    = 64;
-  float     ground_y      = win_dim.y - tile_width;
-  ground                  = Ground(ctx.renderer, ctx.window, ground_y, tile_width);
-  const int player_height = 250;
-  TextureManager::get_instance().load_texture("assets/nigthborne.png", ctx.renderer);
-  player = new PlayerObject(Vector2D(100, ground_y - player_height + 80),
-                            Vector2D(player_height, player_height));
+  const int tile_width = 64;
+  float     ground_y   = win_dim.y - tile_width;
+  ground               = Ground(ctx.renderer, ctx.window, ground_y, tile_width);
+
+  const int   player_height        = 250;
+  const float base_height_location = ground_y - player_height + 80;
+  player =
+      new PlayerObject(Vector2D(100, base_height_location), Vector2D(player_height, player_height));
 }
 
 void PlayState::update(float dt) {
@@ -22,7 +23,7 @@ void PlayState::update(float dt) {
   SDL_Rect player_rect     = player->collider_comp.get_rect();
   auto&    ground_collider = ground.get_collider_component();
   if (!player->on_ground && ground_collider.check_collision(player_rect)) {
-    player->position.y = ground_collider.get_rect().y - player->dimension.y;
+    player->position.y = player->base_height_location;
     player->velocity.y = 0;
     player->set_on_ground(true);
   }
@@ -47,7 +48,7 @@ void PlayState::render() {
   bg_parallax.render(context.window, context.renderer);
   ground.render(context.renderer, context.camera);
   player->render(context.renderer, context.camera);
-  //player->collider_comp.render_collision_box(context.renderer, context.camera);
+  player->collider_comp.render_collision_box(context.renderer, context.camera);
 }
 
 void PlayState::handle_event(SDL_Event& event) {

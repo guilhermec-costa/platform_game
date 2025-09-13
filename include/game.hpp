@@ -51,6 +51,7 @@ public:
   }
 
   void change_state(std::unique_ptr<GameState> new_state) { current_state = std::move(new_state); }
+  void load_textures();
 
 private:
   void handle_events();

@@ -1,3 +1,7 @@
+#ifndef PROJECT_SOURCE_DIR
+#error "Failed to load project source directory"
+#endif
+
 #include "../include/game.hpp"
 #include "../include/game_context.hpp"
 #include "../include/sdl_backend.hpp"
@@ -6,9 +10,7 @@
 #include <memory>
 
 int main() {
-  if (SDLBackend::init_subsytems() == -1) {
-    return -1;
-  }
+  SDLBackend::init_subsytems();
   auto window   = SDLBackend::create_window(900, 600);
   auto renderer = SDLBackend::create_renderer(window);
 

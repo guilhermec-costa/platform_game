@@ -64,3 +64,9 @@ int SDLBackend::get_window_width(SDL_Window* window) {
 int SDLBackend::get_window_height(SDL_Window* window) {
   return get_window_dimension(window).y;
 }
+
+Vector2D SDLBackend::get_texture_dimensions(SDL_Texture* texture) {
+  int tex_width, tex_height;
+  SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
+  return Vector2D(tex_width, tex_height);
+}

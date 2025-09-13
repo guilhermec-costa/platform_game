@@ -13,4 +13,5 @@ public:
   static Vector2D      get_window_dimension(SDL_Window* window);
   static int           get_window_width(SDL_Window* window);
   static int           get_window_height(SDL_Window* window);
+  static Vector2D      get_texture_dimensions(SDL_Texture* texture);
 };

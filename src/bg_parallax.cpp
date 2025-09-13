@@ -9,14 +9,14 @@ BackgroundParallax::BackgroundParallax(SDL_Renderer* renderer)
     : bg_texture(nullptr), mid_trees_texture(nullptr), trees_texture(nullptr), bg_x(0.0f),
       mid_x(0.0f), trees_x(0.0f) {
 
-  bg_texture = TextureManager::get_instance().load_texture(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png", renderer);
-  far_trees_texture = TextureManager::get_instance().load_texture(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png", renderer);
-  mid_trees_texture = TextureManager::get_instance().load_texture(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png", renderer);
-  trees_texture = TextureManager::get_instance().load_texture(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png", renderer);
+  bg_texture        = TextureManager::get_instance().get_texture(TextureManager::asset_path(
+      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png"));
+  far_trees_texture = TextureManager::get_instance().get_texture(TextureManager::asset_path(
+      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png"));
+  mid_trees_texture = TextureManager::get_instance().get_texture(TextureManager::asset_path(
+      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png"));
+  trees_texture     = TextureManager::get_instance().get_texture(TextureManager::asset_path(
+      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png"));
 }
 
 void BackgroundParallax::update(float camera_x) {
