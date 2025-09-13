@@ -27,7 +27,7 @@ public:
 
     int num_tiles = screen_width / tile_width + 2;
     for (int i = 0; i < num_tiles; ++i) {
-      int      x    = i * tile_width - (static_cast<int>(camera.x) % tile_width);
+      int      x    = i * tile_width - (static_cast<int>(camera.get_position().x) % tile_width);
       SDL_Rect rect = {x, static_cast<int>(y), tile_width, tile_width};
       SDL_RenderCopy(renderer, ground_tile, nullptr, &rect);
     }
@@ -38,7 +38,6 @@ public:
     screen_height = new_height;
     update_collider();
   }
-
 
   inline ColliderComponent&       get_collider_component() { return collider; }
   inline const ColliderComponent& get_collider_component() const { return collider; }

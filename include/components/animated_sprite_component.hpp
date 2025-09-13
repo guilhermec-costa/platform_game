@@ -41,7 +41,7 @@ public:
     int col = current_frame % num_columns;
 
     SDL_Rect src_rect = {col * frame_width, row * frame_height, frame_width, frame_height};
-    SDL_Rect dst_rect = {static_cast<int>(pos.x - camera.x), static_cast<int>(pos.y - camera.y),
+    SDL_Rect dst_rect = {static_cast<int>(pos.x - camera.get_position().x), static_cast<int>(pos.y - camera.get_position().y),
                          static_cast<int>(render_dim.x), static_cast<int>(render_dim.y)};
 
     if (horizontally_flipped) {

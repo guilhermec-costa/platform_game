@@ -35,6 +35,10 @@ private:
 public:
   PlayState(GameContext& ctx);
   void handle_event(SDL_Event& event) override;
+  void handle_window_event(const SDL_WindowEvent& window);
+  void handle_keydown(const SDL_KeyboardEvent& key);
+  void handle_keyup(const SDL_KeyboardEvent& key);
+  bool is_key_down(SDL_Scancode scancode) const;
   void update(float dt) override;
   void render() override;
 };

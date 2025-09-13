@@ -19,13 +19,7 @@ public:
   GameContext(GameContext&) = delete;
   GameContext(SDL_Window* window, SDL_Renderer* renderer) : window(window), renderer(renderer) {
     auto win_dim = SDLBackend::get_window_dimension(window);
-    camera       = Camera{
-              .x = 0,
-              .y = 0,
-              .w = win_dim.x,
-              .h = win_dim.y,
-    };
-
+    camera = Camera({0,0}, win_dim);
     std::cout << "[GameContext] GameContext initialized with window and renderer\n";
   };
   void end();

@@ -33,8 +33,8 @@ public:
                             const bool follow_camera = true) {
     collision_box = get_rect();
     if (follow_camera) {
-      collision_box.x -= camera.x;
-      collision_box.y -= camera.y;
+      collision_box.x -= camera.get_position().x;
+      collision_box.y -= camera.get_position().y;
     }
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderDrawRect(renderer, &collision_box);

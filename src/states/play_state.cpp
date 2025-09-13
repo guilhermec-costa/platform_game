@@ -1,8 +1,11 @@
 #include "../../include/game_state.hpp"
 
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_scancode.h>
+#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_video.h>
 
 PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
@@ -21,72 +24,74 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
 
 void PlayState::update(float dt) {
   player->update(dt);
-  SDL_Rect player_rect     = player->collider_comp.get_rect();
-  auto&    ground_collider = ground.get_collider_component();
-  if (!player->on_ground && ground_collider.check_collision(player_rect)) {
-    player->position.y = player->base_height_location;
-    player->velocity.y = 0;
-    player->set_on_ground(true);
-  }
-
-  const float left_margin  = 100.0f;
-  const float right_margin = 650.0f;
-
-  if (player->position.x - context.camera.x < left_margin) {
-    context.camera.x = player->position.x - left_margin;
-  } else if (player->position.x - context.camera.x > right_margin) {
-    context.camera.x = player->position.x - right_margin;
-  }
-
-  if (player->collider_comp.position.x < 0) {
-    float delta = 0 - player->collider_comp.position.x;
-    player->collider_comp.position.x = 0;
-    player->position.x += delta;
-  }
-
-  if (context.camera.x < 0) {
-    context.camera.x = 0;
-  }
-  bg_parallax.update(context.camera.x);
+  player->check_ground_collision();
+  context.camera.follow(player->position, 100.0f, 650.0f);
+  context.camera.update();
+  bg_parallax.update(context.camera.get_position().x);
 }
 
 void PlayState::render() {
   bg_parallax.render(context.window, context.renderer);
   ground.render(context.renderer, context.camera);
   player->render(context.renderer, context.camera);
-  player->collider_comp.render_collision_box(context.renderer, context.camera);
 }
 
 void PlayState::handle_event(SDL_Event& event) {
   switch (event.type) {
-    case SDL_WINDOWEVENT: {
-      if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
-        int new_w = event.window.data1;
-        int new_h = event.window.data2;
-        ground.resize(new_w, new_h);
-      }
+    case SDL_WINDOWEVENT:
+      handle_window_event(event.window);
       break;
-    }
-    case SDL_KEYDOWN: {
-      if (event.key.repeat == 0) {
-        if (event.key.keysym.sym == SDLK_SPACE) {
-          player->handle_event(PlayerEvent::JUMP);
-        }
-        if (event.key.keysym.sym == SDLK_RIGHT) {
-          player->handle_event(PlayerEvent::MOVE_RIGHT);
-        }
-        if (event.key.keysym.sym == SDLK_LEFT) {
-          player->handle_event(PlayerEvent::MOVE_LEFT);
-        }
-      }
-      break;
-    }
 
-    case SDL_KEYUP: {
-      if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_LEFT) {
+    case SDL_KEYDOWN:
+      handle_keydown(event.key);
+      break;
+
+    case SDL_KEYUP:
+      handle_keyup(event.key);
+      break;
+  }
+}
+
+void PlayState::handle_window_event(const SDL_WindowEvent& window) {
+  if (window.event == SDL_WINDOWEVENT_RESIZED) {
+    ground.resize(window.data1, window.data2);
+  }
+}
+
+void PlayState::handle_keydown(const SDL_KeyboardEvent& key) {
+  if (key.repeat != 0)
+    return;
+
+  switch (key.keysym.sym) {
+    case SDLK_SPACE:
+      player->handle_event(PlayerEvent::JUMP);
+      break;
+    case SDLK_RIGHT:
+      player->handle_event(PlayerEvent::MOVE_RIGHT);
+      break;
+    case SDLK_LEFT:
+      player->handle_event(PlayerEvent::MOVE_LEFT);
+      break;
+  }
+}
+
+void PlayState::handle_keyup(const SDL_KeyboardEvent& key) {
+  switch (key.keysym.sym) {
+    case SDLK_RIGHT: {
+      if (!is_key_down(SDL_SCANCODE_LEFT)) {
         player->handle_event(PlayerEvent::STOP_HORIZONTAL);
       }
       break;
     }
+    case SDLK_LEFT:
+      if (!is_key_down(SDL_SCANCODE_RIGHT)) {
+        player->handle_event(PlayerEvent::STOP_HORIZONTAL);
+      }
+      break;
   }
+}
+
+bool PlayState::is_key_down(SDL_Scancode scancode) const {
+  const Uint8* state = SDL_GetKeyboardState(nullptr);
+  return state[scancode];
 }
