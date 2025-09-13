@@ -5,43 +5,45 @@
 
 #include <SDL2/SDL_render.h>
 
-BackgroundParallax::BackgroundParallax(SDL_Renderer* renderer)
-    : bg_texture(nullptr), mid_trees_texture(nullptr), trees_texture(nullptr), bg_x(0.0f),
-      mid_x(0.0f), trees_x(0.0f) {
-
-  bg_texture        = TextureManager::get_instance().get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png"));
-  far_trees_texture = TextureManager::get_instance().get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png"));
-  mid_trees_texture = TextureManager::get_instance().get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png"));
-  trees_texture     = TextureManager::get_instance().get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png"));
+BackgroundParallax::BackgroundParallax(SDL_Renderer* renderer) {
+  bg_layer = TextureManager::get_or_load(
+      TextureManager::asset_path(
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png"),
+      renderer);
+  far_trees_layer = TextureManager::get_or_load(
+      TextureManager::asset_path(
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png"),
+      renderer);
+  mid_trees_layer = TextureManager::get_or_load(
+      TextureManager::asset_path(
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png"),
+      renderer);
+  close_trees_layer = TextureManager::get_or_load(
+      TextureManager::asset_path(
+          "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png"),
+      renderer);
+  layers = {{bg_layer, 0.1f, 0.0f},
+            {far_trees_layer, 0.3f, 0.0f},
+            {mid_trees_layer, 0.5f, 0.0f},
+            {close_trees_layer, 0.9f, 0.0f}};
 }
 
 void BackgroundParallax::update(float camera_x) {
-  bg_x    = -camera_x * 0.1f;
-  mid_x   = -camera_x * 0.3f;
-  trees_x = -camera_x * 0.9f;
+  for (auto& layer : layers) {
+    layer.offset = -camera_x * layer.speed;
+  }
 }
 
 void BackgroundParallax::render(SDL_Window* window, SDL_Renderer* renderer) {
   Vector2D win_dim = SDLBackend::get_window_dimension(window);
 
-  auto draw_layer = [&](SDL_Texture* tex, float offset) {
-    if (!tex)
-      return;
-
-    float    x     = fmod(offset, (float)win_dim.x);
+  for (auto& layer : layers) {
+    if (!layer.texture)
+      continue;
+    float    x     = fmod(layer.offset, (float)win_dim.x);
     SDL_Rect rect1 = {(int)x, 0, (int)win_dim.x, (int)win_dim.y};
     SDL_Rect rect2 = {(int)x + (int)win_dim.x, 0, (int)win_dim.x, (int)win_dim.y};
-
-    SDL_RenderCopy(renderer, tex, nullptr, &rect1);
-    SDL_RenderCopy(renderer, tex, nullptr, &rect2);
-  };
-
-  draw_layer(bg_texture, bg_x);
-  draw_layer(far_trees_texture, mid_x);
-  draw_layer(mid_trees_texture, mid_x);
-  draw_layer(trees_texture, trees_x);
+    SDL_RenderCopy(renderer, layer.texture, nullptr, &rect1);
+    SDL_RenderCopy(renderer, layer.texture, nullptr, &rect2);
+  }
 }

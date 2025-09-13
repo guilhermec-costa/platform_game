@@ -1,6 +1,13 @@
 #pragma once
 
 #include <SDL2/SDL_render.h>
+#include <vector>
+
+struct Layer {
+  SDL_Texture* texture;
+  float        speed;
+  float        offset;
+};
 
 class BackgroundParallax {
 public:
@@ -11,9 +18,10 @@ public:
   void render(SDL_Window* window, SDL_Renderer* renderer);
 
 private:
-  SDL_Texture* bg_texture;
-  SDL_Texture* far_trees_texture;
-  SDL_Texture* mid_trees_texture;
-  SDL_Texture* trees_texture;
-  float        bg_x, mid_x, trees_x;
+  SDL_Texture*       bg_layer          = nullptr;
+  SDL_Texture*       far_trees_layer   = nullptr;
+  SDL_Texture*       mid_trees_layer   = nullptr;
+  SDL_Texture*       close_trees_layer = nullptr;
+  float              bg_offset = 0.0f, far_offset = 0.0f, mid_offset = 0.0f, close_offset = 0.0f;
+  std::vector<Layer> layers;
 };

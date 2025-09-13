@@ -16,8 +16,8 @@ public:
       : y(y_pos), screen_width(SDLBackend::get_window_width(window)),
         num_tiles(screen_width / tile_width + 2),
         screen_height(SDLBackend::get_window_height(window)), tile_width(tile_width) {
-    ground_tile = TextureManager::get_instance().load_texture(
-        TextureManager::asset_path("assets/grass.png"), renderer);
+    ground_tile =
+        TextureManager::get_or_load(TextureManager::asset_path("assets/grass.png"), renderer);
     collision_offset = tile_width * 0.35;
     collider =
         ColliderComponent({0, (screen_height - tile_width + collision_offset) * 1.0f},

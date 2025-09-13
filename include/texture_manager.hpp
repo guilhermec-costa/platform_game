@@ -1,10 +1,5 @@
 #pragma once
 
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_render.h>
-#include <string>
-enum class TextureID { Grass, Player, Enemy };
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
@@ -22,7 +17,7 @@ private:
   }
 
 public:
-  TextureManager(const TextureManager&)            = delete;
+  TextureManager(const TextureManager&) = delete;
   TextureManager& operator=(const TextureManager&) = delete;
 
   static TextureManager& get_instance() {
@@ -30,22 +25,36 @@ public:
     return instance;
   }
 
-  SDL_Texture* load_texture(const std::string& file, SDL_Renderer* renderer) {
-    if (textures.count(file)) {
-      return textures[file];
+  static SDL_Texture* get_or_load(const std::string& file, SDL_Renderer* renderer) {
+    return TextureManager::get_instance()._get_or_load(file, renderer);
+  }
+
+  static SDL_Texture* get_texture(const std::string& file) {
+    return TextureManager::get_instance()._get_texture(file);
+  }
+
+  static std::string asset_path(const std::string& relative) {
+    return std::string(PROJECT_SOURCE_DIR) + relative;
+  }
+
+private:
+  SDL_Texture* _get_or_load(const std::string& file, SDL_Renderer* renderer) {
+    auto it = textures.find(file);
+    if (it != textures.end()) {
+      return it->second;
     }
 
-    SDL_Surface* tempSurface = IMG_Load(file.c_str());
-    if (!tempSurface) {
-      SDL_Log("Failed to load image %s: %s", file.c_str(), IMG_GetError());
+    SDL_Surface* surface = IMG_Load(file.c_str());
+    if (!surface) {
+      SDL_Log("❌ Failed to load image %s: %s", file.c_str(), IMG_GetError());
       return nullptr;
     }
 
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
-    SDL_FreeSurface(tempSurface);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
 
     if (!texture) {
-      SDL_Log("Failed to create texture from %s: %s", file.c_str(), SDL_GetError());
+      SDL_Log("❌ Failed to create texture from %s: %s", file.c_str(), SDL_GetError());
       return nullptr;
     }
 
@@ -53,13 +62,11 @@ public:
     return texture;
   }
 
-  SDL_Texture* get_texture(const std::string& file) {
-    if (textures.count(file))
-      return textures[file];
+  SDL_Texture* _get_texture(const std::string& file) {
+    auto it = textures.find(file);
+    if (it != textures.end()) {
+      return it->second;
+    }
     return nullptr;
-  }
-
-  static inline std::string asset_path(const std::string& relative) {
-    return std::string(PROJECT_SOURCE_DIR) + relative;
   }
 };

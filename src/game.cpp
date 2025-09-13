@@ -39,7 +39,7 @@ void Game::render() {
 
 SDL_Texture* load_texture_or_die(const std::string& path, SDL_Renderer* renderer) {
   auto&        tex_manager = TextureManager::get_instance();
-  SDL_Texture* tex         = tex_manager.load_texture(path, renderer);
+  SDL_Texture* tex         = tex_manager.get_or_load(path, renderer);
 
   if (!tex) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load texture: %s", path.c_str());
