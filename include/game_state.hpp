@@ -35,6 +35,7 @@ private:
 public:
   PlayState(GameContext& ctx);
   void handle_event(SDL_Event& event) override;
+  void handle_mouse_click_event(const SDL_MouseButtonEvent& window);
   void handle_window_event(const SDL_WindowEvent& window);
   void handle_keydown(const SDL_KeyboardEvent& key);
   void handle_keyup(const SDL_KeyboardEvent& key);

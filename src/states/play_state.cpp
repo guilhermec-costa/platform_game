@@ -25,7 +25,7 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
 void PlayState::update(float dt) {
   player->update(dt);
   player->check_ground_collision();
-  context.camera.follow(player->position, 100.0f, 650.0f);
+  context.camera.follow(player->get_position());
   context.camera.update();
   bg_parallax.update(context.camera.get_position().x);
 }
@@ -38,23 +38,33 @@ void PlayState::render() {
 
 void PlayState::handle_event(SDL_Event& event) {
   switch (event.type) {
-    case SDL_WINDOWEVENT:
+    case SDL_MOUSEBUTTONDOWN: {
+      handle_mouse_click_event(event.button);
+      break;
+    }
+    case SDL_WINDOWEVENT: {
       handle_window_event(event.window);
       break;
-
-    case SDL_KEYDOWN:
+    }
+    case SDL_KEYDOWN: {
       handle_keydown(event.key);
       break;
-
-    case SDL_KEYUP:
+    }
+    case SDL_KEYUP: {
       handle_keyup(event.key);
       break;
+    }
   }
+}
+
+void PlayState::handle_mouse_click_event(const SDL_MouseButtonEvent& window) {
+  player->handle_event(PlayerEvent::ATTACK);
 }
 
 void PlayState::handle_window_event(const SDL_WindowEvent& window) {
   if (window.event == SDL_WINDOWEVENT_RESIZED) {
     ground.resize(window.data1, window.data2);
+    context.camera.resize(window.data1);
   }
 }
 
@@ -66,10 +76,10 @@ void PlayState::handle_keydown(const SDL_KeyboardEvent& key) {
     case SDLK_SPACE:
       player->handle_event(PlayerEvent::JUMP);
       break;
-    case SDLK_RIGHT:
+    case SDLK_d:
       player->handle_event(PlayerEvent::MOVE_RIGHT);
       break;
-    case SDLK_LEFT:
+    case SDLK_a:
       player->handle_event(PlayerEvent::MOVE_LEFT);
       break;
   }
@@ -77,14 +87,14 @@ void PlayState::handle_keydown(const SDL_KeyboardEvent& key) {
 
 void PlayState::handle_keyup(const SDL_KeyboardEvent& key) {
   switch (key.keysym.sym) {
-    case SDLK_RIGHT: {
-      if (!is_key_down(SDL_SCANCODE_LEFT)) {
+    case SDLK_d: {
+      if (!is_key_down(SDL_SCANCODE_A)) {
         player->handle_event(PlayerEvent::STOP_HORIZONTAL);
       }
       break;
     }
-    case SDLK_LEFT:
-      if (!is_key_down(SDL_SCANCODE_RIGHT)) {
+    case SDLK_a:
+      if (!is_key_down(SDL_SCANCODE_D)) {
         player->handle_event(PlayerEvent::STOP_HORIZONTAL);
       }
       break;

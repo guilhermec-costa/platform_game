@@ -39,8 +39,7 @@ public:
     update_collider();
   }
 
-  inline ColliderComponent&       get_collider_component() { return collider; }
-  inline const ColliderComponent& get_collider_component() const { return collider; }
+  const ColliderComponent& get_collider_component() const { return collider; }
 
 private:
   void update_collider() {

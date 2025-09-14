@@ -15,6 +15,11 @@ public:
   virtual void render(SDL_Renderer* renderer, const Camera& camera) = 0;
 
 public:
+  const Vector2D& get_position() const { return position; }
+  const Vector2D& get_velocity() const { return velocity; }
+  const Vector2D& get_dimension() const { return dimension; }
+
+protected:
   Vector2D position;
   Vector2D velocity;
   Vector2D dimension;

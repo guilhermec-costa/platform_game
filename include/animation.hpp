@@ -5,4 +5,5 @@ struct Animation {
   int         start_frame;
   int         end_frame;
   float       frame_time;
+  bool        loop = true;
 };
