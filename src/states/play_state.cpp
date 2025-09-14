@@ -3,6 +3,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_stdinc.h>
@@ -57,8 +58,10 @@ void PlayState::handle_event(SDL_Event& event) {
   }
 }
 
-void PlayState::handle_mouse_click_event(const SDL_MouseButtonEvent& window) {
-  player->handle_event(PlayerEvent::ATTACK);
+void PlayState::handle_mouse_click_event(const SDL_MouseButtonEvent& button) {
+  if(button.type == SDL_MOUSEBUTTONDOWN && button.button == SDL_BUTTON_LEFT) {
+    player->handle_event(PlayerEvent::ATTACK);
+  }
 }
 
 void PlayState::handle_window_event(const SDL_WindowEvent& window) {

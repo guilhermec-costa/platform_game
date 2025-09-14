@@ -21,7 +21,7 @@ PlayerObject::PlayerObject(Vector2D pos, Vector2D dim)
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::IDLE), "idle", 0, 8, 0.099f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::RUN), "run", 8, 12, 0.1f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::JUMP), "jump", 0, 8, 0.1f);
-  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.02f,
+  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.015f,
                                 false);
 };
 
