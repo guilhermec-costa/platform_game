@@ -59,7 +59,7 @@ void PlayState::handle_event(SDL_Event& event) {
 }
 
 void PlayState::handle_mouse_click_event(const SDL_MouseButtonEvent& button) {
-  if(button.type == SDL_MOUSEBUTTONDOWN && button.button == SDL_BUTTON_LEFT) {
+  if (button.type == SDL_MOUSEBUTTONDOWN && button.button == SDL_BUTTON_LEFT) {
     player->handle_event(PlayerEvent::ATTACK);
   }
 }

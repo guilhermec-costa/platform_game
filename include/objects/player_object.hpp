@@ -7,6 +7,9 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
+enum class MovementState { IDLE, RUNNING, JUMPING, FALLING };
+enum class ActionState { NONE, ATTACKING };
+
 enum class PlayerEvent { JUMP, MOVE_LEFT, MOVE_RIGHT, STOP_HORIZONTAL, ATTACK };
 enum class PlayerAnimation { RUN, JUMP, IDLE, ATTACK };
 enum class PlayerState {
@@ -48,4 +51,6 @@ private:
   AnimatedSpriteComponent animated_sprite;
   Vector2D                collider_offset;
   PlayerState             state;
+  MovementState           movement_state = MovementState::IDLE;
+  ActionState             action_state   = ActionState::NONE;
 };

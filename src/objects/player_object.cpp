@@ -21,7 +21,7 @@ PlayerObject::PlayerObject(Vector2D pos, Vector2D dim)
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::IDLE), "idle", 0, 8, 0.099f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::RUN), "run", 8, 12, 0.1f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::JUMP), "jump", 0, 8, 0.1f);
-  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.015f,
+  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.03f,
                                 false);
 };
 
@@ -42,14 +42,19 @@ void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
 void PlayerObject::handle_event(PlayerEvent event) {
   switch (event) {
     case PlayerEvent::ATTACK: {
-      state = PlayerState::ATTACKING;
+      if (action_state != ActionState::ATTACKING) {
+        action_state = ActionState::ATTACKING;
+        // velocity.x = 0;
+      }
       break;
     }
+
     case PlayerEvent::MOVE_LEFT: {
       velocity.x = -MOVE_SPEED;
       animated_sprite.set_flipped(true);
-      if (on_ground)
-        state = PlayerState::RUNNING;
+      if (on_ground) {
+        movement_state = MovementState::RUNNING;
+      }
       break;
     }
 
@@ -57,7 +62,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
       velocity.x = MOVE_SPEED;
       animated_sprite.set_flipped(false);
       if (on_ground)
-        state = PlayerState::RUNNING;
+        movement_state = MovementState::RUNNING;
       break;
     }
 
@@ -65,7 +70,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
       if (on_ground) {
         velocity.y = -JUMP_FORCE;
         set_on_ground(false);
-        state = PlayerState::JUMPING;
+        movement_state = MovementState::JUMPING;
       }
       break;
     }
@@ -73,7 +78,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     case PlayerEvent::STOP_HORIZONTAL: {
       velocity.x = 0;
       if (on_ground)
-        state = PlayerState::IDLEING;
+        movement_state = MovementState::IDLE;
       break;
     }
   }
@@ -101,20 +106,16 @@ void PlayerObject::check_ground_collision() {
 }
 
 void PlayerObject::update_state() {
-  if (state == PlayerState::ATTACKING) {
-    if (animated_sprite.is_finished()) {
-      state = on_ground ? (velocity.x != 0 ? PlayerState::RUNNING : PlayerState::IDLEING)
-                        : PlayerState::JUMPING;
-    }
-    return;
+  if (!on_ground) {
+    movement_state = MovementState::JUMPING;
+  } else if (velocity.x != 0) {
+    movement_state = MovementState::RUNNING;
+  } else {
+    movement_state = MovementState::IDLE;
   }
 
-  if (!on_ground) {
-    state = PlayerState::JUMPING;
-  } else if (velocity.x != 0) {
-    state = PlayerState::RUNNING;
-  } else {
-    state = PlayerState::IDLEING;
+  if (action_state == ActionState::ATTACKING && animated_sprite.is_finished()) {
+    action_state = ActionState::NONE;
   }
 }
 
@@ -123,22 +124,21 @@ void PlayerObject::update_collider() {
 }
 
 void PlayerObject::update_animation(float dt) {
-  switch (state) {
-    case PlayerState::ATTACKING: {
-      animated_sprite.play_animation(static_cast<int>(PlayerAnimation::ATTACK));
-      break;
-    }
-    case PlayerState::JUMPING: {
-      animated_sprite.play_animation(static_cast<int>(PlayerAnimation::JUMP));
-      break;
-    }
-    case PlayerState::RUNNING: {
-      animated_sprite.play_animation(static_cast<int>(PlayerAnimation::RUN));
-      break;
-    }
-    case PlayerState::IDLEING: {
-      animated_sprite.play_animation(static_cast<int>(PlayerAnimation::IDLE));
-      break;
+  if (action_state == ActionState::ATTACKING) {
+    animated_sprite.play_animation((int)PlayerAnimation::ATTACK);
+  } else {
+    switch (movement_state) {
+      case MovementState::JUMPING:
+        animated_sprite.play_animation((int)PlayerAnimation::JUMP);
+        break;
+      case MovementState::RUNNING:
+        animated_sprite.play_animation((int)PlayerAnimation::RUN);
+        break;
+      case MovementState::IDLE:
+        animated_sprite.play_animation((int)PlayerAnimation::IDLE);
+        break;
+      default:
+        break;
     }
   }
   animated_sprite.update(dt);
