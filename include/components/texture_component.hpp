@@ -10,7 +10,7 @@ class TextureComponent {
 public:
   TextureComponent() : m_texture(nullptr) {}
 
-  TextureComponent(SDL_Texture* texture, Vector2D pos, Vector2D dim)
+  TextureComponent(SDL_Texture* texture, Vector2 pos, Vector2 dim)
       : m_texture(texture), pos(pos), dim(dim) {
     src_rect    = {0, 0, (int)dim.x, (int)dim.y};
     target_rect = {(int)pos.x, (int)pos.y, (int)dim.x, (int)dim.y};
@@ -23,12 +23,12 @@ public:
     SDL_RenderCopy(renderer, m_texture, &src_rect, &target_rect);
   }
 
-  void set_position(Vector2D pos) {
+  void set_position(Vector2 pos) {
     target_rect.x = (int)pos.x;
     target_rect.y = (int)pos.y;
   }
 
-  void set_dimension(Vector2D dim) {
+  void set_dimension(Vector2 dim) {
     target_rect.w = dim.x;
     target_rect.h = dim.y;
   }
@@ -38,14 +38,14 @@ public:
     target_rect.h = (int)(target_rect.h * proportion);
   }
 
-  const Vector2D& get_pos() const { return pos; };
-  const Vector2D& get_dimension() const { return dim; };
+  const Vector2& get_pos() const { return pos; };
+  const Vector2& get_dimension() const { return dim; };
   SDL_Texture*    get_texture() { return m_texture; }
 
 private:
   SDL_Texture* m_texture;
   SDL_Rect     src_rect;
   SDL_Rect     target_rect;
-  Vector2D     pos;
-  Vector2D     dim;
+  Vector2     pos;
+  Vector2     dim;
 };

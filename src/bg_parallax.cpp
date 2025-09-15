@@ -27,7 +27,7 @@ void BackgroundParallax::update(float camera_x) {
 }
 
 void BackgroundParallax::render(SDL_Window* window, SDL_Renderer* renderer) {
-  Vector2D win_dim = SDLBackend::get_window_dimension(window);
+  Vector2 win_dim = SDLBackend::get_window_dimension(window);
 
   for (auto& layer : layers) {
     if (!layer.texture)

@@ -6,7 +6,7 @@
 
 class PlatformObject : public GameObject {
 public:
-  PlatformObject(Vector2D pos, Vector2D dim) : GameObject(pos, {0, 0}, dim) {}
+  PlatformObject(Vector2 pos, Vector2 dim) : GameObject(pos, {0, 0}, dim) {}
 
   void handle_event();
   void update(float dt) override;

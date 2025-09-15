@@ -10,13 +10,13 @@ class ColliderComponent {
 
 public:
   ColliderComponent() = default;
-  ColliderComponent(Vector2D pos, Vector2D dim) : position(pos), dimension(dim) {
+  ColliderComponent(Vector2 pos, Vector2 dim) : position(pos), dimension(dim) {
     collision_box = {(int)position.x, (int)position.y, (int)dim.x, (int)dim.y};
   };
 
 public:
-  Vector2D position;
-  Vector2D dimension;
+  Vector2 position;
+  Vector2 dimension;
   SDL_Rect collision_box;
 
 public:
@@ -40,6 +40,6 @@ public:
     SDL_RenderDrawRect(renderer, &collision_box);
   }
 
-  void set_position(const Vector2D& pos) { position = pos; }
-  void set_dimension(const Vector2D& dim) { dimension = dim; }
+  void set_position(const Vector2& pos) { position = pos; }
+  void set_dimension(const Vector2& dim) { dimension = dim; }
 };

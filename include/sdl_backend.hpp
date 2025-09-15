@@ -10,8 +10,8 @@ public:
   static SDL_Window*   create_window(int width, int height);
   static SDL_Renderer* create_renderer(SDL_Window* window);
   static int           init_subsytems();
-  static Vector2D      get_window_dimension(SDL_Window* window);
+  static Vector2      get_window_dimension(SDL_Window* window);
   static int           get_window_width(SDL_Window* window);
   static int           get_window_height(SDL_Window* window);
-  static Vector2D      get_texture_dimensions(SDL_Texture* texture);
+  static Vector2      get_texture_dimensions(SDL_Texture* texture);
 };

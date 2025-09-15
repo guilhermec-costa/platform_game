@@ -6,13 +6,13 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-PlayerObject::PlayerObject(Vector2D pos, Vector2D dim)
+PlayerObject::PlayerObject(Vector2 pos, Vector2 dim)
     : GameObject(pos, {0, 0}, dim), on_ground(true), base_height_location(pos.y) {
   auto texture = TextureManager::get_texture(TextureManager::asset_path("assets/nigthborne.png"));
-  Vector2D tex_dim = SDLBackend::get_texture_dimensions(texture);
+  Vector2 tex_dim = SDLBackend::get_texture_dimensions(texture);
 
   collider_offset = {dimension.x * 0.25f, dimension.y * 0.25f};
-  Vector2D collider_dim{dimension.x * 0.55f, dimension.y * 0.55f};
+  Vector2 collider_dim{dimension.x * 0.55f, dimension.y * 0.55f};
   collider_comp = ColliderComponent(pos + collider_offset, collider_dim);
 
   animated_sprite = AnimatedSpriteComponent(

@@ -5,12 +5,12 @@
 class Camera {
 public:
   Camera() = default;
-  Camera(Vector2D position, Vector2D dimension) : position(position), dimension(dimension) {};
-  Camera(Vector2D position, Vector2D dimension, float left_margin, float right_margin)
+  Camera(Vector2 position, Vector2 dimension) : position(position), dimension(dimension) {};
+  Camera(Vector2 position, Vector2 dimension, float left_margin, float right_margin)
       : position(position), dimension(dimension), left_margin(left_margin),
         right_margin(right_margin) {};
 
-  void follow(const Vector2D& target_pos) {
+  void follow(const Vector2& target_pos) {
     if (target_pos.x - position.x < left_margin) {
       position.x = target_pos.x - left_margin;
     } else if (target_pos.x - position.x > right_margin) {
@@ -30,11 +30,11 @@ public:
     std::cout << "Left margin: " << left_margin << " | Right margin: " << right_margin << "\n";
   }
 
-  const Vector2D& get_position() const { return position; }
+  const Vector2& get_position() const { return position; }
 
 private:
-  Vector2D position;
-  Vector2D dimension;
+  Vector2 position;
+  Vector2 dimension;
   float    left_margin = 0, right_margin = 0;
 
 public:

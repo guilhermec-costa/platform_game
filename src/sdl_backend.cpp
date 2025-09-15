@@ -51,10 +51,10 @@ int SDLBackend::init_subsytems() {
   return 0;
 }
 
-Vector2D SDLBackend::get_window_dimension(SDL_Window* window) {
+Vector2 SDLBackend::get_window_dimension(SDL_Window* window) {
   int w, h;
   SDL_GetWindowSize(window, &w, &h);
-  return Vector2D(w, h);
+  return Vector2(w, h);
 }
 
 int SDLBackend::get_window_width(SDL_Window* window) {
@@ -65,8 +65,8 @@ int SDLBackend::get_window_height(SDL_Window* window) {
   return get_window_dimension(window).y;
 }
 
-Vector2D SDLBackend::get_texture_dimensions(SDL_Texture* texture) {
+Vector2 SDLBackend::get_texture_dimensions(SDL_Texture* texture) {
   int tex_width, tex_height;
   SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
-  return Vector2D(tex_width, tex_height);
+  return Vector2(tex_width, tex_height);
 }

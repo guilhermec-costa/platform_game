@@ -22,7 +22,7 @@ enum class PlayerState {
 class PlayerObject : public GameObject {
 public:
   PlayerObject() = delete;
-  PlayerObject(Vector2D pos, Vector2D dim);
+  PlayerObject(Vector2 pos, Vector2 dim);
 
   void        handle_event(PlayerEvent event);
   void        update(float dt) override;
@@ -49,7 +49,7 @@ public:
 private:
   ColliderComponent       collider_comp;
   AnimatedSpriteComponent animated_sprite;
-  Vector2D                collider_offset;
+  Vector2                collider_offset;
   PlayerState             state;
   MovementState           movement_state = MovementState::IDLE;
   ActionState             action_state   = ActionState::NONE;

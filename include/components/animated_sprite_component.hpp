@@ -8,7 +8,7 @@ class AnimatedSpriteComponent {
 public:
   AnimatedSpriteComponent() = default;
   AnimatedSpriteComponent(TextureComponent texture, int frame_width, int frame_height,
-                          float frame_time, Vector2D render_dim)
+                          float frame_time, Vector2 render_dim)
       : texture(texture), frame_width(frame_width), frame_height(frame_height),
         frame_time(frame_time), current_frame(0), elapsed_time(0.0f), render_dim(render_dim),
         horizontally_flipped(false) {
@@ -28,7 +28,7 @@ public:
 
     elapsed_time += dt;
     Animation& anim = animations[current_animaton_idx];
-    if (elapsed_time >= anim.frame_time) {
+    if (elapsed_time >= anim.default_frame_time) {
       elapsed_time = 0.0f;
       current_frame++;
       if (current_frame > anim.end_frame) {
@@ -36,16 +36,16 @@ public:
           current_frame = anim.start_frame;
         } else {
           current_frame = anim.end_frame;
-          elapsed_time  = anim.frame_time;
+          elapsed_time  = anim.default_frame_time;
         }
       }
     }
   }
 
-  void render(SDL_Renderer* renderer, const Vector2D& pos, const Camera& camera) {
+  void render(SDL_Renderer* renderer, const Vector2& pos, const Camera& camera) {
     int             row        = current_frame / num_columns;
     int             col        = current_frame % num_columns;
-    const Vector2D& camera_pos = camera.get_position();
+    const Vector2& camera_pos = camera.get_position();
 
     SDL_Rect src_rect = {col * frame_width, row * frame_height, frame_width, frame_height};
     SDL_Rect dst_rect = {static_cast<int>(pos.x - camera_pos.x),
@@ -70,7 +70,7 @@ public:
       return true;
     }
     const Animation& anim = animations.at(current_animaton_idx);
-    return (current_frame == anim.end_frame && elapsed_time >= anim.frame_time);
+    return (current_frame == anim.end_frame && elapsed_time >= anim.default_frame_time);
   }
 
   void play_animation(int animation_idx) {
@@ -85,7 +85,7 @@ public:
 
 private:
   TextureComponent                   texture;
-  Vector2D                           render_dim;
+  Vector2                           render_dim;
   std::unordered_map<int, Animation> animations;
   int                                frame_width;
   int                                frame_height;
