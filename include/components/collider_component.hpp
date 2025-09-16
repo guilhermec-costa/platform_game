@@ -15,8 +15,8 @@ public:
   };
 
 public:
-  Vector2 position;
-  Vector2 dimension;
+  Vector2  position;
+  Vector2  dimension;
   SDL_Rect collision_box;
 
 public:

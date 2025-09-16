@@ -23,5 +23,5 @@ protected:
   Vector2 position;
   Vector2 velocity;
   Vector2 dimension;
-  int      direction;
+  int     direction;
 };

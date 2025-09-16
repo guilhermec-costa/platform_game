@@ -10,7 +10,7 @@
 #include <SDL2/SDL_video.h>
 
 PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
-  bg_parallax      = BackgroundParallax();
+  bg_parallax     = BackgroundParallax();
   Vector2 win_dim = SDLBackend::get_window_dimension(ctx.window);
 
   const int tile_width = 86;
@@ -19,10 +19,10 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
 
   const int   player_height        = 320;
   const float base_height_location = ground_y - player_height + 100;
-  player = std::make_unique<PlayerObject>(Vector2(100, base_height_location),
-                                          Vector2(player_height, player_height));
+  player   = std::make_unique<PlayerObject>(Vector2(ctx.active_level.player_start.x, base_height_location),
+                                            Vector2(player_height, player_height));
   platform = std::make_unique<PlatformObject>(Vector2(100, base_height_location),
-                                          Vector2(player_height, player_height));
+                                              Vector2(player_height, player_height));
 }
 
 void PlayState::update(float dt) {

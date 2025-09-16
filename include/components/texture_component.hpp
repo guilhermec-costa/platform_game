@@ -40,12 +40,12 @@ public:
 
   const Vector2& get_pos() const { return pos; };
   const Vector2& get_dimension() const { return dim; };
-  SDL_Texture*    get_texture() { return m_texture; }
+  SDL_Texture*   get_texture() { return m_texture; }
 
 private:
   SDL_Texture* m_texture;
   SDL_Rect     src_rect;
   SDL_Rect     target_rect;
-  Vector2     pos;
-  Vector2     dim;
+  Vector2      pos;
+  Vector2      dim;
 };

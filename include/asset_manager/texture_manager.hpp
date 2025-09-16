@@ -33,10 +33,6 @@ public:
     return TextureManager::get_instance()._get_texture(file);
   }
 
-  static std::string asset_path(const std::string& relative) {
-    return std::string(PROJECT_SOURCE_DIR) + relative;
-  }
-
 private:
   SDL_Texture* _get_or_load(const std::string& file, SDL_Renderer* renderer) {
     auto it = textures.find(file);

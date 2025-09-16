@@ -2,6 +2,7 @@
 
 #include "camera.hpp"
 #include "sdl_backend.hpp"
+#include "level.hpp"
 
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
@@ -13,6 +14,7 @@ public:
   SDL_Renderer* renderer = nullptr;
   TTF_Font*     font     = nullptr;
   Camera        camera;
+  Level active_level;
 
 public:
   GameContext()             = default;

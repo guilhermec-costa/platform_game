@@ -49,7 +49,7 @@ public:
 private:
   ColliderComponent       collider_comp;
   AnimatedSpriteComponent animated_sprite;
-  Vector2                collider_offset;
+  Vector2                 collider_offset;
   PlayerState             state;
   MovementState           movement_state = MovementState::IDLE;
   ActionState             action_state   = ActionState::NONE;

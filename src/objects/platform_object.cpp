@@ -1,4 +1,5 @@
 #include "../../include/objects/platform_object.hpp"
+
 #include <SDL2/SDL_render.h>
 
 void PlatformObject::handle_event() {}

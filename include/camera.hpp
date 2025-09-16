@@ -35,7 +35,7 @@ public:
 private:
   Vector2 position;
   Vector2 dimension;
-  float    left_margin = 0, right_margin = 0;
+  float   left_margin = 0, right_margin = 0;
 
 public:
   static constexpr float LEFT_MARGIN_PCT  = 0.15;

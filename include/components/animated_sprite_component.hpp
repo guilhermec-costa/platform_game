@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include "../animation.hpp"
 #include "texture_component.hpp"
@@ -45,8 +45,8 @@ public:
   }
 
   void render(SDL_Renderer* renderer, const Vector2& pos, const Camera& camera) {
-    int             row        = current_frame / num_columns;
-    int             col        = current_frame % num_columns;
+    int            row        = current_frame / num_columns;
+    int            col        = current_frame % num_columns;
     const Vector2& camera_pos = camera.get_position();
 
     SDL_Rect src_rect = {col * frame_width, row * frame_height, frame_width, frame_height};
@@ -87,7 +87,7 @@ public:
 
 private:
   TextureComponent                   texture;
-  Vector2                           render_dim;
+  Vector2                            render_dim;
   std::unordered_map<int, Animation> animations;
   int                                frame_width;
   int                                frame_height;

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "asset_manager/texture_manager.hpp"
+#include "asset_manager/utils.hpp"
 #include "camera.hpp"
 #include "components/collider_component.hpp"
-#include "asset_manager/texture_manager.hpp"
 
 #include <SDL2/SDL_render.h>
 
@@ -13,7 +14,7 @@ public:
   Ground(SDL_Renderer* renderer, int screen_w, int screen_h, float y_pos, int tile_w = 64)
       : y(y_pos), screen_width(screen_w), screen_height(screen_h), tile_width(tile_w) {
 
-    ground_tile = TextureManager::get_texture(TextureManager::asset_path("assets/images/grass.png"));
+    ground_tile = TextureManager::get_texture(asset_path("assets/images/grass.png"));
     update_collider();
   }
 

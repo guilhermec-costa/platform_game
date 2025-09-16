@@ -1,4 +1,6 @@
 #include "../include/game.hpp"
+#include "../include/level.hpp"
+#include "../include/asset_manager/json/json_manager.hpp"
 
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
@@ -6,6 +8,8 @@
 
 Game::Game(GameContext& ctx) : running(true), current_state(nullptr), context(ctx) {
   load_textures();
+  Level l = load_level(asset_path("assets/phases/level1.json"));
+  ctx.active_level = l;
   fps_counter = FPSCounter();
 }
 
@@ -51,15 +55,17 @@ SDL_Texture* load_texture_or_die(const std::string& path, SDL_Renderer* renderer
 
 void Game::load_textures() {
   std::vector<std::string> textures = {
-      "assets/images/nigthborne.png",
-      "assets/images/parallax/bg.png",
-      "assets/images/parallax/far-trees.png",
-      "assets/images/parallax/mid-trees.png",
-      "assets/images/parallax/close-trees.png",
-      "assets/images/grass.png"
-      };
+      "assets/images/nigthborne.png",           "assets/images/parallax/bg.png",
+      "assets/images/parallax/far-trees.png",   "assets/images/parallax/mid-trees.png",
+      "assets/images/parallax/close-trees.png", "assets/images/grass.png"};
 
   for (auto& path : textures) {
-    load_texture_or_die(TextureManager::asset_path(path), context.renderer);
+    load_texture_or_die(asset_path(path), context.renderer);
   }
+}
+
+Level Game::load_level(const std::string& level_name) {
+  json j = JSONManager::get_instance().load_file(level_name);
+  Level level = Level::from_json(j);
+  return level;
 }
