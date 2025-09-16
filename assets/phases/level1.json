@@ -1,7 +1,25 @@
 {
-  "player_start": { "x": 500, "y": 300 },
-  "platforms": [
-    { "x": 0, "y": 400, "width": 800, "height": 32 },
-    { "x": 200, "y": 300, "width": 150, "height": 32 }
-  ]
+  "world": {
+    "ground_tile_side": 86,
+    "platforms": [
+      { "x": 0, "y": 400, "width": 800, "height": 32 },
+      { "x": 200, "y": 300, "width": 150, "height": 32 }
+    ],
+    "min_horizontal_x": 0.0,
+    "max_horizontal_x": 2000.0
+  },
+  "player": {
+    "height": 320.0,
+    "start_position": {
+      "x": 0, 
+      "y": 300
+    },
+    "collision_offset_pct": 0.22, 
+    "attrs": {
+      "move_speed": 500.0,
+      "jump_force": 650.0,
+      "gravity": 1500.0,
+      "max_fall_speed": 820.0
+    }
+  }
 }

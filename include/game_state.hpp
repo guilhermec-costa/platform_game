@@ -29,10 +29,10 @@ public:
 
 class PlayState : public GameState {
 private:
-  BackgroundParallax              bg_parallax;
-  Ground                          ground;
-  std::unique_ptr<PlayerObject>   player;
-  std::unique_ptr<PlatformObject> platform;
+  BackgroundParallax            bg_parallax;
+  Ground                        ground;
+  std::unique_ptr<PlayerObject> player;
+  std::vector<PlatformObject>   platforms;
 
 public:
   PlayState(GameContext& ctx);
@@ -44,4 +44,6 @@ public:
   bool is_key_down(SDL_Scancode scancode) const;
   void update(float dt) override;
   void render() override;
+  void check_player_ground_collision();
+  void check_player_window_collision();
 };

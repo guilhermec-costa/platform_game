@@ -7,10 +7,9 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-PlayerObject::PlayerObject(Vector2 pos, Vector2 dim)
-    : GameObject(pos, {0, 0}, dim), on_ground(true), base_height_location(pos.y) {
-  auto texture =
-      TextureManager::get_texture(asset_path("assets/images/nigthborne.png"));
+PlayerObject::PlayerObject(Vector2 pos, Vector2 dim, LevelMetadata::Player& player_data)
+    : GameObject(pos, {0, 0}, dim), on_ground(true) {
+  auto    texture = TextureManager::get_texture(asset_path("assets/images/nigthborne.png"));
   Vector2 tex_dim = SDLBackend::get_texture_dimensions(texture);
 
   collider_offset = {dimension.x * 0.25f, dimension.y * 0.25f};
@@ -25,13 +24,16 @@ PlayerObject::PlayerObject(Vector2 pos, Vector2 dim)
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::JUMP), "jump", 0, 8, 0.1f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.03f,
                                 false);
+
+  move_spped     = player_data.attrs.move_speed;
+  gravity        = player_data.attrs.gravity;
+  jump_force     = player_data.attrs.jump_force;
+  max_fall_speed = player_data.attrs.max_fall_speed;
 };
 
 void PlayerObject::update(float dt) {
   apply_gravity(dt);
   move(dt);
-  check_window_collision();
-  check_ground_collision();
   update_collider();
   update_state();
   update_animation(dt);
@@ -39,6 +41,7 @@ void PlayerObject::update(float dt) {
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
   animated_sprite.render(renderer, position, camera);
+  collider_comp.render_collision_box(renderer, camera);
 }
 
 void PlayerObject::handle_event(PlayerEvent event) {
@@ -46,13 +49,12 @@ void PlayerObject::handle_event(PlayerEvent event) {
     case PlayerEvent::ATTACK: {
       if (action_state != ActionState::ATTACKING) {
         action_state = ActionState::ATTACKING;
-        // velocity.x = 0;
       }
       break;
     }
 
     case PlayerEvent::MOVE_LEFT: {
-      velocity.x = -MOVE_SPEED;
+      velocity.x = -move_spped;
       animated_sprite.set_flipped(true);
       if (on_ground) {
         movement_state = MovementState::RUNNING;
@@ -61,7 +63,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     }
 
     case PlayerEvent::MOVE_RIGHT: {
-      velocity.x = MOVE_SPEED;
+      velocity.x = move_spped;
       animated_sprite.set_flipped(false);
       if (on_ground)
         movement_state = MovementState::RUNNING;
@@ -70,7 +72,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
 
     case PlayerEvent::JUMP: {
       if (on_ground) {
-        velocity.y = -JUMP_FORCE;
+        velocity.y = -jump_force;
         set_on_ground(false);
         movement_state = MovementState::JUMPING;
       }
@@ -88,23 +90,16 @@ void PlayerObject::handle_event(PlayerEvent event) {
 
 void PlayerObject::apply_gravity(float dt) {
   if (!on_ground) {
-    velocity.y += GRAVITY * dt;
-    if (velocity.y > MAX_FALL_SPEED) {
-      velocity.y = MAX_FALL_SPEED;
+    velocity.y += gravity * dt;
+    if (velocity.y > max_fall_speed) {
+      velocity.y = max_fall_speed;
     }
   }
 }
 
 void PlayerObject::move(float dt) {
   position += velocity * dt;
-}
-
-void PlayerObject::check_ground_collision() {
-  if (position.y >= base_height_location) {
-    position.y = base_height_location;
-    velocity.y = 0;
-    set_on_ground(true);
-  }
+  std::cout << "Position: " << position << "\n";
 }
 
 void PlayerObject::update_state() {

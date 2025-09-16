@@ -1,15 +1,54 @@
 #pragma once
 
 #include "asset_manager/json/json_alias.hpp"
-
 #include "shared.hpp"
 
+struct LevelMetadata {
+  struct World {
+    float ground_tile_side;
+    float min_horizontal_x;
+    float max_horizontal_x;
+  };
+  struct Player {
+    Vector2 start_position;
+    float   height;
+    float   collision_offset_pct;
+    struct Attributes {
+      float move_speed;
+      float jump_force;
+      float gravity;
+      float max_fall_speed;
+    } attrs;
+  };
+};
+
 struct Level {
-  Vector2 player_start;
+  LevelMetadata::World  world;
+  LevelMetadata::Player player;
 
   static Level from_json(const json& j) {
     Level level;
-    level.player_start = Vector2(j["player_start"]["x"], j["player_start"]["y"]);
+
+    // WORLD DATA
+    auto world                   = j["world"];
+    level.world.ground_tile_side = world["ground_tile_side"].get<float>();
+    level.world.min_horizontal_x = world["min_horizontal_x"].get<float>();
+    level.world.max_horizontal_x = world["max_horizontal_x"].get<float>();
+
+    // PLAYER DATA
+    auto player       = j["player"];
+    auto player_pos   = player["start_position"];
+    auto player_attrs = player["attrs"];
+    level.player.start_position =
+        Vector2{player_pos["x"].get<float>(), player_pos["y"].get<float>()};
+    level.player.attrs = LevelMetadata::Player::Attributes{
+        .move_speed     = player_attrs["move_speed"].get<float>(),
+        .jump_force     = player_attrs["jump_force"].get<float>(),
+        .gravity        = player_attrs["gravity"].get<float>(),
+        .max_fall_speed = player_attrs["max_fall_speed"].get<float>()};
+    level.player.height               = player["height"].get<float>();
+    level.player.collision_offset_pct = player["collision_offset_pct"].get<float>();
+
     return level;
   }
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "level.hpp"
 #include "shared.hpp"
 
 class Camera {
@@ -18,9 +19,11 @@ public:
     }
   }
 
-  void update() {
-    if (position.x < 0) {
-      position.x = 0;
+  void update(float min_horizontal, float max_horizontal) {
+    if (position.x < min_horizontal) {
+      position.x = min_horizontal;
+    } else if (position.x + dimension.x > max_horizontal) {
+      position.x = max_horizontal - dimension.x;
     }
   }
 

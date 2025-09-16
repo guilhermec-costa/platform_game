@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../include/level.hpp"
 #include "../components/animated_sprite_component.hpp"
 #include "../components/collider_component.hpp"
 #include "game_object.hpp"
@@ -22,29 +23,29 @@ enum class PlayerState {
 class PlayerObject : public GameObject {
 public:
   PlayerObject() = delete;
-  PlayerObject(Vector2 pos, Vector2 dim);
+  PlayerObject(Vector2 pos, Vector2 dim, LevelMetadata::Player& player_data);
 
-  void        handle_event(PlayerEvent event);
-  void        update(float dt) override;
-  void        render(SDL_Renderer* renderer, const Camera& camera) override;
-  void        apply_gravity(float dt);
-  void        move(float dt);
-  void        check_ground_collision();
-  void        update_collider();
-  void        update_animation(float dt);
-  void        update_state();
-  void        check_window_collision();
-  inline void set_on_ground(bool state) { on_ground = state; }
+  void                      handle_event(PlayerEvent event);
+  void                      update(float dt) override;
+  void                      render(SDL_Renderer* renderer, const Camera& camera) override;
+  void                      apply_gravity(float dt);
+  void                      move(float dt);
+  void                      update_collider();
+  void                      update_animation(float dt);
+  void                      update_state();
+  void                      check_window_collision();
+  inline void               set_position_x(float x) { position.x = x; };
+  inline void               set_position_y(float y) { position.y = y; };
+  void                      set_velocity_y(float y) { velocity.y = y; };
+  inline void               set_on_ground(bool state) { on_ground = state; }
+  inline ColliderComponent& get_collider_component() { return collider_comp; }
 
 public:
-  float base_height_location;
   bool  on_ground;
-
-public:
-  static constexpr float MOVE_SPEED     = 500.0f;
-  static constexpr float JUMP_FORCE     = 600.0f;
-  static constexpr float GRAVITY        = 1400.0f;
-  static constexpr float MAX_FALL_SPEED = 800.0f;
+  float move_spped;
+  float jump_force;
+  float gravity;
+  float max_fall_speed;
 
 private:
   ColliderComponent       collider_comp;

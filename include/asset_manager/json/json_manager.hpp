@@ -1,7 +1,8 @@
 #pragma once
 
-#include <fstream>
 #include "json_alias.hpp"
+
+#include <fstream>
 
 class JSONManager {
 public:
@@ -19,7 +20,7 @@ public:
   };
 
 private:
-  JSONManager() = default;
+  JSONManager()                              = default;
   JSONManager(const JSONManager&)            = delete;
   JSONManager& operator=(const JSONManager&) = delete;
 };

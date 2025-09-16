@@ -1,6 +1,7 @@
 #include "../include/game.hpp"
-#include "../include/level.hpp"
+
 #include "../include/asset_manager/json/json_manager.hpp"
+#include "../include/level.hpp"
 
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
@@ -9,7 +10,7 @@
 Game::Game(GameContext& ctx) : running(true), current_state(nullptr), context(ctx) {
   load_textures();
   Level l = load_level(asset_path("assets/phases/level1.json"));
-  ctx.active_level = l;
+  ctx.set_level(l);
   fps_counter = FPSCounter();
 }
 
@@ -65,7 +66,7 @@ void Game::load_textures() {
 }
 
 Level Game::load_level(const std::string& level_name) {
-  json j = JSONManager::get_instance().load_file(level_name);
+  json  j     = JSONManager::get_instance().load_file(level_name);
   Level level = Level::from_json(j);
   return level;
 }
