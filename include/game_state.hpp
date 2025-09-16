@@ -4,6 +4,7 @@
 #include "entity_manager.hpp"
 #include "game_context.hpp"
 #include "ground.hpp"
+#include "objects/platform_object.hpp"
 #include "objects/player_object.hpp"
 
 #include <SDL2/SDL_events.h>
@@ -31,6 +32,7 @@ private:
   BackgroundParallax            bg_parallax;
   Ground                        ground;
   std::unique_ptr<PlayerObject> player;
+  std::unique_ptr<PlatformObject> platform;
 
 public:
   PlayState(GameContext& ctx);

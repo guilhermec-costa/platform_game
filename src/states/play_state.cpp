@@ -13,13 +13,15 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
   bg_parallax      = BackgroundParallax();
   Vector2 win_dim = SDLBackend::get_window_dimension(ctx.window);
 
-  const int tile_width = 64;
+  const int tile_width = 86;
   float     ground_y   = win_dim.y - tile_width;
   ground               = Ground(ctx.renderer, win_dim.x, win_dim.y, ground_y, tile_width);
 
-  const int   player_height        = 250;
-  const float base_height_location = ground_y - player_height + 80;
+  const int   player_height        = 320;
+  const float base_height_location = ground_y - player_height + 100;
   player = std::make_unique<PlayerObject>(Vector2(100, base_height_location),
+                                          Vector2(player_height, player_height));
+  platform = std::make_unique<PlatformObject>(Vector2(100, base_height_location),
                                           Vector2(player_height, player_height));
 }
 
@@ -35,6 +37,7 @@ void PlayState::render() {
   bg_parallax.render(context.window, context.renderer);
   ground.render(context.renderer, context.camera);
   player->render(context.renderer, context.camera);
+  platform->render(context.renderer, context.camera);
 }
 
 void PlayState::handle_event(SDL_Event& event) {

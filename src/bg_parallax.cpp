@@ -1,19 +1,19 @@
 #include "../include/bg_parallax.hpp"
 
 #include "../include/sdl_backend.hpp"
-#include "../include/texture_manager.hpp"
+#include "../include/asset_manager/texture_manager.hpp"
 
 #include <SDL2/SDL_render.h>
 
 BackgroundParallax::BackgroundParallax() {
   bg_layer          = TextureManager::get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png"));
+      "assets/images/parallax/bg.png"));
   far_trees_layer   = TextureManager::get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png"));
+      "assets/images/parallax/far-trees.png"));
   mid_trees_layer   = TextureManager::get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png"));
+      "assets/images/parallax/mid-trees.png"));
   close_trees_layer = TextureManager::get_texture(TextureManager::asset_path(
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png"));
+      "assets/images/parallax/close-trees.png"));
   layers            = {{bg_layer, 0.1f, 0.0f},
                        {far_trees_layer, 0.3f, 0.0f},
                        {mid_trees_layer, 0.5f, 0.0f},

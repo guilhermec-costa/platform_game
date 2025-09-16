@@ -51,11 +51,13 @@ SDL_Texture* load_texture_or_die(const std::string& path, SDL_Renderer* renderer
 
 void Game::load_textures() {
   std::vector<std::string> textures = {
-      "assets/nigthborne.png",
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png",
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png",
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png",
-      "assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png"};
+      "assets/images/nigthborne.png",
+      "assets/images/parallax/bg.png",
+      "assets/images/parallax/far-trees.png",
+      "assets/images/parallax/mid-trees.png",
+      "assets/images/parallax/close-trees.png",
+      "assets/images/grass.png"
+      };
 
   for (auto& path : textures) {
     load_texture_or_die(TextureManager::asset_path(path), context.renderer);

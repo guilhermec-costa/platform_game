@@ -41,7 +41,7 @@ public:
   bool  on_ground;
 
 public:
-  static constexpr float MOVE_SPEED     = 400.0f;
+  static constexpr float MOVE_SPEED     = 500.0f;
   static constexpr float JUMP_FORCE     = 600.0f;
   static constexpr float GRAVITY        = 1400.0f;
   static constexpr float MAX_FALL_SPEED = 800.0f;

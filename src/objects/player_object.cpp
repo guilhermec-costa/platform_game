@@ -1,14 +1,14 @@
 #include "../../include/objects/player_object.hpp"
 
 #include "../../include/sdl_backend.hpp"
-#include "../../include/texture_manager.hpp"
+#include "../../include/asset_manager/texture_manager.hpp"
 
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
 PlayerObject::PlayerObject(Vector2 pos, Vector2 dim)
     : GameObject(pos, {0, 0}, dim), on_ground(true), base_height_location(pos.y) {
-  auto texture = TextureManager::get_texture(TextureManager::asset_path("assets/nigthborne.png"));
+  auto texture = TextureManager::get_texture(TextureManager::asset_path("assets/images/nigthborne.png"));
   Vector2 tex_dim = SDLBackend::get_texture_dimensions(texture);
 
   collider_offset = {dimension.x * 0.25f, dimension.y * 0.25f};

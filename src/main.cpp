@@ -5,9 +5,12 @@
 #include "../include/game.hpp"
 #include "../include/game_context.hpp"
 #include "../include/sdl_backend.hpp"
+#include "../vendor/json.hpp"
 
 #include <SDL2/SDL_timer.h>
 #include <memory>
+
+using json = nlohmann::json;
 
 int main() {
   SDLBackend::init_subsytems();
