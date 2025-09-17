@@ -41,7 +41,6 @@ void PlayerObject::update(float dt) {
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
   animated_sprite.render(renderer, position, camera);
-  collider_comp.render_collision_box(renderer, camera);
 }
 
 void PlayerObject::handle_event(PlayerEvent event) {
@@ -99,7 +98,6 @@ void PlayerObject::apply_gravity(float dt) {
 
 void PlayerObject::move(float dt) {
   position += velocity * dt;
-  std::cout << "Position: " << position << "\n";
 }
 
 void PlayerObject::update_state() {

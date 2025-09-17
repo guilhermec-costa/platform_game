@@ -30,8 +30,6 @@ public:
       SDL_Rect rect = {x, static_cast<int>(y), tile_side, tile_side};
       SDL_RenderCopy(renderer, ground_tile, nullptr, &rect);
     }
-
-    collider.render_collision_box(renderer, camera);
   }
 
   void resize(int new_width, int new_height) {

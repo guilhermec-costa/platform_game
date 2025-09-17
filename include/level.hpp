@@ -9,6 +9,14 @@ struct LevelMetadata {
     float min_horizontal_x;
     float max_horizontal_x;
   };
+
+  struct Platform {
+    float x;
+    float y;
+    float width;
+    float height;
+  };
+
   struct Player {
     Vector2 start_position;
     float   height;
@@ -23,8 +31,9 @@ struct LevelMetadata {
 };
 
 struct Level {
-  LevelMetadata::World  world;
-  LevelMetadata::Player player;
+  LevelMetadata::World                 world;
+  LevelMetadata::Player                player;
+  std::vector<LevelMetadata::Platform> platforms;
 
   static Level from_json(const json& j) {
     Level level;
@@ -48,6 +57,13 @@ struct Level {
         .max_fall_speed = player_attrs["max_fall_speed"].get<float>()};
     level.player.height               = player["height"].get<float>();
     level.player.collision_offset_pct = player["collision_offset_pct"].get<float>();
+
+    // PLATFORM DATA
+    for (const auto& p : j["platforms"]) {
+      LevelMetadata::Platform platform{p["x"].get<float>(), p["y"].get<float>(),
+                                       p["width"].get<float>(), p["height"].get<float>()};
+      level.platforms.push_back(platform);
+    };
 
     return level;
   }

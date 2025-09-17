@@ -30,7 +30,6 @@ public:
   void resize(float screen_width) {
     left_margin  = screen_width * LEFT_MARGIN_PCT;
     right_margin = screen_width * RIGHT_MARGIN_PCT;
-    std::cout << "Left margin: " << left_margin << " | Right margin: " << right_margin << "\n";
   }
 
   const Vector2& get_position() const { return position; }

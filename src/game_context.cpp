@@ -22,6 +22,9 @@ GameContext::GameContext(SDL_Window* window, SDL_Renderer* renderer)
 LevelMetadata::Player& GameContext::get_player_data() {
   return active_level.player;
 }
+std::vector<LevelMetadata::Platform>& GameContext::get_platforms_data() {
+  return active_level.platforms;
+}
 
 LevelMetadata::World& GameContext::get_world_data() {
   return active_level.world;

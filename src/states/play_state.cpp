@@ -21,12 +21,22 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
   player =
       std::make_unique<PlayerObject>(Vector2(player_data.start_position),
                                      Vector2(player_data.height, player_data.height), player_data);
+
+  auto& platforms_data = ctx.get_platforms_data();
+  for (const auto& p : platforms_data) {
+    platforms.push_back(
+        std::make_unique<PlatformObject>(Vector2(p.x, p.y), Vector2(p.width, p.height)));
+  }
+  std::cout << "Platforms size: " << platforms.size() << "\n";
 }
 
 void PlayState::update(float dt) {
   auto& world_data = context.get_world_data();
   ground.update(context.camera.get_position().x);
   player->update(dt);
+  for (auto& platform : platforms) {
+    platform->render(context.renderer, context.camera);
+  }
   check_player_ground_collision();
   check_player_window_collision();
   context.camera.follow(player->get_position());
@@ -76,6 +86,9 @@ void PlayState::render() {
   bg_parallax.render(context.window, context.renderer);
   ground.render(context.renderer, context.camera);
   player->render(context.renderer, context.camera);
+  for (auto& platform : platforms) {
+    platform->render(context.renderer, context.camera);
+  }
 }
 
 void PlayState::handle_event(SDL_Event& event) {

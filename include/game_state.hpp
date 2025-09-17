@@ -29,10 +29,10 @@ public:
 
 class PlayState : public GameState {
 private:
-  BackgroundParallax            bg_parallax;
-  Ground                        ground;
-  std::unique_ptr<PlayerObject> player;
-  std::vector<PlatformObject>   platforms;
+  BackgroundParallax                           bg_parallax;
+  Ground                                       ground;
+  std::unique_ptr<PlayerObject>                player;
+  std::vector<std::unique_ptr<PlatformObject>> platforms;
 
 public:
   PlayState(GameContext& ctx);

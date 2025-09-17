@@ -18,10 +18,11 @@ public:
   GameContext()             = default;
   GameContext(GameContext&) = delete;
   GameContext(SDL_Window* window, SDL_Renderer* renderer);
-  void                   end();
-  LevelMetadata::Player& get_player_data();
-  LevelMetadata::World&  get_world_data();
-  void                   set_level(const Level& level);
+  void                                  end();
+  LevelMetadata::Player&                get_player_data();
+  LevelMetadata::World&                 get_world_data();
+  std::vector<LevelMetadata::Platform>& get_platforms_data();
+  void                                  set_level(const Level& level);
 
 private:
   Level active_level;
