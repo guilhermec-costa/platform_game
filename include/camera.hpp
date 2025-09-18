@@ -1,6 +1,5 @@
 #pragma once
 
-#include "level.hpp"
 #include "shared.hpp"
 
 class Camera {
@@ -25,6 +24,7 @@ public:
     } else if (position.x + dimension.x > max_horizontal) {
       position.x = max_horizontal - dimension.x;
     }
+    std::cout << "Cam pos: " << position << "\n";
   }
 
   void resize(float screen_width) {

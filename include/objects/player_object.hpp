@@ -33,7 +33,6 @@ public:
   void                      update_collider();
   void                      update_animation(float dt);
   void                      update_state();
-  void                      check_window_collision();
   inline void               set_position_x(float x) { position.x = x; };
   inline void               set_position_y(float y) { position.y = y; };
   void                      set_velocity_y(float y) { velocity.y = y; };

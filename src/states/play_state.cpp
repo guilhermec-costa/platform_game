@@ -11,8 +11,7 @@
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_video.h>
 
-PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
-  bg_parallax     = BackgroundParallax();
+PlayState::PlayState() : GameState(), bg_parallax() {
   Vector2 win_dim = SDLBackend::get_window_dimension(ctx.window);
 
   const float tile_side   = ctx.get_world_data().ground_tile_side;
@@ -30,25 +29,24 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
         std::make_unique<PlatformObject>(Vector2(p.x, p.y), Vector2(p.width, p.height)));
   }
 
-  ui_manager = UIManager();
   auto label = std::make_unique<Label>("testing label", ctx.font);
   label->set_position({100, 100});
   label->set_dimension({100, 100});
-  ui_manager.add_element(std::move(label));
+  ctx.ui_manager.add_element(std::move(label));
 }
 
 void PlayState::update(float dt) {
-  auto& world_data = context.get_world_data();
-  ground.update(context.camera.get_position().x);
+  auto& world_data = ctx.get_world_data();
+  ground.update(ctx.camera.get_position().x);
   player->update(dt);
   for (auto& platform : platforms) {
-    platform->render(context.renderer, context.camera);
+    platform->render(ctx.renderer, ctx.camera);
   }
   check_player_ground_collision();
   check_player_window_collision();
-  context.camera.follow(player->get_position());
-  context.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
-  bg_parallax.update(context.camera.get_position().x);
+  ctx.camera.follow(player->get_position());
+  ctx.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
+  bg_parallax.update(ctx.camera.get_position().x);
 }
 
 void PlayState::check_player_ground_collision() {
@@ -57,7 +55,7 @@ void PlayState::check_player_ground_collision() {
 
   if (SDL_HasIntersection(&player_rect, &ground_rect)) {
     float ground_top  = static_cast<float>(ground_rect.y);
-    auto  player_data = context.get_player_data();
+    auto  player_data = ctx.get_player_data();
 
     float player_new_y = ground_top - player->get_dimension().y +
                          (player_data.height * player_data.collision_offset_pct);
@@ -71,7 +69,7 @@ void PlayState::check_player_ground_collision() {
 
 void PlayState::check_player_window_collision() {
   auto&       player_collider  = player->get_collider_component();
-  const auto& world_data       = context.get_world_data();
+  const auto& world_data       = ctx.get_world_data();
   float       min_horizontal_x = world_data.min_horizontal_x;
   float       max_horizontal_x = world_data.max_horizontal_x;
 
@@ -90,13 +88,13 @@ void PlayState::check_player_window_collision() {
 }
 
 void PlayState::render() {
-  bg_parallax.render(context.window, context.renderer);
-  ground.render(context.renderer, context.camera);
-  player->render(context.renderer, context.camera);
+  bg_parallax.render(ctx.window, ctx.renderer);
+  ground.render(ctx.renderer, ctx.camera);
+  player->render(ctx.renderer, ctx.camera);
   for (auto& platform : platforms) {
-    platform->render(context.renderer, context.camera);
+    platform->render(ctx.renderer, ctx.camera);
   }
-  ui_manager.render(context.renderer);
+  ctx.ui_manager.render(ctx.renderer);
 }
 
 void PlayState::handle_event(SDL_Event& event) {
@@ -129,7 +127,7 @@ void PlayState::handle_mouse_click_event(const SDL_MouseButtonEvent& button) {
 void PlayState::handle_window_event(const SDL_WindowEvent& window) {
   if (window.event == SDL_WINDOWEVENT_RESIZED) {
     ground.resize(window.data1, window.data2);
-    context.camera.resize(window.data1);
+    ctx.camera.resize(window.data1);
   }
 }
 

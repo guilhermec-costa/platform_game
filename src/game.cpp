@@ -10,7 +10,12 @@
 #include <SDL2/SDL_ttf.h>
 #include <cstdlib>
 
-Game::Game(GameContext& ctx) : running(true), current_state(nullptr), context(ctx) {
+struct WindowSpecification {
+  int width;
+  int height;
+};
+
+Game::Game() : running(true), current_state(nullptr) {
   load_textures();
   Level l = load_level(asset_path("assets/phases/level1.json"));
   ctx.set_level(l);
@@ -20,7 +25,8 @@ Game::Game(GameContext& ctx) : running(true), current_state(nullptr), context(ct
     std::runtime_error("Failed to load font");
   }
   ctx.set_font(font);
-  fps_counter = FPSCounter();
+  ctx.ui_manager = UIManager();
+  fps_counter    = FPSCounter();
 }
 
 void Game::handle_events() {
@@ -42,13 +48,13 @@ void Game::update(float dt) {
 }
 
 void Game::render() {
-  SDL_SetRenderDrawColor(context.renderer, 0, 0, 0, 255);
-  SDL_RenderClear(context.renderer);
+  SDL_SetRenderDrawColor(ctx.renderer, 0, 0, 0, 255);
+  SDL_RenderClear(ctx.renderer);
   if (current_state) {
     current_state->render();
   }
 
-  SDL_RenderPresent(context.renderer);
+  SDL_RenderPresent(ctx.renderer);
 }
 
 SDL_Texture* load_texture_or_die(const std::string& path, SDL_Renderer* renderer) {
@@ -70,7 +76,7 @@ void Game::load_textures() {
       "assets/images/parallax/close-trees.png", "assets/images/grass.png"};
 
   for (auto& path : textures) {
-    load_texture_or_die(asset_path(path), context.renderer);
+    load_texture_or_die(asset_path(path), ctx.renderer);
   }
 }
 

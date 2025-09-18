@@ -10,13 +10,14 @@
 class Game {
 private:
   bool                       running;
-  GameContext&               context;
+  int                        target_fps = 60;
+  GameContext&               ctx        = GameContext::instance();
   std::unique_ptr<GameState> current_state;
   FPSCounter                 fps_counter;
-  int                        target_fps = 60;
 
 public:
-  Game(GameContext& ctx);
+  Game();
+  Game(const Game&) = delete;
 
   void set_fps(int fps) {
     target_fps = fps;
@@ -48,7 +49,7 @@ public:
     running = false;
     std::cout << "[Game] Quitting the game\n";
     current_state.reset();
-    context.end();
+    ctx.end();
   }
 
   void  change_state(std::unique_ptr<GameState> new_state) { current_state = std::move(new_state); }

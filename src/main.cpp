@@ -16,10 +16,10 @@ int main() {
   SDLBackend::init_subsytems();
   auto window   = SDLBackend::create_window(900, 600);
   auto renderer = SDLBackend::create_renderer(window);
+  GameContext::instance().init(window, renderer);
 
-  GameContext ctx(window, renderer);
-  Game        game(ctx);
-  game.change_state(std::make_unique<PlayState>(ctx));
+  Game game;
+  game.change_state(std::make_unique<PlayState>());
   game.set_fps(60);
   game.run();
   return 0;

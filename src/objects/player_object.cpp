@@ -138,11 +138,3 @@ void PlayerObject::update_animation(float dt) {
   }
   animated_sprite.update(dt);
 }
-
-void PlayerObject::check_window_collision() {
-  if (collider_comp.position.x < 0) {
-    float delta              = 0 - collider_comp.position.x;
-    collider_comp.position.x = 0;
-    position.x += delta;
-  }
-}
