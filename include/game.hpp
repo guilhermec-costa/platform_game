@@ -46,8 +46,9 @@ public:
 
   void quit() {
     running = false;
-    context.end();
     std::cout << "[Game] Quitting the game\n";
+    current_state.reset();
+    context.end();
   }
 
   void  change_state(std::unique_ptr<GameState> new_state) { current_state = std::move(new_state); }

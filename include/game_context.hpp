@@ -2,7 +2,7 @@
 
 #include "camera.hpp"
 #include "level.hpp"
-#include "sdl_backend.hpp"
+#include "ui/ui_manager.hpp"
 
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
@@ -12,6 +12,7 @@ public:
   SDL_Window*   window   = nullptr;
   SDL_Renderer* renderer = nullptr;
   TTF_Font*     font     = nullptr;
+  UIManager     ui_manager;
   Camera        camera;
 
 public:
@@ -23,6 +24,7 @@ public:
   LevelMetadata::World&                 get_world_data();
   std::vector<LevelMetadata::Platform>& get_platforms_data();
   void                                  set_level(const Level& level);
+  void                                  set_font(TTF_Font* f);
 
 private:
   Level active_level;

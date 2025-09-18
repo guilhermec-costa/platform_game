@@ -1,16 +1,25 @@
 #include "../include/game.hpp"
 
 #include "../include/asset_manager/json/json_manager.hpp"
+#include "../include/asset_manager/utils.hpp"
 #include "../include/level.hpp"
+#include "../include/sdl_backend.hpp"
 
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
 #include <cstdlib>
 
 Game::Game(GameContext& ctx) : running(true), current_state(nullptr), context(ctx) {
   load_textures();
   Level l = load_level(asset_path("assets/phases/level1.json"));
   ctx.set_level(l);
+  TTF_Font* font =
+      SDLBackend::load_font(asset_path("assets/fonts/YoungSerif-Regular.ttf").c_str(), 22);
+  if (!font) {
+    std::runtime_error("Failed to load font");
+  }
+  ctx.set_font(font);
   fps_counter = FPSCounter();
 }
 

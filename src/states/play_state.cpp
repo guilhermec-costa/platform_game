@@ -1,4 +1,6 @@
 #include "../../include/game_state.hpp"
+#include "../../include/sdl_backend.hpp"
+#include "../../include/ui/label_element.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keyboard.h>
@@ -27,7 +29,12 @@ PlayState::PlayState(GameContext& ctx) : GameState(ctx) {
     platforms.push_back(
         std::make_unique<PlatformObject>(Vector2(p.x, p.y), Vector2(p.width, p.height)));
   }
-  std::cout << "Platforms size: " << platforms.size() << "\n";
+
+  ui_manager = UIManager();
+  auto label = std::make_unique<Label>("testing label", ctx.font);
+  label->set_position({100, 100});
+  label->set_dimension({100, 100});
+  ui_manager.add_element(std::move(label));
 }
 
 void PlayState::update(float dt) {
@@ -89,6 +96,7 @@ void PlayState::render() {
   for (auto& platform : platforms) {
     platform->render(context.renderer, context.camera);
   }
+  ui_manager.render(context.renderer);
 }
 
 void PlayState::handle_event(SDL_Event& event) {

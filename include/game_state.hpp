@@ -6,6 +6,7 @@
 #include "ground.hpp"
 #include "objects/platform_object.hpp"
 #include "objects/player_object.hpp"
+#include "ui/ui_manager.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
@@ -33,6 +34,8 @@ private:
   Ground                                       ground;
   std::unique_ptr<PlayerObject>                player;
   std::vector<std::unique_ptr<PlatformObject>> platforms;
+  UIManager                                    ui_manager;
+  std::vector<std::unique_ptr<UIElement>>      ui_elements;
 
 public:
   PlayState(GameContext& ctx);

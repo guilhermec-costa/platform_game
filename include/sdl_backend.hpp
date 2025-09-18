@@ -3,6 +3,7 @@
 #include "../include/shared.hpp"
 
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 
 class SDLBackend {
@@ -14,4 +15,5 @@ public:
   static int           get_window_width(SDL_Window* window);
   static int           get_window_height(SDL_Window* window);
   static Vector2       get_texture_dimensions(SDL_Texture* texture);
+  static TTF_Font*     load_font(const char* path, int s);
 };

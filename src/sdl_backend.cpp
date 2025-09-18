@@ -70,3 +70,12 @@ Vector2 SDLBackend::get_texture_dimensions(SDL_Texture* texture) {
   SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
   return Vector2(tex_width, tex_height);
 }
+
+TTF_Font* SDLBackend::load_font(const char* path, int s) {
+  TTF_Font* font = TTF_OpenFont(path, s);
+  if (!font) {
+    std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+    return nullptr;
+  }
+  return font;
+}
