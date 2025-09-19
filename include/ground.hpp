@@ -30,6 +30,7 @@ public:
       SDL_Rect rect = {x, static_cast<int>(y), tile_side, tile_side};
       SDL_RenderCopy(renderer, ground_tile, nullptr, &rect);
     }
+    collider.render_collision_box(renderer, camera);
   }
 
   void resize(int new_width, int new_height) {
@@ -53,9 +54,9 @@ private:
 
 private:
   Components::ColliderComponent collider;
-  SDL_Texture*      ground_tile   = nullptr;
-  float             y             = 0;
-  int               screen_width  = 0;
-  int               screen_height = 0;
-  int               tile_side     = 64;
+  SDL_Texture*                  ground_tile   = nullptr;
+  float                         y             = 0;
+  int                           screen_width  = 0;
+  int                           screen_height = 0;
+  int                           tile_side     = 64;
 };

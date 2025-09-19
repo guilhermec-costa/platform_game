@@ -47,4 +47,5 @@ public:
   void render() override;
   void check_player_ground_collision();
   void check_player_window_collision();
+  void check_player_platform_collision();
 };

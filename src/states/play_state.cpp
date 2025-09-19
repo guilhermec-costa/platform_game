@@ -6,6 +6,7 @@
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_stdinc.h>
@@ -18,10 +19,7 @@ PlayState::PlayState() : GameState(), bg_parallax() {
   float       tile_height = win_dim.y - tile_side;
   ground                  = Ground(ctx.renderer, win_dim.x, win_dim.y, tile_height, tile_side);
 
-  auto& player_data = ctx.get_player_data();
-  player =
-      std::make_unique<PlayerObject>(Vector2(player_data.start_position),
-                                     Vector2(player_data.height, player_data.height), player_data);
+  player = std::make_unique<PlayerObject>(ctx.get_player_data());
 
   auto& platforms_data = ctx.get_platforms_data();
   for (const auto& p : platforms_data) {
@@ -42,10 +40,57 @@ void PlayState::update(float dt) {
     platform->update(dt);
   }
   check_player_ground_collision();
+  check_player_platform_collision();
   check_player_window_collision();
   ctx.camera.follow(player->get_position());
   ctx.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
   bg_parallax.update(ctx.camera.get_position().x);
+}
+
+void PlayState::check_player_platform_collision() {
+  SDL_Rect player_rect = player->get_collider_component().get_rect();
+
+  for (auto& p : platforms) {
+    SDL_Rect plt_rect = p->get_collider().get_rect();
+
+    if (SDL_HasIntersection(&player_rect, &plt_rect)) {
+      // Calcula as distâncias de penetração em cada lado
+      int overlap_left   = (player_rect.x + player_rect.w) - plt_rect.x;
+      int overlap_right  = (plt_rect.x + plt_rect.w) - player_rect.x;
+      int overlap_top    = (player_rect.y + player_rect.h) - plt_rect.y;
+      int overlap_bottom = (plt_rect.y + plt_rect.h) - player_rect.y;
+
+      // Pega a menor sobreposição (resolve pelo menor eixo)
+      int min_dx = std::min(overlap_left, overlap_right);
+      int min_dy = std::min(overlap_top, overlap_bottom);
+
+      if (min_dx < min_dy) {
+        // Resolver no eixo X
+        if (overlap_left < overlap_right) {
+          player->position.x -= overlap_left; // empurra player para a esquerda
+        } else {
+          player->position.x += overlap_right; // empurra player para a direita
+        }
+        player->velocity.x = 0; // trava a velocidade horizontal
+      } else {
+        // Resolver no eixo Y
+        if (overlap_top < overlap_bottom) {
+          // Player caiu em cima da plataforma
+          float plt_top     = static_cast<float>(plt_rect.y);
+          auto  player_data = ctx.get_player_data();
+
+          player->land_on(plt_top);
+        } else {
+          // Player bateu por baixo
+          player->position.y += overlap_bottom;
+          player->velocity.y = 0;
+        }
+      }
+
+      // Atualiza o collider depois de mover
+      player->get_collider_component().set_position(player->position);
+    }
+  }
 }
 
 void PlayState::check_player_ground_collision() {
@@ -56,9 +101,7 @@ void PlayState::check_player_ground_collision() {
     float ground_top  = static_cast<float>(ground_rect.y);
     auto  player_data = ctx.get_player_data();
 
-    float player_new_y = ground_top - player->get_dimension().y +
-                         (player_data.height * player_data.collision_offset_pct);
-    player->set_position_y(player_new_y);
+    player->land_on(ground_top);
     player->set_velocity_y(0);
     player->set_on_ground(true);
   } else {

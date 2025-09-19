@@ -7,17 +7,18 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-PlayerObject::PlayerObject(Vector2 pos, Vector2 dim, LevelMetadata::Player& player_data)
-    : GameObject(pos, {0, 0}, dim), on_ground(true) {
+PlayerObject::PlayerObject(LevelMetadata::Player& player_data)
+    : GameObject(player_data.start_position, {0, 0}, player_data.dimension), on_ground(true) {
   auto    texture = TextureManager::get_texture(asset_path("assets/images/nigthborne.png"));
   Vector2 tex_dim = SDLBackend::get_texture_dimensions(texture);
 
-  collider_offset = {dimension.x * 0.25f, dimension.y * 0.25f};
-  Vector2 collider_dim{dimension.x * 0.55f, dimension.y * 0.55f};
-  collider_comp = Components::ColliderComponent(pos + collider_offset, collider_dim);
+  collision_offset_pct = player_data.collision_offset_pct;
+  collider_offset = {dimension.x * 0.35f, dimension.y * 0.4f};
+  Vector2 collider_dim{dimension.x * 0.40f, dimension.y * 0.40f};
+  collider_component = Components::ColliderComponent(player_data.start_position + collider_offset, collider_dim);
 
   animated_sprite = Components::AnimatedSpriteComponent(
-      Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}), 80, 80, 0.1, dim);
+      Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}), 80, 80, 0.1,  player_data.dimension);
 
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::IDLE), "idle", 0, 8, 0.099f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::RUN), "run", 8, 12, 0.1f);
@@ -41,6 +42,7 @@ void PlayerObject::update(float dt) {
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
   animated_sprite.render(renderer, position, camera);
+  collider_component.render_collision_box(renderer, camera);
 }
 
 void PlayerObject::handle_event(PlayerEvent event) {
@@ -115,7 +117,7 @@ void PlayerObject::update_state() {
 }
 
 void PlayerObject::update_collider() {
-  collider_comp.set_position(position + collider_offset);
+  collider_component.set_position(position + collider_offset);
 }
 
 void PlayerObject::update_animation(float dt) {
@@ -137,4 +139,12 @@ void PlayerObject::update_animation(float dt) {
     }
   }
   animated_sprite.update(dt);
+}
+
+void PlayerObject::land_on(float surface_y) {
+  float new_y = surface_y - dimension.y  +
+                         (dimension.y * collision_offset_pct);
+    position.y = new_y; 
+    velocity.y = 0;
+    on_ground  = true;
 }

@@ -19,7 +19,7 @@ struct LevelMetadata {
 
   struct Player {
     Vector2 start_position;
-    float   height;
+    Vector2 dimension;
     float   collision_offset_pct;
     struct Attributes {
       float move_speed;
@@ -50,16 +50,19 @@ struct Level {
 
     // PLAYER DATA
     auto player       = j["player"];
-    auto player_pos   = player["start_position"];
+    auto player_position   = player["start_position"];
+    auto player_dimension   = player["dimension"];
     auto player_attrs = player["attrs"];
     level.player.start_position =
-        Vector2{player_pos["x"].get<float>(), player_pos["y"].get<float>()};
+        Vector2{player_position["x"].get<float>(), player_position["y"].get<float>()};
+
+    level.player.dimension = 
+        Vector2{player_dimension["width"].get<float>(), player_dimension["height"].get<float>()};
     level.player.attrs = LevelMetadata::Player::Attributes{
         .move_speed     = player_attrs["move_speed"].get<float>(),
         .jump_force     = player_attrs["jump_force"].get<float>(),
         .gravity        = player_attrs["gravity"].get<float>(),
         .max_fall_speed = player_attrs["max_fall_speed"].get<float>()};
-    level.player.height               = player["height"].get<float>();
     level.player.collision_offset_pct = player["collision_offset_pct"].get<float>();
 
     // PLATFORM DATA

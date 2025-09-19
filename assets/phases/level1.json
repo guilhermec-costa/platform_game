@@ -6,15 +6,18 @@
     "max_horizontal_x": 2000.0
   },
   "player": {
-    "height": 320.0,
     "start_position": {
       "x": 0, 
       "y": 300
     },
+    "dimension": {
+      "height": 320.0,
+      "width": 320.0
+    },
     "collision_offset_pct": 0.22, 
     "attrs": {
       "move_speed": 500.0,
-      "jump_force": 700.0,
+      "jump_force": 900.0,
       "gravity": 1500.0,
       "max_fall_speed": 820.0
     }

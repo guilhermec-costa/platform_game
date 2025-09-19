@@ -23,21 +23,22 @@ enum class PlayerState {
 class PlayerObject : public GameObject {
 public:
   PlayerObject() = delete;
-  PlayerObject(Vector2 pos, Vector2 dim, LevelMetadata::Player& player_data);
+  PlayerObject(LevelMetadata::Player& player_data);
 
-  void                      handle_event(PlayerEvent event);
-  void                      update(float dt) override;
-  void                      render(SDL_Renderer* renderer, const Camera& camera) override;
-  void                      apply_gravity(float dt);
-  void                      move(float dt);
-  void                      update_collider();
-  void                      update_animation(float dt);
-  void                      update_state();
-  inline void               set_position_x(float x) { position.x = x; };
-  inline void               set_position_y(float y) { position.y = y; };
-  void                      set_velocity_y(float y) { velocity.y = y; };
-  inline void               set_on_ground(bool state) { on_ground = state; }
-  inline Components::ColliderComponent& get_collider_component() { return collider_comp; }
+  void        handle_event(PlayerEvent event);
+  void        update(float dt) override;
+  void        render(SDL_Renderer* renderer, const Camera& camera) override;
+  void        apply_gravity(float dt);
+  void        move(float dt);
+  void        update_collider();
+  void        update_animation(float dt);
+  void        update_state();
+  void        land_on(float surface_y);
+  inline void set_position_x(float x) { position.x = x; };
+  inline void set_position_y(float y) { position.y = y; };
+  void        set_velocity_y(float y) { velocity.y = y; };
+  inline void set_on_ground(bool state) { on_ground = state; }
+  inline Components::ColliderComponent& get_collider_component() { return collider_component; }
 
 public:
   bool  on_ground;
@@ -47,10 +48,11 @@ public:
   float max_fall_speed;
 
 private:
-  Components::ColliderComponent       collider_comp;
+  Components::ColliderComponent       collider_component;
   Components::AnimatedSpriteComponent animated_sprite;
-  Vector2                 collider_offset;
-  PlayerState             state;
-  MovementState           movement_state = MovementState::IDLE;
-  ActionState             action_state   = ActionState::NONE;
+  Vector2                             collider_offset;
+  PlayerState                         state;
+  MovementState                       movement_state = MovementState::IDLE;
+  ActionState                         action_state   = ActionState::NONE;
+  float collision_offset_pct;
 };

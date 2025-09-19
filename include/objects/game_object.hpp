@@ -19,7 +19,7 @@ public:
   const Vector2& get_velocity() const { return velocity; }
   const Vector2& get_dimension() const { return dimension; }
 
-protected:
+public:
   Vector2 position;
   Vector2 velocity;
   Vector2 dimension;
