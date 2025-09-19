@@ -31,12 +31,16 @@ struct LevelMetadata {
 };
 
 struct Level {
+  std::string                          name;
   LevelMetadata::World                 world;
   LevelMetadata::Player                player;
   std::vector<LevelMetadata::Platform> platforms;
 
   static Level from_json(const json& j) {
     Level level;
+
+    // METADATA
+    level.name = j["name"];
 
     // WORLD DATA
     auto world                   = j["world"];

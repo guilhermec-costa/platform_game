@@ -6,6 +6,7 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
+namespace UI {
 class UIElement {
 public:
   virtual ~UIElement() = default;
@@ -29,3 +30,4 @@ public:
 protected:
   SDL_Rect rect{0, 0, 0, 0};
 };
+} // namespace UI

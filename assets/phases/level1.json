@@ -1,4 +1,5 @@
 {
+  "name": "Phase 1",
   "world": {
     "ground_tile_side": 86,
     "min_horizontal_x": 0.0,
@@ -13,14 +14,12 @@
     "collision_offset_pct": 0.22, 
     "attrs": {
       "move_speed": 500.0,
-      "jump_force": 650.0,
+      "jump_force": 700.0,
       "gravity": 1500.0,
       "max_fall_speed": 820.0
     }
   },
   "platforms": [
-    { "x": 50, "y": 300, "width": 100, "height": 32 },
-    { "x": 200, "y": 300, "width": 100, "height": 32 },
-    { "x": 1200, "y": 300, "width": 100, "height": 64 }
+    { "x": 500, "y": 370, "width": 150, "height": 45 }
   ]
 }

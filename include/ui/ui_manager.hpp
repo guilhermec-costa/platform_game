@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 
+namespace UI {
 class UIManager {
 public:
   UIManager() = default;
@@ -27,3 +28,4 @@ public:
 
   std::vector<std::unique_ptr<UIElement>> elements;
 };
+} // namespace UI

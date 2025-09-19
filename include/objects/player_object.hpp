@@ -37,7 +37,7 @@ public:
   inline void               set_position_y(float y) { position.y = y; };
   void                      set_velocity_y(float y) { velocity.y = y; };
   inline void               set_on_ground(bool state) { on_ground = state; }
-  inline ColliderComponent& get_collider_component() { return collider_comp; }
+  inline Components::ColliderComponent& get_collider_component() { return collider_comp; }
 
 public:
   bool  on_ground;
@@ -47,8 +47,8 @@ public:
   float max_fall_speed;
 
 private:
-  ColliderComponent       collider_comp;
-  AnimatedSpriteComponent animated_sprite;
+  Components::ColliderComponent       collider_comp;
+  Components::AnimatedSpriteComponent animated_sprite;
   Vector2                 collider_offset;
   PlayerState             state;
   MovementState           movement_state = MovementState::IDLE;

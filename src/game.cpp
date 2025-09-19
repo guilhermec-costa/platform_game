@@ -25,7 +25,7 @@ Game::Game() : running(true), current_state(nullptr) {
     std::runtime_error("Failed to load font");
   }
   ctx.set_font(font);
-  ctx.ui_manager = UIManager();
+  ctx.ui_manager = UI::UIManager();
   fps_counter    = FPSCounter();
 }
 

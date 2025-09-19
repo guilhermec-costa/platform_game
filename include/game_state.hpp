@@ -6,7 +6,6 @@
 #include "ground.hpp"
 #include "objects/platform_object.hpp"
 #include "objects/player_object.hpp"
-#include "ui/ui_manager.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>

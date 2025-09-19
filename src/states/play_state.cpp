@@ -29,9 +29,8 @@ PlayState::PlayState() : GameState(), bg_parallax() {
         std::make_unique<PlatformObject>(Vector2(p.x, p.y), Vector2(p.width, p.height)));
   }
 
-  auto label = std::make_unique<Label>("testing label", ctx.font);
-  label->set_position({100, 100});
-  label->set_dimension({100, 100});
+  auto label = std::make_unique<UI::Label>(ctx.get_level().name, ctx.font, Vector2{100, 100},
+                                           Vector2{100, 100});
   ctx.ui_manager.add_element(std::move(label));
 }
 
@@ -40,7 +39,7 @@ void PlayState::update(float dt) {
   ground.update(ctx.camera.get_position().x);
   player->update(dt);
   for (auto& platform : platforms) {
-    platform->render(ctx.renderer, ctx.camera);
+    platform->update(dt);
   }
   check_player_ground_collision();
   check_player_window_collision();
@@ -90,10 +89,10 @@ void PlayState::check_player_window_collision() {
 void PlayState::render() {
   bg_parallax.render(ctx.window, ctx.renderer);
   ground.render(ctx.renderer, ctx.camera);
-  player->render(ctx.renderer, ctx.camera);
   for (auto& platform : platforms) {
     platform->render(ctx.renderer, ctx.camera);
   }
+  player->render(ctx.renderer, ctx.camera);
   ctx.ui_manager.render(ctx.renderer);
 }
 

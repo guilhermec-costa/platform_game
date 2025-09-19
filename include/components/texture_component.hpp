@@ -6,9 +6,11 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
+namespace Components {
+
 class TextureComponent {
 public:
-  TextureComponent() : m_texture(nullptr) {}
+  TextureComponent() {}
 
   TextureComponent(SDL_Texture* texture, Vector2 pos, Vector2 dim)
       : m_texture(texture), pos(pos), dim(dim) {
@@ -43,9 +45,10 @@ public:
   SDL_Texture*   get_texture() { return m_texture; }
 
 private:
-  SDL_Texture* m_texture;
+  SDL_Texture* m_texture = nullptr;
   SDL_Rect     src_rect;
   SDL_Rect     target_rect;
   Vector2      pos;
   Vector2      dim;
 };
+} // namespace Components

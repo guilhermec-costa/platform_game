@@ -6,6 +6,8 @@
 #include <SDL2/SDL_render.h>
 #include <unordered_map>
 
+namespace Components {
+
 class AnimatedSpriteComponent {
 public:
   AnimatedSpriteComponent() = default;
@@ -100,3 +102,4 @@ private:
   bool                               horizontally_flipped;
   int                                current_animaton_idx;
 };
+} // namespace Components

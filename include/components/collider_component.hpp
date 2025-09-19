@@ -3,8 +3,11 @@
 #include "../camera.hpp"
 #include "../shared.hpp"
 
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+
+namespace Components {
 
 class ColliderComponent {
 
@@ -36,10 +39,11 @@ public:
       collision_box.x -= camera.get_position().x;
       collision_box.y -= camera.get_position().y;
     }
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 125, 125, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderDrawRect(renderer, &collision_box);
   }
 
   void set_position(const Vector2& pos) { position = pos; }
   void set_dimension(const Vector2& dim) { dimension = dim; }
 };
+} // namespace Components

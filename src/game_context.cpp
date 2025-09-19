@@ -1,7 +1,5 @@
 #include "../include/game_context.hpp"
 
-#include "../include/sdl_backend.hpp"
-
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>

@@ -39,7 +39,7 @@ public:
     update_collider(0);
   }
 
-  const ColliderComponent& get_collider_component() const { return collider; }
+  const Components::ColliderComponent& get_collider_component() const { return collider; }
 
 private:
   void update_collider(float camera_x) {
@@ -52,7 +52,7 @@ private:
   }
 
 private:
-  ColliderComponent collider;
+  Components::ColliderComponent collider;
   SDL_Texture*      ground_tile   = nullptr;
   float             y             = 0;
   int               screen_width  = 0;

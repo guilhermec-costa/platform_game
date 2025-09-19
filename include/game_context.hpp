@@ -13,7 +13,7 @@ public:
   SDL_Window*   window   = nullptr;
   SDL_Renderer* renderer = nullptr;
   TTF_Font*     font     = nullptr;
-  UIManager     ui_manager;
+  UI::UIManager ui_manager;
   Camera        camera;
 
 public:
@@ -35,6 +35,8 @@ public:
     camera = Camera({0, 0}, win_dim, Camera::LEFT_MARGIN_PCT * win_dim.x,
                                                      Camera::RIGHT_MARGIN_PCT * win_dim.x);
   }
+
+  Level& get_level() { return active_level; }
 
 private:
   Level active_level;
