@@ -2,7 +2,7 @@
 
 #include "fps_counter.hpp"
 #include "game_context.hpp"
-#include "game_state.hpp"
+#include "game_layer.hpp"
 
 #include <SDL2/SDL_timer.h>
 #include <memory>

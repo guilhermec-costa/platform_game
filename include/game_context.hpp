@@ -15,7 +15,6 @@ public:
   Core::Window  window;
   SDL_Renderer* renderer = nullptr;
   TTF_Font*     font     = nullptr;
-  UI::UIManager ui_manager;
   Camera        camera;
 
   static GameContext& instance();

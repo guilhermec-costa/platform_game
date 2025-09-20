@@ -1,4 +1,4 @@
-#include "../../include/game_state.hpp"
+#include "../../include/game_layer.hpp"
 #include "../../include/ui/label_element.hpp"
 
 #include <SDL2/SDL_events.h>
@@ -24,10 +24,6 @@ PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
   for (const auto& p : platforms_data) {
     platforms.push_back(std::make_unique<PlatformObject>(p));
   }
-
-  auto label = std::make_unique<UI::Label>(ctx.get_level().name, ctx.font, Vector2{100, 100},
-                                           Vector2{100, 100});
-  ctx.ui_manager.add_element(std::move(label));
 }
 
 void PlayLayer::update(float dt) {
@@ -126,7 +122,7 @@ void PlayLayer::render() {
   player->render(ctx.renderer, ctx.camera);
 }
 
-void PlayLayer::handle_event(SDL_Event& event) {
+void PlayLayer::handle_event(const SDL_Event& event) {
   switch (event.type) {
     case SDL_MOUSEBUTTONDOWN: {
       handle_mouse_click_event(event.button);

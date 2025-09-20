@@ -15,6 +15,7 @@ int main() {
 
   Core::Game game(game_spec);
   game.push_layer(std::make_unique<PlayLayer>());
+  game.push_layer(std::make_unique<UILayer>());
   game.set_fps(120);
   game.run();
   return 0;

@@ -28,7 +28,6 @@ Game::Game(const GameSpecification& game_spec) : running(true) {
     std::runtime_error("Failed to load font");
   }
   ctx.set_font(font);
-  ctx.ui_manager = UI::UIManager();
   fps_counter    = FPSCounter();
 }
 
@@ -56,7 +55,6 @@ void Game::render() {
   for (const auto& layer : layers) {
     layer->render();
   }
-  ctx.ui_manager.render(ctx.renderer);
   SDL_RenderPresent(ctx.renderer);
 }
 
@@ -134,10 +132,6 @@ void Game::run() {
 void Game::quit() {
   running = false;
   std::cout << "[Game] Quitting the game\n";
-  // for(const auto& layer : layers) {
-  //   layer->get;
-  // }
-  // current_state.reset();
   ctx.end();
 }
 
