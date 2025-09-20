@@ -22,7 +22,7 @@ PlayState::PlayState() : GameState(), bg_parallax() {
 
   auto& platforms_data = ctx.get_platforms_data();
   for (const auto& p : platforms_data) {
-    platforms.push_back(std::make_unique<PlatformObject>(p.position, p.dimension));
+    platforms.push_back(std::make_unique<PlatformObject>(p));
   }
 
   auto label = std::make_unique<UI::Label>(ctx.get_level().name, ctx.font, Vector2{100, 100},
@@ -34,13 +34,13 @@ void PlayState::update(float dt) {
   auto& world_data = ctx.get_world_data();
   ground.update(ctx.camera.get_position().x);
   player->update(dt);
-  for (auto& platform : platforms) {
+  for (const auto& platform : platforms) {
     platform->update(dt);
   }
   check_player_ground_collision();
   check_player_platform_collision();
   check_player_window_collision();
-  ctx.camera.follow(player->get_position());
+  ctx.camera.follow(player->position);
   ctx.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
   bg_parallax.update(ctx.camera.get_position().x);
 }
@@ -48,7 +48,7 @@ void PlayState::update(float dt) {
 void PlayState::check_player_platform_collision() {
   SDL_Rect player_rect = player->get_collider_component().get_rect();
 
-  for (auto& p : platforms) {
+  for (const auto& p : platforms) {
     const SDL_Rect& plt_rect = p->get_collider().get_rect();
 
     if (SDL_HasIntersection(&player_rect, &plt_rect)) {
@@ -120,11 +120,10 @@ void PlayState::check_player_window_collision() {
 void PlayState::render() {
   bg_parallax.render();
   ground.render();
-  for (auto& platform : platforms) {
+  for (const auto& platform : platforms) {
     platform->render(ctx.renderer, ctx.camera);
   }
   player->render(ctx.renderer, ctx.camera);
-  ctx.ui_manager.render(ctx.renderer);
 }
 
 void PlayState::handle_event(SDL_Event& event) {
@@ -158,6 +157,9 @@ void PlayState::handle_window_event(const SDL_WindowEvent& window) {
   if (window.event == SDL_WINDOWEVENT_RESIZED) {
     ground.resize(window.data1, window.data2);
     ctx.camera.resize(window.data1);
+    for (const auto& platform : platforms) {
+      platform->resize();
+    }
   }
 }
 

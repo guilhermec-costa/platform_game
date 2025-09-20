@@ -16,10 +16,12 @@ namespace Core {
 
 Game::Game(const GameSpecification& game_spec) : running(true), current_state(nullptr) {
   init_subsytems();
-  GameContext::instance().init(game_spec.window_spec);
-  load_textures();
+
   Level l = load_level(asset_path("assets/phases/level1.json"));
   ctx.set_level(l);
+
+  GameContext::instance().init(game_spec.window_spec);
+  load_textures();
 
   TTF_Font* font = Managers::FontManager::load_font("assets/fonts/YoungSerif-Regular.ttf", 22);
   if (!font) {
@@ -76,13 +78,13 @@ void Game::load_textures() {
       "assets/images/parallax/far-trees.png",   "assets/images/parallax/mid-trees.png",
       "assets/images/parallax/close-trees.png", "assets/images/grass.png"};
 
-  for (auto& path : textures)
+  for (const auto& path : textures)
     load_texture_or_die(path, ctx.renderer);
 }
 
 Level Game::load_level(const std::string& level_name) {
   json  j     = Managers::JSONManager::get_instance().load_file(level_name);
-  Level level = Level::from_json(j);
+  Level level = Level::from_json(j, ctx.window.get_height());
   return level;
 }
 

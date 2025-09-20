@@ -15,11 +15,6 @@ public:
   virtual void render(SDL_Renderer* renderer, const Core::Camera& camera) = 0;
 
 public:
-  const Vector2& get_position() const { return position; }
-  const Vector2& get_velocity() const { return velocity; }
-  const Vector2& get_dimension() const { return dimension; }
-
-public:
   Vector2 position;
   Vector2 velocity;
   Vector2 dimension;

@@ -1,13 +1,14 @@
 #include "../include/window.hpp"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
 #include <iostream>
 
 namespace Core {
 
 Window::Window(const WindowSpecification& spec) {
   m_window = SDL_CreateWindow(spec.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              spec.width, spec.height, 0);
+                              spec.width, spec.height, SDL_WINDOW_RESIZABLE);
   if (!m_window) {
     throw std::runtime_error(std::string("SDL Error: ") + SDL_GetError());
   }

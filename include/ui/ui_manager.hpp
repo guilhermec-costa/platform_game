@@ -12,17 +12,17 @@ public:
 
   void add_element(std::unique_ptr<UIElement> element) { elements.push_back(std::move(element)); }
   void render(SDL_Renderer* renderer) {
-    for (auto& elem : elements)
+    for (const auto& elem : elements)
       elem->render(renderer);
   }
 
   void handle_event(const SDL_Event& e) {
-    for (auto& elem : elements)
+    for (const auto& elem : elements)
       elem->handle_event(e);
   }
 
   void update(float dt) {
-    for (auto& elem : elements)
+    for (const auto& elem : elements)
       elem->update(dt);
   }
 

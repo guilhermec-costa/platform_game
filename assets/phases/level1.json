@@ -6,15 +6,12 @@
     "max_horizontal_x": 3000.0
   },
   "player": {
-    "start_position": {
-      "x": 0, 
-      "y": 300
-    },
+    "start_position": { "x": 0.0, "y": 0.5 },
     "dimension": {
       "height": 320.0,
       "width": 320.0
     },
-    "collision_offset_pct": 0.22, 
+    "collision_offset_pct": 0.22,
     "attrs": {
       "move_speed": 480.0,
       "jump_force": 760.0,
@@ -23,8 +20,8 @@
     }
   },
   "platforms": [
-    { "x": 500, "y": 380, "width": 150, "height": 45 },
-    { "x": 850, "y": 380, "width": 350, "height": 45 },
-    { "x": 1250, "y": 420, "width": 450, "height": 60 }
+    { "x": 0.1667, "y": 0.7, "width": 0.05, "height": 0.077 },
+    { "x": 0.2833, "y": 0.7, "width": 0.1167, "height": 0.077 },
+    { "x": 0.4167, "y": 0.7, "width": 0.15, "height": 0.077 }
   ]
 }

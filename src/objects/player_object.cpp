@@ -7,7 +7,7 @@
 
 PlayerObject::PlayerObject(LevelMetadata::Player& player_data)
     : GameObject(player_data.start_position, {0, 0}, player_data.dimension), on_ground(true) {
-  auto texture = Managers::TextureManager::get_texture("assets/images/nigthborne.png");
+  auto    texture = Managers::TextureManager::get_texture("assets/images/nigthborne.png");
   Vector2 tex_dim = Managers::TextureManager::get_texture_dimension(texture);
 
   collision_offset_pct = player_data.collision_offset_pct;

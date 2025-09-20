@@ -8,15 +8,14 @@
 using namespace Managers;
 
 BackgroundParallax::BackgroundParallax() {
-  bg_layer        = TextureManager::get_texture("assets/images/parallax/bg.png");
-  far_trees_layer = TextureManager::get_texture("assets/images/parallax/far-trees.png");
-  mid_trees_layer = TextureManager::get_texture("assets/images/parallax/mid-trees.png");
-  close_trees_layer =
-      TextureManager::get_texture("assets/images/parallax/close-trees.png");
-  layers = {{bg_layer, 0.1f, 0.0f},
-            {far_trees_layer, 0.3f, 0.0f},
-            {mid_trees_layer, 0.5f, 0.0f},
-            {close_trees_layer, 0.9f, 0.0f}};
+  bg_layer          = TextureManager::get_texture("assets/images/parallax/bg.png");
+  far_trees_layer   = TextureManager::get_texture("assets/images/parallax/far-trees.png");
+  mid_trees_layer   = TextureManager::get_texture("assets/images/parallax/mid-trees.png");
+  close_trees_layer = TextureManager::get_texture("assets/images/parallax/close-trees.png");
+  layers            = {{.texture = bg_layer, .speed = 0.1f, .offset = 0.0f},
+                       {.texture = far_trees_layer, .speed = 0.3f, .offset = 0.0f},
+                       {.texture = mid_trees_layer, .speed = 0.5f, .offset = 0.0f},
+                       {.texture = close_trees_layer, .speed = 0.9f, .offset = 0.0f}};
 }
 
 void BackgroundParallax::update(float camera_x) {
@@ -29,7 +28,7 @@ void BackgroundParallax::render() {
   auto&   ctx     = Core::GameContext::instance();
   Vector2 win_dim = ctx.window.get_dimension();
 
-  for (auto& layer : layers) {
+  for (const auto& layer : layers) {
     if (!layer.texture)
       continue;
     float    x     = fmod(layer.offset, (float)win_dim.x);

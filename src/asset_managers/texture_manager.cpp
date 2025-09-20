@@ -1,4 +1,5 @@
 #include "../../include/asset_manager/texture_manager.hpp"
+
 #include "../../include/asset_manager/utils.hpp"
 
 #include <SDL2/SDL_image.h>
@@ -8,7 +9,7 @@ namespace Managers {
 TextureManager::TextureManager() {}
 
 TextureManager::~TextureManager() {
-  for (auto& pair : textures) {
+  for (const auto& pair : textures) {
     SDL_DestroyTexture(pair.second);
   }
 }

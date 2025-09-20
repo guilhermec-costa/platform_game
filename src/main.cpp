@@ -3,7 +3,6 @@
 #endif
 
 #include "../include/game.hpp"
-#include "../include/game_context.hpp"
 
 #include <SDL2/SDL_timer.h>
 #include <memory>

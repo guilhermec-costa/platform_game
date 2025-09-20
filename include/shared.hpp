@@ -25,10 +25,3 @@ typedef struct Vector2 {
   };
 
 } Vector2;
-
-struct RectOverlap {
-  int left;
-  int right;
-  int top;
-  int bottom;
-};

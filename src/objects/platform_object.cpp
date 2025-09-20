@@ -1,11 +1,17 @@
 #include "../../include/objects/platform_object.hpp"
 
 #include "../../include/asset_manager/texture_manager.hpp"
+#include "../../include/game_context.hpp"
 
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-PlatformObject::PlatformObject(Vector2 pos, Vector2 dim) : GameObject(pos, {0, 0}, dim) {
+PlatformObject::PlatformObject(LevelMetadata::Platform data)
+    : m_metadata(data), GameObject(data.position, {0, 0}, data.dimension) {
+
+  Vector2& pos = data.position;
+  Vector2& dim = data.dimension;
+
   auto texture      = Managers::TextureManager::get_texture("assets/images/grass.png");
   texture_component = Components::TextureComponent(texture, pos, dim);
 
@@ -35,4 +41,9 @@ RectOverlap PlatformObject::get_overlap(const SDL_Rect& rect) {
 void PlatformObject::update(float dt) {
   float collision_offset = dimension.y * 0.35f;
   collider_component.set_position({position.x, position.y + collision_offset});
+}
+
+void PlatformObject::resize() {
+  auto& window = Core::GameContext::instance().window;
+  position.y   = m_metadata.screen_height_pct * window.get_height();
 }
