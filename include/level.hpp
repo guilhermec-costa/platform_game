@@ -11,10 +11,8 @@ struct LevelMetadata {
   };
 
   struct Platform {
-    float x;
-    float y;
-    float width;
-    float height;
+    Vector2 position;
+    Vector2 dimension;
   };
 
   struct Player {
@@ -67,8 +65,8 @@ struct Level {
 
     // PLATFORM DATA
     for (const auto& p : j["platforms"]) {
-      LevelMetadata::Platform platform{p["x"].get<float>(), p["y"].get<float>(),
-                                       p["width"].get<float>(), p["height"].get<float>()};
+      LevelMetadata::Platform platform{{p["x"].get<float>(), p["y"].get<float>()},
+                                       {p["width"].get<float>(), p["height"].get<float>()}};
       level.platforms.push_back(platform);
     };
 

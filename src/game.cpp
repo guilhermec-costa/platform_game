@@ -1,9 +1,9 @@
 #include "../include/game.hpp"
 
+#include "../include/asset_manager/font_manager.hpp"
 #include "../include/asset_manager/json/json_manager.hpp"
 #include "../include/asset_manager/utils.hpp"
 #include "../include/level.hpp"
-#include "../include/sdl_backend.hpp"
 
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
@@ -19,8 +19,8 @@ Game::Game(const GameSpecification& game_spec) : running(true), current_state(nu
   Level l = load_level(asset_path("assets/phases/level1.json"));
   ctx.set_level(l);
 
-  TTF_Font* font =
-      SDLBackend::load_font(asset_path("assets/fonts/YoungSerif-Regular.ttf").c_str(), 22);
+  TTF_Font* font = Managers::FontManager::load_font(
+      asset_path("assets/fonts/YoungSerif-Regular.ttf").c_str(), 22);
   if (!font) {
     std::runtime_error("Failed to load font");
   }
@@ -87,23 +87,23 @@ Level Game::load_level(const std::string& level_name) {
 
 void Game::init_subsytems() {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    throw std::runtime_error("[SDLBackend] SDL Video subsystem initialization failed: " +
+    throw std::runtime_error("[Game] SDL Video subsystem initialization failed: " +
                              std::string(SDL_GetError()));
   }
-  std::cout << "[SDLBackend] SDL Video subsystem initialized\n";
+  std::cout << "[Game] SDL Video subsystem initialized\n";
 
   if (!(IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG)) {
-    throw std::runtime_error("[SDLBackend] SDL Image subsystem initialization failed: " +
+    throw std::runtime_error("[Game] SDL Image subsystem initialization failed: " +
                              std::string(IMG_GetError()));
   }
-  std::cout << "[SDLBackend] SDL Image subsystem initialized\n";
+  std::cout << "[Game] SDL Image subsystem initialized\n";
 
   if (TTF_Init() < 0) {
-    throw std::runtime_error("[SDLBackend] SDL TTF subsystem initialization failed: " +
+    throw std::runtime_error("[Game] SDL TTF subsystem initialization failed: " +
                              std::string(TTF_GetError()));
   }
-  std::cout << "[SDLBackend] SDL TTF subsystem initialized\n";
+  std::cout << "[Game] SDL TTF subsystem initialized\n";
 
-  std::cout << "[SDLBackend] Finished initializing SDL subsystems\n";
+  std::cout << "[Game] Finished initializing SDL subsystems\n";
 }
 } // namespace Core

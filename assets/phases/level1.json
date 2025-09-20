@@ -3,7 +3,7 @@
   "world": {
     "ground_tile_side": 86,
     "min_horizontal_x": 0.0,
-    "max_horizontal_x": 2000.0
+    "max_horizontal_x": 3000.0
   },
   "player": {
     "start_position": {
@@ -23,6 +23,8 @@
     }
   },
   "platforms": [
-    { "x": 500, "y": 370, "width": 150, "height": 45 }
+    { "x": 500, "y": 380, "width": 150, "height": 45 },
+    { "x": 850, "y": 380, "width": 350, "height": 45 },
+    { "x": 1250, "y": 420, "width": 450, "height": 60 }
   ]
 }

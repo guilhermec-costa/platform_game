@@ -51,7 +51,7 @@ public:
     if (!renderer) {
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     }
-    std::cout << "[SDLBackend] SDL Renderer created\n";
+    std::cout << "[GameContext] SDL Renderer created\n";
   }
 
 private:

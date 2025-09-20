@@ -42,6 +42,7 @@ void PlayerObject::update(float dt) {
 
 void PlayerObject::render(SDL_Renderer* renderer, const Camera& camera) {
   animated_sprite.render(renderer, position, camera);
+  collider_component.render_collision_box(renderer, camera);
 }
 
 void PlayerObject::handle_event(PlayerEvent event) {

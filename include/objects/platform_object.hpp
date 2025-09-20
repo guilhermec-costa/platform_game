@@ -10,6 +10,7 @@ public:
   void                           handle_event();
   void                           update(float dt) override;
   void                           render(SDL_Renderer* renderer, const Camera& camera) override;
+  RectOverlap                          get_overlap(const SDL_Rect& rect);
   Components::ColliderComponent& get_collider() { return collider_component; }
 
 private:

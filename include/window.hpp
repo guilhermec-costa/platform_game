@@ -19,7 +19,7 @@ public:
     if (!m_window) {
       throw std::runtime_error(std::string("SDL Error: ") + SDL_GetError());
     }
-    std::cout << "[SDLBackend] SDL Window created\n";
+    std::cout << "[Window] SDL Window created\n";
   }
 
   ~Window() { destroy(); }
