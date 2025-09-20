@@ -34,9 +34,6 @@ public:
   void        update_animation(float dt);
   void        update_state();
   void        land_on(float surface_y);
-  inline void set_position_x(float x) { position.x = x; };
-  inline void set_position_y(float y) { position.y = y; };
-  void        set_velocity_y(float y) { velocity.y = y; };
   inline void set_on_ground(bool state) { on_ground = state; }
   inline Components::ColliderComponent& get_collider_component() { return collider_component; }
 
