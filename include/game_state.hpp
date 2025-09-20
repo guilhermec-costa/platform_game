@@ -1,7 +1,6 @@
 #pragma once
 
 #include "bg_parallax.hpp"
-#include "entity_manager.hpp"
 #include "game_context.hpp"
 #include "ground.hpp"
 #include "objects/platform_object.hpp"
@@ -15,16 +14,14 @@
 
 class GameState {
 protected:
-  EntityManager entity_manager;
-
 public:
-  GameState(const GameState&) = delete;
-  GameState() : entity_manager(EntityManager()) {}
+  GameState(const GameState&)                 = delete;
+  GameState()                                 = default;
   virtual void handle_event(SDL_Event& event) = 0;
   virtual void update(float dt)               = 0;
   virtual void render()                       = 0;
 
-  GameContext& ctx = GameContext::instance();
+  Core::GameContext& ctx = Core::GameContext::instance();
   virtual ~GameState() {}
 };
 

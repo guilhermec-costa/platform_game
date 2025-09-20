@@ -1,5 +1,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
+
 namespace Managers {
 class FontManager {
 public:

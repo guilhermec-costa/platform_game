@@ -7,10 +7,10 @@
 class PlatformObject : public GameObject {
 public:
   PlatformObject(Vector2 pos, Vector2 dim);
-  void                           handle_event();
-  void                           update(float dt) override;
-  void                           render(SDL_Renderer* renderer, const Camera& camera) override;
-  RectOverlap                          get_overlap(const SDL_Rect& rect);
+  void        handle_event();
+  void        update(float dt) override;
+  void        render(SDL_Renderer* renderer, const Core::Camera& camera) override;
+  RectOverlap get_overlap(const SDL_Rect& rect);
   Components::ColliderComponent& get_collider() { return collider_component; }
 
 private:

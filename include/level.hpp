@@ -1,6 +1,6 @@
 #pragma once
 
-#include "asset_manager/json/json_alias.hpp"
+#include "asset_manager/json_alias.hpp"
 #include "shared.hpp"
 
 struct LevelMetadata {

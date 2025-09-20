@@ -14,7 +14,7 @@ public:
   BackgroundParallax();
   BackgroundParallax(const BackgroundParallax&) = delete;
   void update(float camera_x);
-  void render(SDL_Renderer* renderer);
+  void render();
 
 private:
   SDL_Texture*       bg_layer          = nullptr;

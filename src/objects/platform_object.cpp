@@ -16,21 +16,21 @@ PlatformObject::PlatformObject(Vector2 pos, Vector2 dim) : GameObject(pos, {0, 0
 }
 void PlatformObject::handle_event() {}
 
-void PlatformObject::render(SDL_Renderer* renderer, const Camera& camera) {
+void PlatformObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
   SDL_Rect rec{static_cast<int>(position.x) - static_cast<int>(camera.get_position().x),
                static_cast<int>(position.y), static_cast<int>(dimension.x),
                static_cast<int>(dimension.y)};
   SDL_RenderCopy(renderer, texture_component.get_texture(), NULL, &rec);
-  collider_component.render_collision_box(renderer, camera);
+  // collider_component.render_collision_box(renderer, camera);
 }
 
 RectOverlap PlatformObject::get_overlap(const SDL_Rect& rect) {
-  const auto& collider_rect = collider_component.get_rect();
-  int overlap_left   = (rect.x + rect.w) - collider_rect.x;
-  int overlap_right  = (collider_rect.x + collider_rect.w) - rect.x;
-  int overlap_top    = (rect.y + rect.h) - collider_rect.y;
-  int overlap_bottom = (collider_rect.y + collider_rect.h) - rect.y;
-  return RectOverlap {overlap_left,overlap_right,overlap_top, overlap_bottom};
+  const auto& collider_rect  = collider_component.get_rect();
+  int         overlap_left   = (rect.x + rect.w) - collider_rect.x;
+  int         overlap_right  = (collider_rect.x + collider_rect.w) - rect.x;
+  int         overlap_top    = (rect.y + rect.h) - collider_rect.y;
+  int         overlap_bottom = (collider_rect.y + collider_rect.h) - rect.y;
+  return RectOverlap{overlap_left, overlap_right, overlap_top, overlap_bottom};
 }
 
 void PlatformObject::update(float dt) {

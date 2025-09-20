@@ -1,5 +1,5 @@
 {
-  "name": "Phase 1",
+  "name": "Any phase",
   "world": {
     "ground_tile_side": 86,
     "min_horizontal_x": 0.0,
@@ -17,8 +17,8 @@
     "collision_offset_pct": 0.22, 
     "attrs": {
       "move_speed": 480.0,
-      "jump_force": 700.0,
-      "gravity": 1300.0,
+      "jump_force": 760.0,
+      "gravity": 1600.0,
       "max_fall_speed": 820.0
     }
   },

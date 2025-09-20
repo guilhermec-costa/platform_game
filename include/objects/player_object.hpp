@@ -27,7 +27,7 @@ public:
 
   void        handle_event(PlayerEvent event);
   void        update(float dt) override;
-  void        render(SDL_Renderer* renderer, const Camera& camera) override;
+  void        render(SDL_Renderer* renderer, const Core::Camera& camera) override;
   void        apply_gravity(float dt);
   void        move(float dt);
   void        update_collider();

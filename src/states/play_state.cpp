@@ -16,7 +16,7 @@ PlayState::PlayState() : GameState(), bg_parallax() {
 
   const float tile_side   = ctx.get_world_data().ground_tile_side;
   float       tile_height = win_dim.y - tile_side;
-  ground                  = Ground(ctx.renderer, win_dim.x, win_dim.y, tile_height, tile_side);
+  ground                  = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
 
   player = std::make_unique<PlayerObject>(ctx.get_player_data());
 
@@ -60,12 +60,13 @@ void PlayState::check_player_platform_collision() {
       if (min_dx < min_dy) {
         if (overlap.left < overlap.right) {
           player->position.x -= overlap.left;
-          if(player->velocity.x > 0) {
+          if (player->velocity.x > 0) {
             player->velocity.x = 0;
+            player->velocity.y = 0;
           }
         } else {
           player->position.x += overlap.right;
-          if(player->velocity.x < 0) {
+          if (player->velocity.x < 0) {
             player->velocity.x = 0;
           }
         }
@@ -117,8 +118,8 @@ void PlayState::check_player_window_collision() {
 }
 
 void PlayState::render() {
-  bg_parallax.render(ctx.renderer);
-  ground.render(ctx.renderer, ctx.camera);
+  bg_parallax.render();
+  ground.render();
   for (auto& platform : platforms) {
     platform->render(ctx.renderer, ctx.camera);
   }

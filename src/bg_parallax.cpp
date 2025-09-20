@@ -26,8 +26,9 @@ void BackgroundParallax::update(float camera_x) {
   }
 }
 
-void BackgroundParallax::render(SDL_Renderer* renderer) {
-  Vector2 win_dim = GameContext::instance().window.get_dimension();
+void BackgroundParallax::render() {
+  auto&   ctx     = Core::GameContext::instance();
+  Vector2 win_dim = ctx.window.get_dimension();
 
   for (auto& layer : layers) {
     if (!layer.texture)
@@ -35,7 +36,7 @@ void BackgroundParallax::render(SDL_Renderer* renderer) {
     float    x     = fmod(layer.offset, (float)win_dim.x);
     SDL_Rect rect1 = {(int)x, 0, (int)win_dim.x, (int)win_dim.y};
     SDL_Rect rect2 = {(int)x + (int)win_dim.x, 0, (int)win_dim.x, (int)win_dim.y};
-    SDL_RenderCopy(renderer, layer.texture, nullptr, &rect1);
-    SDL_RenderCopy(renderer, layer.texture, nullptr, &rect2);
+    SDL_RenderCopy(ctx.renderer, layer.texture, nullptr, &rect1);
+    SDL_RenderCopy(ctx.renderer, layer.texture, nullptr, &rect2);
   }
 }

@@ -1,10 +1,12 @@
 #include "../include/game.hpp"
 
 #include "../include/asset_manager/font_manager.hpp"
-#include "../include/asset_manager/json/json_manager.hpp"
+#include "../include/asset_manager/json_manager.hpp"
+#include "../include/asset_manager/texture_manager.hpp"
 #include "../include/asset_manager/utils.hpp"
 #include "../include/level.hpp"
 
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
@@ -52,6 +54,7 @@ void Game::render() {
   SDL_RenderClear(ctx.renderer);
   if (current_state) {
     current_state->render();
+    ctx.ui_manager.render(ctx.renderer);
   }
   SDL_RenderPresent(ctx.renderer);
 }
@@ -105,5 +108,33 @@ void Game::init_subsytems() {
   std::cout << "[Game] SDL TTF subsystem initialized\n";
 
   std::cout << "[Game] Finished initializing SDL subsystems\n";
+}
+
+void Game::run() {
+  Uint32    frame_start;
+  Uint32    last_time = SDL_GetTicks();
+  int       frame_time;
+  const int MS_FRAME_DELAY = 1000 / target_fps;
+
+  while (running) {
+    frame_start = SDL_GetTicks();
+    float dt    = (frame_start - last_time) / 1000.0f;
+    last_time   = frame_start;
+    handle_events();
+    update(dt);
+    render();
+
+    frame_time = SDL_GetTicks() - frame_start;
+    if (MS_FRAME_DELAY > frame_time) {
+      SDL_Delay(MS_FRAME_DELAY - frame_time);
+    }
+    fps_counter.frame_rendered();
+  }
+}
+void Game::quit() {
+  running = false;
+  std::cout << "[Game] Quitting the game\n";
+  current_state.reset();
+  ctx.end();
 }
 } // namespace Core
