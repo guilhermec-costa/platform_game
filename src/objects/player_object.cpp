@@ -7,8 +7,7 @@
 #include <SDL2/SDL_render.h>
 
 PlayerObject::PlayerObject(const LevelMetadata::Player& data)
-    : m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension),
-      on_ground(true) {
+    : m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension), on_ground(true) {
   auto    texture = Managers::TextureManager::get_texture("assets/images/nigthborne.png");
   Vector2 tex_dim = Managers::TextureManager::get_texture_dimension(texture);
 

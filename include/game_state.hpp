@@ -12,20 +12,20 @@
 #include <SDL2/SDL_video.h>
 #include <memory>
 
-class GameState {
+class GameLayer {
 protected:
 public:
-  GameState(const GameState&)                 = delete;
-  GameState()                                 = default;
+  GameLayer(const GameLayer&)                 = delete;
+  GameLayer()                                 = default;
   virtual void handle_event(SDL_Event& event) = 0;
   virtual void update(float dt)               = 0;
   virtual void render()                       = 0;
 
   Core::GameContext& ctx = Core::GameContext::instance();
-  virtual ~GameState() {}
+  virtual ~GameLayer() {}
 };
 
-class PlayState : public GameState {
+class PlayLayer : public GameLayer {
 private:
   BackgroundParallax                           bg_parallax;
   Ground                                       ground;
@@ -33,7 +33,7 @@ private:
   std::vector<std::unique_ptr<PlatformObject>> platforms;
 
 public:
-  PlayState();
+  PlayLayer();
   void handle_event(SDL_Event& event) override;
   void handle_mouse_click_event(const SDL_MouseButtonEvent& window);
   void handle_window_event(const SDL_WindowEvent& window);

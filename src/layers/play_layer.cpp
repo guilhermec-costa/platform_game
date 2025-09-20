@@ -11,7 +11,7 @@
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_video.h>
 
-PlayState::PlayState() : GameState(), bg_parallax() {
+PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
   Vector2 win_dim = ctx.window.get_dimension();
 
   const float tile_side   = ctx.get_world_data().ground_tile_side;
@@ -30,7 +30,7 @@ PlayState::PlayState() : GameState(), bg_parallax() {
   ctx.ui_manager.add_element(std::move(label));
 }
 
-void PlayState::update(float dt) {
+void PlayLayer::update(float dt) {
   auto& world_data = ctx.get_world_data();
   ground.update(ctx.camera.get_position().x);
   player->update(dt);
@@ -45,7 +45,7 @@ void PlayState::update(float dt) {
   bg_parallax.update(ctx.camera.get_position().x);
 }
 
-void PlayState::check_player_platform_collision() {
+void PlayLayer::check_player_platform_collision() {
   SDL_Rect player_rect = player->get_collider_component().get_rect();
 
   for (const auto& p : platforms) {
@@ -85,7 +85,7 @@ void PlayState::check_player_platform_collision() {
   }
 }
 
-void PlayState::check_player_ground_collision() {
+void PlayLayer::check_player_ground_collision() {
   const SDL_Rect& player_rect = player->get_collider_component().get_rect();
   const SDL_Rect& ground_rect = ground.get_collider_component().get_rect();
 
@@ -97,7 +97,7 @@ void PlayState::check_player_ground_collision() {
   }
 }
 
-void PlayState::check_player_window_collision() {
+void PlayLayer::check_player_window_collision() {
   auto&       player_collider  = player->get_collider_component();
   const auto& world_data       = ctx.get_world_data();
   float       min_horizontal_x = world_data.min_horizontal_x;
@@ -117,7 +117,7 @@ void PlayState::check_player_window_collision() {
   }
 }
 
-void PlayState::render() {
+void PlayLayer::render() {
   bg_parallax.render();
   ground.render();
   for (const auto& platform : platforms) {
@@ -126,7 +126,7 @@ void PlayState::render() {
   player->render(ctx.renderer, ctx.camera);
 }
 
-void PlayState::handle_event(SDL_Event& event) {
+void PlayLayer::handle_event(SDL_Event& event) {
   switch (event.type) {
     case SDL_MOUSEBUTTONDOWN: {
       handle_mouse_click_event(event.button);
@@ -147,13 +147,13 @@ void PlayState::handle_event(SDL_Event& event) {
   }
 }
 
-void PlayState::handle_mouse_click_event(const SDL_MouseButtonEvent& button) {
+void PlayLayer::handle_mouse_click_event(const SDL_MouseButtonEvent& button) {
   if (button.type == SDL_MOUSEBUTTONDOWN && button.button == SDL_BUTTON_LEFT) {
     player->handle_event(PlayerEvent::ATTACK);
   }
 }
 
-void PlayState::handle_window_event(const SDL_WindowEvent& window) {
+void PlayLayer::handle_window_event(const SDL_WindowEvent& window) {
   if (window.event == SDL_WINDOWEVENT_RESIZED) {
     ground.resize(window.data1, window.data2);
     ctx.camera.resize(window.data1);
@@ -164,7 +164,7 @@ void PlayState::handle_window_event(const SDL_WindowEvent& window) {
   }
 }
 
-void PlayState::handle_keydown(const SDL_KeyboardEvent& key) {
+void PlayLayer::handle_keydown(const SDL_KeyboardEvent& key) {
   if (key.repeat != 0)
     return;
 
@@ -181,7 +181,7 @@ void PlayState::handle_keydown(const SDL_KeyboardEvent& key) {
   }
 }
 
-void PlayState::handle_keyup(const SDL_KeyboardEvent& key) {
+void PlayLayer::handle_keyup(const SDL_KeyboardEvent& key) {
   switch (key.keysym.sym) {
     case SDLK_d: {
       if (!is_key_down(SDL_SCANCODE_A)) {
@@ -197,7 +197,7 @@ void PlayState::handle_keyup(const SDL_KeyboardEvent& key) {
   }
 }
 
-bool PlayState::is_key_down(SDL_Scancode scancode) const {
+bool PlayLayer::is_key_down(SDL_Scancode scancode) const {
   const Uint8* state = SDL_GetKeyboardState(nullptr);
   return state[scancode];
 }

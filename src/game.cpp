@@ -14,7 +14,7 @@
 
 namespace Core {
 
-Game::Game(const GameSpecification& game_spec) : running(true), current_state(nullptr) {
+Game::Game(const GameSpecification& game_spec) : running(true) {
   init_subsytems();
 
   Level l = load_level(asset_path("assets/phases/level1.json"));
@@ -38,25 +38,25 @@ void Game::handle_events() {
     if (event.type == SDL_QUIT) {
       quit();
     }
-    if (current_state) {
-      current_state->handle_event(event);
+    for (const auto& layer : layers) {
+      layer->handle_event(event);
     }
   }
 }
 
 void Game::update(float dt) {
-  if (current_state) {
-    current_state->update(dt);
+  for (const auto& layer : layers) {
+    layer->update(dt);
   }
 }
 
 void Game::render() {
   SDL_SetRenderDrawColor(ctx.renderer, 0, 0, 0, 255);
   SDL_RenderClear(ctx.renderer);
-  if (current_state) {
-    current_state->render();
-    ctx.ui_manager.render(ctx.renderer);
+  for (const auto& layer : layers) {
+    layer->render();
   }
+  ctx.ui_manager.render(ctx.renderer);
   SDL_RenderPresent(ctx.renderer);
 }
 
@@ -134,7 +134,14 @@ void Game::run() {
 void Game::quit() {
   running = false;
   std::cout << "[Game] Quitting the game\n";
-  current_state.reset();
+  // for(const auto& layer : layers) {
+  //   layer->get;
+  // }
+  // current_state.reset();
   ctx.end();
+}
+
+void Game::push_layer(std::unique_ptr<GameLayer> layer) {
+  layers.push_back(std::move(layer));
 }
 } // namespace Core

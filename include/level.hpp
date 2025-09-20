@@ -13,14 +13,14 @@ struct LevelMetadata {
   struct Platform {
     Vector2 position;
     Vector2 dimension;
-    float screen_height_pct;
+    float   screen_height_pct;
   };
 
   struct Player {
     Vector2 start_position;
     Vector2 dimension;
     float   collision_offset_pct;
-    float screen_height_pct;
+    float   screen_height_pct;
     struct Attributes {
       float move_speed;
       float jump_force;
