@@ -4,20 +4,19 @@
 
 #include "../include/game.hpp"
 #include "../include/game_context.hpp"
-#include "../include/sdl_backend.hpp"
 
 #include <SDL2/SDL_timer.h>
 #include <memory>
 
 int main() {
-  SDLBackend::init_subsytems();
-  auto window   = SDLBackend::create_window(900, 600);
-  auto renderer = SDLBackend::create_renderer(window);
-  GameContext::instance().init(window, renderer);
+  Core::GameSpecification game_spec;
+  game_spec.window_spec.title  = "Genius Game platform";
+  game_spec.window_spec.height = 600;
+  game_spec.window_spec.width  = 900;
 
-  Game game;
+  Core::Game game(game_spec);
   game.change_state(std::make_unique<PlayState>());
-  game.set_fps(60);
+  game.set_fps(120);
   game.run();
   return 0;
 }

@@ -11,12 +11,6 @@ void GameContext::end() {
     renderer = nullptr;
   }
 
-  if (window) {
-    SDL_DestroyWindow(window);
-    std::cout << "[GameContext] SDL Window destroyed\n";
-    window = nullptr;
-  }
-
   if (font) {
     TTF_CloseFont(font);
     std::cout << "[GameContext] Font closed\n";

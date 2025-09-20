@@ -4,6 +4,8 @@
 
 #include <fstream>
 
+namespace Managers {
+
 class JSONManager {
 public:
   static JSONManager& get_instance() {
@@ -24,3 +26,4 @@ private:
   JSONManager(const JSONManager&)            = delete;
   JSONManager& operator=(const JSONManager&) = delete;
 };
+} // namespace Managers

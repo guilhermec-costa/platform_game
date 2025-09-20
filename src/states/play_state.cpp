@@ -13,7 +13,7 @@
 #include <SDL2/SDL_video.h>
 
 PlayState::PlayState() : GameState(), bg_parallax() {
-  Vector2 win_dim = SDLBackend::get_window_dimension(ctx.window);
+  Vector2 win_dim = ctx.window.get_dimension();
 
   const float tile_side   = ctx.get_world_data().ground_tile_side;
   float       tile_height = win_dim.y - tile_side;
@@ -130,7 +130,7 @@ void PlayState::check_player_window_collision() {
 }
 
 void PlayState::render() {
-  bg_parallax.render(ctx.window, ctx.renderer);
+  bg_parallax.render(ctx.renderer);
   ground.render(ctx.renderer, ctx.camera);
   for (auto& platform : platforms) {
     platform->render(ctx.renderer, ctx.camera);

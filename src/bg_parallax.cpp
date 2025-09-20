@@ -2,9 +2,11 @@
 
 #include "../include/asset_manager/texture_manager.hpp"
 #include "../include/asset_manager/utils.hpp"
-#include "../include/sdl_backend.hpp"
+#include "../include/game_context.hpp"
 
 #include <SDL2/SDL_render.h>
+
+using namespace Managers;
 
 BackgroundParallax::BackgroundParallax() {
   bg_layer        = TextureManager::get_texture(asset_path("assets/images/parallax/bg.png"));
@@ -24,8 +26,8 @@ void BackgroundParallax::update(float camera_x) {
   }
 }
 
-void BackgroundParallax::render(SDL_Window* window, SDL_Renderer* renderer) {
-  Vector2 win_dim = SDLBackend::get_window_dimension(window);
+void BackgroundParallax::render(SDL_Renderer* renderer) {
+  Vector2 win_dim = GameContext::instance().window.get_dimension();
 
   for (auto& layer : layers) {
     if (!layer.texture)

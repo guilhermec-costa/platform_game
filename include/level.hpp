@@ -49,14 +49,14 @@ struct Level {
     level.world.max_horizontal_x = world["max_horizontal_x"].get<float>();
 
     // PLAYER DATA
-    auto player       = j["player"];
-    auto player_position   = player["start_position"];
-    auto player_dimension   = player["dimension"];
-    auto player_attrs = player["attrs"];
+    auto player           = j["player"];
+    auto player_position  = player["start_position"];
+    auto player_dimension = player["dimension"];
+    auto player_attrs     = player["attrs"];
     level.player.start_position =
         Vector2{player_position["x"].get<float>(), player_position["y"].get<float>()};
 
-    level.player.dimension = 
+    level.player.dimension =
         Vector2{player_dimension["width"].get<float>(), player_dimension["height"].get<float>()};
     level.player.attrs = LevelMetadata::Player::Attributes{
         .move_speed     = player_attrs["move_speed"].get<float>(),

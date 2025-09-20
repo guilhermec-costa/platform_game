@@ -54,5 +54,5 @@ private:
   PlayerState                         state;
   MovementState                       movement_state = MovementState::IDLE;
   ActionState                         action_state   = ActionState::NONE;
-  float collision_offset_pct;
+  float                               collision_offset_pct;
 };

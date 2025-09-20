@@ -1,9 +1,13 @@
 #pragma once
 
+#include "../shared.hpp"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
 #include <unordered_map>
+
+namespace Managers {
 
 class TextureManager {
 private:
@@ -31,6 +35,12 @@ public:
 
   static SDL_Texture* get_texture(const std::string& file) {
     return TextureManager::get_instance()._get_texture(file);
+  }
+
+  static Vector2 get_texture_dimension(SDL_Texture* texture) {
+    int tex_width, tex_height;
+    SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
+    return Vector2(tex_width, tex_height);
   }
 
 private:
@@ -66,3 +76,4 @@ private:
     return nullptr;
   }
 };
+} // namespace Managers

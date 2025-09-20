@@ -7,6 +7,12 @@
 #include <SDL2/SDL_timer.h>
 #include <memory>
 
+namespace Core {
+
+struct GameSpecification {
+  WindowSpecification window_spec;
+};
+
 class Game {
 private:
   bool                       running;
@@ -16,7 +22,7 @@ private:
   FPSCounter                 fps_counter;
 
 public:
-  Game();
+  Game(const GameSpecification& game_spec);
   Game(const Game&) = delete;
 
   void set_fps(int fps) {
@@ -52,12 +58,15 @@ public:
     ctx.end();
   }
 
-  void  change_state(std::unique_ptr<GameState> new_state) { current_state = std::move(new_state); }
-  void  load_textures();
-  Level load_level(const std::string& level_name);
+  void change_state(std::unique_ptr<GameState> new_state) { current_state = std::move(new_state); }
+  void load_textures();
+  SDL_Renderer* create_renderer(Window& window);
+  Level         load_level(const std::string& level_name);
+  void          init_subsytems();
 
 private:
   void handle_events();
   void update(float dt);
   void render();
 };
+} // namespace Core

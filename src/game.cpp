@@ -10,15 +10,15 @@
 #include <SDL2/SDL_ttf.h>
 #include <cstdlib>
 
-struct WindowSpecification {
-  int width;
-  int height;
-};
+namespace Core {
 
-Game::Game() : running(true), current_state(nullptr) {
+Game::Game(const GameSpecification& game_spec) : running(true), current_state(nullptr) {
+  init_subsytems();
+  GameContext::instance().init(game_spec.window_spec);
   load_textures();
   Level l = load_level(asset_path("assets/phases/level1.json"));
   ctx.set_level(l);
+
   TTF_Font* font =
       SDLBackend::load_font(asset_path("assets/fonts/YoungSerif-Regular.ttf").c_str(), 22);
   if (!font) {
@@ -53,12 +53,11 @@ void Game::render() {
   if (current_state) {
     current_state->render();
   }
-
   SDL_RenderPresent(ctx.renderer);
 }
 
 SDL_Texture* load_texture_or_die(const std::string& path, SDL_Renderer* renderer) {
-  auto&        tex_manager = TextureManager::get_instance();
+  auto&        tex_manager = Managers::TextureManager::get_instance();
   SDL_Texture* tex         = tex_manager.get_or_load(path, renderer);
 
   if (!tex) {
@@ -81,7 +80,30 @@ void Game::load_textures() {
 }
 
 Level Game::load_level(const std::string& level_name) {
-  json  j     = JSONManager::get_instance().load_file(level_name);
+  json  j     = Managers::JSONManager::get_instance().load_file(level_name);
   Level level = Level::from_json(j);
   return level;
 }
+
+void Game::init_subsytems() {
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    throw std::runtime_error("[SDLBackend] SDL Video subsystem initialization failed: " +
+                             std::string(SDL_GetError()));
+  }
+  std::cout << "[SDLBackend] SDL Video subsystem initialized\n";
+
+  if (!(IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG)) {
+    throw std::runtime_error("[SDLBackend] SDL Image subsystem initialization failed: " +
+                             std::string(IMG_GetError()));
+  }
+  std::cout << "[SDLBackend] SDL Image subsystem initialized\n";
+
+  if (TTF_Init() < 0) {
+    throw std::runtime_error("[SDLBackend] SDL TTF subsystem initialization failed: " +
+                             std::string(TTF_GetError()));
+  }
+  std::cout << "[SDLBackend] SDL TTF subsystem initialized\n";
+
+  std::cout << "[SDLBackend] Finished initializing SDL subsystems\n";
+}
+} // namespace Core

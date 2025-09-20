@@ -13,7 +13,8 @@ class ColliderComponent {
 
 public:
   ColliderComponent() = default;
-  ColliderComponent(Vector2 pos, Vector2 dim) : position(pos), dimension(dim) {
+  ColliderComponent(Vector2 pos, Vector2 dim, Vector2 collision_offset = {0, 0})
+      : position(pos), dimension(dim), collision_offset(collision_offset) {
     collision_box = {(int)position.x, (int)position.y, (int)dim.x, (int)dim.y};
   };
 
@@ -43,7 +44,10 @@ public:
     SDL_RenderDrawRect(renderer, &collision_box);
   }
 
-  void set_position(const Vector2& pos) { position = pos; }
+  void set_position(const Vector2& pos) { position = pos + collision_offset; }
   void set_dimension(const Vector2& dim) { dimension = dim; }
+
+public:
+  Vector2 collision_offset;
 };
 } // namespace Components

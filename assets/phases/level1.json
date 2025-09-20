@@ -16,9 +16,9 @@
     },
     "collision_offset_pct": 0.22, 
     "attrs": {
-      "move_speed": 500.0,
-      "jump_force": 900.0,
-      "gravity": 1500.0,
+      "move_speed": 480.0,
+      "jump_force": 700.0,
+      "gravity": 1300.0,
       "max_fall_speed": 820.0
     }
   },

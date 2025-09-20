@@ -7,17 +7,6 @@
 #include <iostream>
 #include <stdexcept>
 
-SDL_Window* SDLBackend::create_window(int width, int height) {
-  auto window = SDL_CreateWindow("Platform game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                 width, height, 0);
-  if (!window) {
-    std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
-    throw std::runtime_error("Failed to create window");
-  }
-  std::cout << "[SDLBackend] SDL Window created\n";
-  return window;
-}
-
 SDL_Renderer* SDLBackend::create_renderer(SDL_Window* window) {
   if (!window) {
     throw std::runtime_error("Window not initialized");
@@ -49,26 +38,6 @@ int SDLBackend::init_subsytems() {
   std::cout << "[SDLBackend] SDL TTF subystem initialized\n";
   std::cout << "[SDLBackend] Finished initializing SDL subsystems\n";
   return 0;
-}
-
-Vector2 SDLBackend::get_window_dimension(SDL_Window* window) {
-  int w, h;
-  SDL_GetWindowSize(window, &w, &h);
-  return Vector2(w, h);
-}
-
-int SDLBackend::get_window_width(SDL_Window* window) {
-  return get_window_dimension(window).x;
-}
-
-int SDLBackend::get_window_height(SDL_Window* window) {
-  return get_window_dimension(window).y;
-}
-
-Vector2 SDLBackend::get_texture_dimensions(SDL_Texture* texture) {
-  int tex_width, tex_height;
-  SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
-  return Vector2(tex_width, tex_height);
 }
 
 TTF_Font* SDLBackend::load_font(const char* path, int s) {
