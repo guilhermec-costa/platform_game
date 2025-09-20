@@ -160,6 +160,7 @@ void PlayState::handle_window_event(const SDL_WindowEvent& window) {
     for (const auto& platform : platforms) {
       platform->resize();
     }
+    player->resize();
   }
 }
 

@@ -1,23 +1,25 @@
 #include "../../include/objects/player_object.hpp"
 
 #include "../../include/asset_manager/texture_manager.hpp"
+#include "../../include/game_context.hpp"
 
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-PlayerObject::PlayerObject(LevelMetadata::Player& player_data)
-    : GameObject(player_data.start_position, {0, 0}, player_data.dimension), on_ground(true) {
+PlayerObject::PlayerObject(const LevelMetadata::Player& data)
+    : m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension),
+      on_ground(true) {
   auto    texture = Managers::TextureManager::get_texture("assets/images/nigthborne.png");
   Vector2 tex_dim = Managers::TextureManager::get_texture_dimension(texture);
 
-  collision_offset_pct = player_data.collision_offset_pct;
+  collision_offset_pct = data.collision_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
-  collider_component = Components::ColliderComponent(player_data.start_position, collider_dim,
+  collider_component = Components::ColliderComponent(data.start_position, collider_dim,
                                                      {dimension.x * 0.35f, dimension.y * 0.43f});
 
   animated_sprite = Components::AnimatedSpriteComponent(
       Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}), 80, 80, 0.1,
-      player_data.dimension);
+      data.dimension);
 
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::IDLE), "idle", 0, 8, 0.099f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::RUN), "run", 8, 12, 0.1f);
@@ -25,10 +27,10 @@ PlayerObject::PlayerObject(LevelMetadata::Player& player_data)
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.03f,
                                 false);
 
-  move_spped     = player_data.attrs.move_speed;
-  gravity        = player_data.attrs.gravity;
-  jump_force     = player_data.attrs.jump_force;
-  max_fall_speed = player_data.attrs.max_fall_speed;
+  move_spped     = data.attrs.move_speed;
+  gravity        = data.attrs.gravity;
+  jump_force     = data.attrs.jump_force;
+  max_fall_speed = data.attrs.max_fall_speed;
 };
 
 void PlayerObject::update(float dt) {
@@ -145,4 +147,9 @@ void PlayerObject::land_on(float surface_y) {
   position.y  = new_y;
   velocity.y  = 0;
   on_ground   = true;
+}
+
+void PlayerObject::resize() {
+  auto& window = Core::GameContext::instance().window;
+  position.y   = m_metadata.screen_height_pct * window.get_height();
 }

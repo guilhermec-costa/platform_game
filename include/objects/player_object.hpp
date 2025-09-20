@@ -23,7 +23,7 @@ enum class PlayerState {
 class PlayerObject : public GameObject {
 public:
   PlayerObject() = delete;
-  PlayerObject(LevelMetadata::Player& player_data);
+  PlayerObject(const LevelMetadata::Player& player_data);
 
   void        handle_event(PlayerEvent event);
   void        update(float dt) override;
@@ -34,6 +34,7 @@ public:
   void        update_animation(float dt);
   void        update_state();
   void        land_on(float surface_y);
+  void        resize();
   inline void set_on_ground(bool state) { on_ground = state; }
   inline Components::ColliderComponent& get_collider_component() { return collider_component; }
 
@@ -51,5 +52,6 @@ private:
   PlayerState                         state;
   MovementState                       movement_state = MovementState::IDLE;
   ActionState                         action_state   = ActionState::NONE;
+  LevelMetadata::Player               m_metadata;
   float                               collision_offset_pct;
 };
