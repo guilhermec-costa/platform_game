@@ -1,13 +1,12 @@
 #include "../include/ground.hpp"
 
 #include "../include/asset_manager/texture_manager.hpp"
-#include "../include/asset_manager/utils.hpp"
 #include "../include/game_context.hpp"
 
 Ground::Ground(int screen_w, int screen_h, float y_pos, int tile_w = 64)
     : y(y_pos), screen_width(screen_w), screen_height(screen_h), tile_side(tile_w) {
 
-  ground_tile = Managers::TextureManager::get_texture(asset_path("assets/images/grass.png"));
+  ground_tile = Managers::TextureManager::get_texture("assets/images/grass.png");
   update_collider(0);
 }
 

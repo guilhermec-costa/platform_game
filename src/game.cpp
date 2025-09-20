@@ -21,8 +21,7 @@ Game::Game(const GameSpecification& game_spec) : running(true), current_state(nu
   Level l = load_level(asset_path("assets/phases/level1.json"));
   ctx.set_level(l);
 
-  TTF_Font* font = Managers::FontManager::load_font(
-      asset_path("assets/fonts/YoungSerif-Regular.ttf").c_str(), 22);
+  TTF_Font* font = Managers::FontManager::load_font("assets/fonts/YoungSerif-Regular.ttf", 22);
   if (!font) {
     std::runtime_error("Failed to load font");
   }
@@ -77,9 +76,8 @@ void Game::load_textures() {
       "assets/images/parallax/far-trees.png",   "assets/images/parallax/mid-trees.png",
       "assets/images/parallax/close-trees.png", "assets/images/grass.png"};
 
-  for (auto& path : textures) {
-    load_texture_or_die(asset_path(path), ctx.renderer);
-  }
+  for (auto& path : textures)
+    load_texture_or_die(path, ctx.renderer);
 }
 
 Level Game::load_level(const std::string& level_name) {

@@ -1,7 +1,6 @@
 #include "../include/bg_parallax.hpp"
 
 #include "../include/asset_manager/texture_manager.hpp"
-#include "../include/asset_manager/utils.hpp"
 #include "../include/game_context.hpp"
 
 #include <SDL2/SDL_render.h>
@@ -9,11 +8,11 @@
 using namespace Managers;
 
 BackgroundParallax::BackgroundParallax() {
-  bg_layer        = TextureManager::get_texture(asset_path("assets/images/parallax/bg.png"));
-  far_trees_layer = TextureManager::get_texture(asset_path("assets/images/parallax/far-trees.png"));
-  mid_trees_layer = TextureManager::get_texture(asset_path("assets/images/parallax/mid-trees.png"));
+  bg_layer        = TextureManager::get_texture("assets/images/parallax/bg.png");
+  far_trees_layer = TextureManager::get_texture("assets/images/parallax/far-trees.png");
+  mid_trees_layer = TextureManager::get_texture("assets/images/parallax/mid-trees.png");
   close_trees_layer =
-      TextureManager::get_texture(asset_path("assets/images/parallax/close-trees.png"));
+      TextureManager::get_texture("assets/images/parallax/close-trees.png");
   layers = {{bg_layer, 0.1f, 0.0f},
             {far_trees_layer, 0.3f, 0.0f},
             {mid_trees_layer, 0.5f, 0.0f},

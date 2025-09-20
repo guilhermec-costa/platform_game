@@ -1,3 +1,4 @@
+#include "utils.hpp"
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 
@@ -10,7 +11,7 @@ public:
   }
 
   static TTF_Font* load_font(const char* path, int s) {
-    TTF_Font* font = TTF_OpenFont(path, s);
+    TTF_Font* font = TTF_OpenFont(asset_path(path).c_str(), s);
     if (!font) {
       std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
       return nullptr;

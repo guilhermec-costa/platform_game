@@ -1,4 +1,5 @@
 #include "../../include/asset_manager/texture_manager.hpp"
+#include "../../include/asset_manager/utils.hpp"
 
 #include <SDL2/SDL_image.h>
 
@@ -18,11 +19,11 @@ TextureManager& TextureManager::get_instance() {
 }
 
 SDL_Texture* TextureManager::get_or_load(const std::string& file, SDL_Renderer* renderer) {
-  return TextureManager::get_instance()._get_or_load(file, renderer);
+  return TextureManager::get_instance()._get_or_load(asset_path(file), renderer);
 }
 
 SDL_Texture* TextureManager::get_texture(const std::string& file) {
-  return TextureManager::get_instance()._get_texture(file);
+  return TextureManager::get_instance()._get_texture(asset_path(file));
 }
 
 Vector2 TextureManager::get_texture_dimension(SDL_Texture* texture) {

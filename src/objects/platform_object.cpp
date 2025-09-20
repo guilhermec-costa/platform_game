@@ -1,13 +1,12 @@
 #include "../../include/objects/platform_object.hpp"
 
 #include "../../include/asset_manager/texture_manager.hpp"
-#include "../../include/asset_manager/utils.hpp"
 
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
 PlatformObject::PlatformObject(Vector2 pos, Vector2 dim) : GameObject(pos, {0, 0}, dim) {
-  auto texture      = Managers::TextureManager::get_texture(asset_path("assets/images/grass.png"));
+  auto texture      = Managers::TextureManager::get_texture("assets/images/grass.png");
   texture_component = Components::TextureComponent(texture, pos, dim);
 
   float collision_offset = dim.y * 0.35f;
