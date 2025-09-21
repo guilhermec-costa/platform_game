@@ -10,9 +10,15 @@ typedef struct Vector2 {
   Vector2(float _x, float _y) : x(_x), y(_y) {};
   Vector2(const Vector2& v) : x(v.x), y(v.y) {};
 
-  Vector2 operator*(float scalar) const { return Vector2(x * scalar, y * scalar); }
-  Vector2 operator+(float sum) const { return Vector2(x + sum, y + sum); };
-  Vector2 operator+(const Vector2& vec) const { return Vector2(x + vec.x, y + vec.y); };
+  Vector2 operator*(float scalar) const {
+    return Vector2(x * scalar, y * scalar);
+  }
+  Vector2 operator+(float sum) const {
+    return Vector2(x + sum, y + sum);
+  };
+  Vector2 operator+(const Vector2& vec) const {
+    return Vector2(x + vec.x, y + vec.y);
+  };
   Vector2 operator+=(const Vector2& vec) {
     x += vec.x;
     y += vec.y;

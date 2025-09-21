@@ -20,7 +20,9 @@ public:
   void        render(SDL_Renderer* renderer, const Core::Camera& camera) override;
   void        resize();
   RectOverlap get_overlap(const SDL_Rect& rect);
-  Components::ColliderComponent& get_collider() { return collider_component; }
+  Components::ColliderComponent& get_collider() {
+    return collider_component;
+  }
 
 private:
   Components::ColliderComponent collider_component;

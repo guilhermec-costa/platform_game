@@ -1,31 +1,34 @@
 #include "../../include/objects/player_object.hpp"
 
-#include "../../include/asset_manager/texture_manager.hpp"
-#include "../../include/game_context.hpp"
-
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-PlayerObject::PlayerObject(const LevelMetadata::Player& data)
-    : m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension), on_ground(true) {
+#include "../../include/asset_manager/texture_manager.hpp"
+#include "../../include/game_context.hpp"
+
+PlayerObject::PlayerObject(const LevelMetadata::Player& data) :
+  m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension), on_ground(true) {
   auto texture =
       Managers::TextureManagerSingleton::instance().get_asset("assets/images/nigthborne.png");
   Vector2 tex_dim = Managers::TextureManagerSingleton::instance().get_texture_dimension(texture);
 
   collision_offset_pct = data.collision_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
-  collider_component = Components::ColliderComponent(data.start_position, collider_dim,
-                                                     {dimension.x * 0.35f, dimension.y * 0.43f});
+  collider_component = Components::ColliderComponent(
+      data.start_position, collider_dim, {dimension.x * 0.35f, dimension.y * 0.43f});
 
   animated_sprite = Components::AnimatedSpriteComponent(
-      Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}), 80, 80, 0.1,
+      Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}),
+      80,
+      80,
+      0.1,
       data.dimension);
 
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::IDLE), "idle", 0, 8, 0.099f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::RUN), "run", 8, 12, 0.1f);
   animated_sprite.add_animation(static_cast<int>(PlayerAnimation::JUMP), "jump", 0, 8, 0.1f);
-  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.03f,
-                                false);
+  animated_sprite.add_animation(
+      static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.03f, false);
 
   move_spped     = data.attrs.move_speed;
   gravity        = data.attrs.gravity;

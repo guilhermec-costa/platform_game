@@ -1,13 +1,13 @@
 #include "../../include/objects/platform_object.hpp"
 
-#include "../../include/asset_manager/texture_manager.hpp"
-#include "../../include/game_context.hpp"
-
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-PlatformObject::PlatformObject(LevelMetadata::Platform data)
-    : m_metadata(data), GameObject(data.position, {0, 0}, data.dimension) {
+#include "../../include/asset_manager/texture_manager.hpp"
+#include "../../include/game_context.hpp"
+
+PlatformObject::PlatformObject(LevelMetadata::Platform data) :
+  m_metadata(data), GameObject(data.position, {0, 0}, data.dimension) {
 
   Vector2& pos = data.position;
   Vector2& dim = data.dimension;
@@ -23,7 +23,8 @@ void PlatformObject::handle_event() {}
 
 void PlatformObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
   SDL_Rect rec{static_cast<int>(position.x) - static_cast<int>(camera.get_position().x),
-               static_cast<int>(position.y), static_cast<int>(dimension.x),
+               static_cast<int>(position.y),
+               static_cast<int>(dimension.x),
                static_cast<int>(dimension.y)};
   SDL_RenderCopy(renderer, texture_component.get_texture(), NULL, &rec);
   // collider_component.render_collision_box(renderer, camera);

@@ -1,28 +1,25 @@
-#include "utils.hpp"
+#pragma once
 
 #include <SDL2/SDL_ttf.h>
-#include <iostream>
+
+#include "asset_manager.hpp"
 
 namespace Managers {
-class FontManager {
-public:
-  static FontManager& instance() {
-    static FontManager instance;
-    return instance;
-  }
 
-  static TTF_Font* load_font(const char* path, int s) {
-    TTF_Font* font = TTF_OpenFont(asset_path(path).c_str(), s);
-    if (!font) {
-      std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
-      return nullptr;
+  class FontManagerSingleton : public AssetManager<TTF_Font*> {
+  public:
+    ~FontManagerSingleton();
+
+    static FontManagerSingleton& instance() {
+      static FontManagerSingleton instance;
+      return instance;
     }
-    return font;
-  }
 
-private:
-  FontManager()                              = default;
-  FontManager(const FontManager&)            = delete;
-  FontManager& operator=(const FontManager&) = delete;
-};
+    TTF_Font* get_or_load(const std::string& file) override;
+
+  private:
+    FontManagerSingleton();
+    FontManagerSingleton(const FontManagerSingleton&)            = delete;
+    FontManagerSingleton& operator=(const FontManagerSingleton&) = delete;
+  };
 } // namespace Managers

@@ -1,17 +1,18 @@
 #pragma once
 
+#include <memory>
+
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_video.h>
+
 #include "bg_parallax.hpp"
 #include "game_context.hpp"
 #include "ground.hpp"
 #include "objects/platform_object.hpp"
 #include "objects/player_object.hpp"
 #include "ui/ui_manager.hpp"
-
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_video.h>
-#include <memory>
 
 class GameLayer {
 protected:
@@ -23,8 +24,12 @@ public:
   virtual void handle_event(const SDL_Event& event) = 0;
   virtual void update(float dt)                     = 0;
   virtual void render()                             = 0;
-  void         set_suspended(bool s) { suspended = s; };
-  bool         is_suspended() { return suspended; }
+  void         set_suspended(bool s) {
+    suspended = s;
+  };
+  bool is_suspended() {
+    return suspended;
+  }
 
   virtual ~GameLayer() {};
 

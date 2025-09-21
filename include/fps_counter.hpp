@@ -17,7 +17,9 @@ public:
     }
   }
 
-  int getFPS() const { return fps; }
+  int getFPS() const {
+    return fps;
+  }
 
 private:
   int    frame_count;

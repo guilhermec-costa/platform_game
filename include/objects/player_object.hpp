@@ -1,12 +1,12 @@
 #pragma once
 
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
+
 #include "../../include/level.hpp"
 #include "../components/animated_sprite_component.hpp"
 #include "../components/collider_component.hpp"
 #include "game_object.hpp"
-
-#include <SDL2/SDL_rect.h>
-#include <SDL2/SDL_render.h>
 
 enum class MovementState { IDLE, RUNNING, JUMPING, FALLING };
 enum class ActionState { NONE, ATTACKING };
@@ -35,8 +35,12 @@ public:
   void        update_state();
   void        land_on(float surface_y);
   void        resize();
-  inline void set_on_ground(bool state) { on_ground = state; }
-  inline Components::ColliderComponent& get_collider_component() { return collider_component; }
+  inline void set_on_ground(bool state) {
+    on_ground = state;
+  }
+  inline Components::ColliderComponent& get_collider_component() {
+    return collider_component;
+  }
 
 public:
   bool  on_ground;

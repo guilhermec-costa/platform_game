@@ -1,9 +1,9 @@
 #include "../include/bg_parallax.hpp"
 
+#include <SDL2/SDL_render.h>
+
 #include "../include/asset_manager/texture_manager.hpp"
 #include "../include/game_context.hpp"
-
-#include <SDL2/SDL_render.h>
 
 using namespace Managers;
 

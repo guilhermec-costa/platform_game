@@ -2,10 +2,11 @@
 #error "Failed to load project source directory"
 #endif
 
-#include "../include/game.hpp"
+#include <memory>
 
 #include <SDL2/SDL_timer.h>
-#include <memory>
+
+#include "../include/game.hpp"
 
 int main() {
   Core::GameSpecification game_spec;

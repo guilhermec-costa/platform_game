@@ -1,5 +1,3 @@
-#include "../../include/game_layer.hpp"
-
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
@@ -9,6 +7,8 @@
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_video.h>
+
+#include "../../include/game_layer.hpp"
 
 PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
   Vector2 win_dim = ctx.window.get_dimension();
