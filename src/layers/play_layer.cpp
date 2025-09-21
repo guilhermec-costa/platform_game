@@ -19,7 +19,7 @@ PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
 
   player = std::make_unique<PlayerObject>(ctx.get_player_data());
 
-  auto& platforms_data = ctx.get_platforms_data();
+  auto& platforms_data = ctx.get_level_data().platforms;
   for (const auto& p : platforms_data) {
     platforms.push_back(std::make_unique<PlatformObject>(p));
   }

@@ -1,0 +1,10 @@
+{
+  "name": "Phase 2",
+  "platforms": [
+    { "x": 0.1667, "y": 0.7, "width": 200, "height": 50},
+    { "x": 0.3, "y": 0.7, "width": 200, "height": 50 },
+    { "x": 0.5, "y": 0.7, "width": 300, "height": 50},
+    { "x": 0.55, "y": 0.7, "width": 300, "height": 50},
+    { "x": 0.65, "y": 0.7, "width": 300, "height": 50}
+  ]
+}

@@ -3,6 +3,7 @@
 #include <string>
 
 #include "font_manager.hpp"
+#include "json_manager.hpp"
 #include "texture_manager.hpp"
 
 class AssetFactoryMethod {
@@ -14,10 +15,9 @@ public:
       return Managers::TextureManagerSingleton::instance().get_or_load(path);
     } else if (ext == "ttf" || ext == "otf") {
       return Managers::FontManagerSingleton::instance().get_or_load(path);
+    } else if (ext == "json") {
+      return Managers::JSONManager::instance().get_or_load(path);
     }
-    // else if (ext == "ogg" || ext == "wav" || ext == "mp3") {
-    //     return Managers::SoundManagerSingleton::instance().get_or_load(path);
-    // }
     return nullptr;
   }
 

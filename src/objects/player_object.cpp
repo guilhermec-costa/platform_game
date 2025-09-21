@@ -6,7 +6,7 @@
 #include "../../include/asset_manager/texture_manager.hpp"
 #include "../../include/game_context.hpp"
 
-PlayerObject::PlayerObject(const LevelMetadata::Player& data) :
+PlayerObject::PlayerObject(const PlayerData& data) :
   m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension), on_ground(true) {
   auto texture =
       Managers::TextureManagerSingleton::instance().get_asset("assets/images/nigthborne.png");

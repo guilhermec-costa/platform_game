@@ -1,29 +1,22 @@
 #pragma once
 
-#include <fstream>
+#include <string>
 
+#include "asset_manager.hpp"
 #include "json_alias.hpp"
 
 namespace Managers {
 
-  class JSONManager {
+  class JSONManager : public AssetManager<json*> {
   public:
-    static JSONManager& get_instance() {
-      static JSONManager manager;
-      return manager;
-    };
+    static JSONManager& instance();
 
-    json load_file(const std::string& path) {
-      std::ifstream file(path);
-      if (!file.is_open()) {
-        std::runtime_error("Cannot open JSON file: " + path);
-      }
-      return json::parse(file);
-    };
+    json* get_or_load(const std::string& path);
 
   private:
-    JSONManager()                              = default;
+    JSONManager();
     JSONManager(const JSONManager&)            = delete;
     JSONManager& operator=(const JSONManager&) = delete;
   };
+
 } // namespace Managers

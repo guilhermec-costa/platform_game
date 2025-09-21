@@ -16,12 +16,13 @@ namespace Managers {
   }
 
   TTF_Font* FontManagerSingleton::get_or_load(const std::string& path) {
-    TTF_Font* font = TTF_OpenFont(asset_path(path).c_str(), 14);
+    const std::string normalized_path = asset_path(path);
+    TTF_Font*         font            = TTF_OpenFont(normalized_path.c_str(), 14);
     if (!font) {
       std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
       return nullptr;
     }
-    m_assets[path] = font;
+    m_assets[normalized_path] = font;
     return font;
   }
 } // namespace Managers

@@ -2,7 +2,6 @@
 
 #include <SDL2/SDL_image.h>
 
-#include "../../include/asset_manager/utils.hpp"
 #include "../../include/game_context.hpp"
 
 namespace Managers {
@@ -20,24 +19,15 @@ namespace Managers {
     return instance;
   }
 
-  SDL_Texture* TextureManagerSingleton::get_or_load(const std::string& file) {
-    return TextureManagerSingleton::instance()._get_or_load(asset_path(file));
-  }
-
-  Vector2 TextureManagerSingleton::get_texture_dimension(SDL_Texture* texture) {
-    int tex_width, tex_height;
-    SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
-    return Vector2(tex_width, tex_height);
-  }
-
-  SDL_Texture* TextureManagerSingleton::_get_or_load(const std::string& file) {
-    SDL_Texture* tex = get_asset(file);
+  SDL_Texture* TextureManagerSingleton::get_or_load(const std::string& path) {
+    const std::string normalized_path = asset_path(path);
+    SDL_Texture*      tex             = get_asset(path);
     if (tex)
       return tex;
 
-    SDL_Surface* surface = IMG_Load(file.c_str());
+    SDL_Surface* surface = IMG_Load(normalized_path.c_str());
     if (!surface) {
-      SDL_Log("❌ Failed to load image %s: %s", file.c_str(), IMG_GetError());
+      SDL_Log("❌ Failed to load image %s: %s", normalized_path.c_str(), IMG_GetError());
       return nullptr;
     }
 
@@ -46,11 +36,17 @@ namespace Managers {
     SDL_FreeSurface(surface);
 
     if (!texture) {
-      SDL_Log("❌ Failed to create texture from %s: %s", file.c_str(), SDL_GetError());
+      SDL_Log("❌ Failed to create texture from %s: %s", normalized_path.c_str(), SDL_GetError());
       return nullptr;
     }
 
-    m_assets[file] = texture;
+    m_assets[normalized_path] = texture;
     return texture;
+  }
+
+  Vector2 TextureManagerSingleton::get_texture_dimension(SDL_Texture* texture) {
+    int tex_width, tex_height;
+    SDL_QueryTexture(texture, nullptr, nullptr, &tex_width, &tex_height);
+    return Vector2(tex_width, tex_height);
   }
 } // namespace Managers

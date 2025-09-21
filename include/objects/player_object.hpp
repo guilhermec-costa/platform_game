@@ -23,7 +23,7 @@ enum class PlayerState {
 class PlayerObject : public GameObject {
 public:
   PlayerObject() = delete;
-  PlayerObject(const LevelMetadata::Player& player_data);
+  PlayerObject(const PlayerData& player_data);
 
   void        handle_event(PlayerEvent event);
   void        update(float dt) override;
@@ -56,6 +56,6 @@ private:
   PlayerState                         state;
   MovementState                       movement_state = MovementState::IDLE;
   ActionState                         action_state   = ActionState::NONE;
-  LevelMetadata::Player               m_metadata;
+  PlayerData                          m_metadata;
   float                               collision_offset_pct;
 };

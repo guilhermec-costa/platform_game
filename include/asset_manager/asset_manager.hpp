@@ -3,8 +3,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "utils.hpp"
-
 namespace Managers {
 
   template <typename T>
@@ -21,6 +19,10 @@ namespace Managers {
         return it->second;
       }
       return nullptr;
+    }
+
+    std::string asset_path(const std::string& relative) {
+      return std::string(PROJECT_SOURCE_DIR) + relative;
     }
 
   protected:

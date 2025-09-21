@@ -6,30 +6,39 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "../include/asset_manager/asset_factory_method.hpp"
-#include "../include/asset_manager/font_manager.hpp"
 #include "../include/asset_manager/json_manager.hpp"
-#include "../include/asset_manager/utils.hpp"
 #include "../include/level.hpp"
 
 namespace Core {
 
   Game::Game(const GameSpecification& game_spec) : running(true) {
     init_subsytems();
-
-    Level l = load_level(asset_path("assets/phases/level1.json"));
-    ctx.set_level(l);
-
     GameContext::instance().init(game_spec.window_spec);
-    load_global_assets();
 
-    TTF_Font* font = Managers::FontManagerSingleton::instance().get_or_load(
-        "assets/fonts/YoungSerif-Regular.ttf");
-    if (!font) {
-      std::runtime_error("Failed to load font");
-    }
-    ctx.set_font(font);
+    load_global_assets();
+    load_game_data();
+    LevelData l = load_level("assets/phases/level1.json");
+    ctx.set_level(l);
     fps_counter = FPSCounter();
   }
+
+  void Game::load_game_data() {
+    Vector2 window_dimension = ctx.window.get_dimension();
+    json*   player_data_json =
+        Managers::JSONManager::instance().get_asset("assets/phases/player_data.json");
+    json* world_data_json =
+        Managers::JSONManager::instance().get_asset("assets/phases/world_data.json");
+    json* level1_data_json =
+        Managers::JSONManager::instance().get_asset("assets/phases/level1.json");
+
+    WorldData world_data = WorldData::from_json(*world_data_json);
+    LevelData level_data =
+        LevelData::from_json(*level1_data_json, window_dimension.y, world_data.max_horizontal_x);
+    PlayerData player_data =
+        PlayerData::from_json(*player_data_json, window_dimension.y, world_data.max_horizontal_x);
+
+    ctx.game_data = GameData{player_data, world_data, level_data};
+  };
 
   void Game::handle_events() {
     SDL_Event event;
@@ -61,13 +70,19 @@ namespace Core {
   }
 
   void Game::load_global_assets() {
-    std::vector<std::string> assets = {"assets/images/nigthborne.png",
-                                       "assets/images/parallax/bg.png",
-                                       "assets/images/parallax/far-trees.png",
-                                       "assets/images/parallax/mid-trees.png",
-                                       "assets/images/parallax/close-trees.png",
-                                       "assets/images/grass.png",
-                                       "assets/fonts/YoungSerif-Regular.ttf"};
+    const std::string assets[] = {
+        "assets/images/nigthborne.png",
+        "assets/images/parallax/bg.png",
+        "assets/images/parallax/far-trees.png",
+        "assets/images/parallax/mid-trees.png",
+        "assets/images/parallax/close-trees.png",
+        "assets/images/grass.png",
+        "assets/fonts/YoungSerif-Regular.ttf",
+        "assets/phases/level1.json",
+        "assets/phases/level2.json",
+        "assets/phases/player_data.json",
+        "assets/phases/world_data.json",
+    };
 
     for (const auto& path : assets) {
       if (!AssetFactoryMethod::load(path)) {
@@ -76,9 +91,11 @@ namespace Core {
     }
   }
 
-  Level Game::load_level(const std::string& level_name) {
-    json  j     = Managers::JSONManager::get_instance().load_file(level_name);
-    Level level = Level::from_json(j, ctx.window.get_height());
+  LevelData Game::load_level(const std::string& level_name) {
+    int       window_height = ctx.window.get_height();
+    json*     j             = Managers::JSONManager::instance().get_asset(level_name);
+    LevelData level =
+        LevelData::from_json(*j, window_height, ctx.get_world_data().max_horizontal_x);
     return level;
   }
 

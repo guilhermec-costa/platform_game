@@ -35,28 +35,24 @@ namespace Core {
     std::cout << "[GameContext] SDL Renderer created\n";
   }
 
-  Level& GameContext::get_level() {
+  LevelData& GameContext::get_level() {
     return active_level;
   }
 
-  LevelMetadata::Player& GameContext::get_player_data() {
-    return active_level.player;
+  PlayerData& GameContext::get_player_data() {
+    return game_data.player_data;
   }
 
-  LevelMetadata::World& GameContext::get_world_data() {
-    return active_level.world;
+  WorldData& GameContext::get_world_data() {
+    return game_data.world_data;
   }
 
-  std::vector<LevelMetadata::Platform>& GameContext::get_platforms_data() {
-    return active_level.platforms;
+  LevelData& GameContext::get_level_data() {
+    return game_data.level_data;
   }
 
-  void GameContext::set_level(const Level& level) {
+  void GameContext::set_level(const LevelData& level) {
     active_level = level;
-  }
-
-  void GameContext::set_font(TTF_Font* f) {
-    font = f;
   }
 
   void GameContext::end() {

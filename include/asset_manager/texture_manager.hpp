@@ -21,9 +21,6 @@ namespace Managers {
     TextureManagerSingleton(const TextureManagerSingleton&)            = delete;
     TextureManagerSingleton& operator=(const TextureManagerSingleton&) = delete;
     TextureManagerSingleton();
-
-  private:
-    SDL_Texture* _get_or_load(const std::string& file);
   };
 
 } // namespace Managers

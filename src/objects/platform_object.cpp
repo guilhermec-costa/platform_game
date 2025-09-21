@@ -6,7 +6,7 @@
 #include "../../include/asset_manager/texture_manager.hpp"
 #include "../../include/game_context.hpp"
 
-PlatformObject::PlatformObject(LevelMetadata::Platform data) :
+PlatformObject::PlatformObject(LevelData::PlatformData data) :
   m_metadata(data), GameObject(data.position, {0, 0}, data.dimension) {
 
   Vector2& pos = data.position;

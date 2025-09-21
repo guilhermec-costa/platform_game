@@ -3,38 +3,41 @@
 #include "asset_manager/json_alias.hpp"
 #include "shared.hpp"
 
-struct LevelMetadata {
-  struct World {
-    float ground_tile_side;
-    float min_horizontal_x;
-    float max_horizontal_x;
-  };
-
-  struct Platform {
+struct LevelData {
+  struct PlatformData {
     Vector2 position;
     Vector2 dimension;
     float   screen_height_pct;
   };
-
-  struct Player {
-    Vector2 start_position;
-    Vector2 dimension;
-    float   collision_offset_pct;
-    float   screen_height_pct;
-    struct Attributes {
-      float move_speed;
-      float jump_force;
-      float gravity;
-      float max_fall_speed;
-    } attrs;
-  };
+  std::string               name;
+  std::vector<PlatformData> platforms;
+  static LevelData          from_json(const json& j, float screen_height, int world_width);
 };
 
-struct Level {
-  std::string                          name;
-  LevelMetadata::World                 world;
-  LevelMetadata::Player                player;
-  std::vector<LevelMetadata::Platform> platforms;
+struct WorldData {
+  float            ground_tile_side;
+  float            min_horizontal_x;
+  float            max_horizontal_x;
+  static WorldData from_json(const json& j);
+};
 
-  static Level from_json(const json& j, float screen_height);
+struct PlayerData {
+  Vector2 start_position;
+  Vector2 dimension;
+  float   collision_offset_pct;
+  float   screen_height_pct;
+  struct Attributes {
+    float move_speed;
+    float jump_force;
+    float gravity;
+    float max_fall_speed;
+  } attrs;
+
+  static PlayerData from_json(const json& j, float screen_height, float world_width);
+};
+
+struct GameData {
+  PlayerData player_data;
+  WorldData  world_data;
+  LevelData  level_data;
 };

@@ -14,7 +14,7 @@ struct RectOverlap {
 
 class PlatformObject : public GameObject {
 public:
-  PlatformObject(const LevelMetadata::Platform metadata);
+  PlatformObject(const LevelData::PlatformData metadata);
   void        handle_event();
   void        update(float dt) override;
   void        render(SDL_Renderer* renderer, const Core::Camera& camera) override;
@@ -27,5 +27,5 @@ public:
 private:
   Components::ColliderComponent collider_component;
   Components::TextureComponent  texture_component;
-  LevelMetadata::Platform       m_metadata;
+  LevelData::PlatformData       m_metadata;
 };
