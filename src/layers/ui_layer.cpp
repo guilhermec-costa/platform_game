@@ -8,8 +8,8 @@
 UILayer::UILayer() : ui_manager(), GameLayer() {
   TTF_Font* font =
       Managers::FontManagerSingleton::instance().get_asset("assets/fonts/YoungSerif-Regular.ttf");
-  auto label =
-      std::make_unique<UI::Label>(ctx.get_level().name, font, Vector2{100, 100}, Vector2{130, 130});
+  auto label = std::make_unique<UI::Label>(
+      ctx.get_active_level().name, font, Vector2{100, 100}, Vector2{130, 130});
   ui_manager.add_element(std::move(label));
 }
 

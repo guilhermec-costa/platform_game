@@ -13,26 +13,27 @@ namespace Core {
   public:
     Core::Window  window;
     SDL_Renderer* renderer = nullptr;
-    GameData      game_data;
     Camera        camera;
+    GameData      game_data;
 
     static GameContext& instance();
 
-    void        end();
+    void end();
+    void init(const Core::WindowSpecification& spec);
+    void create_renderer(Core::Window& window);
+
+    void        set_active_level(LevelData& level);
+    void        set_player_data(PlayerData& player);
+    void        set_world_data(WorldData& world);
+    LevelData&  get_active_level();
     PlayerData& get_player_data();
     WorldData&  get_world_data();
-    LevelData&  get_level_data();
-    void        set_level(const LevelData& level);
-    void        init(const Core::WindowSpecification& spec);
-    LevelData&  get_level();
-    void        create_renderer(Core::Window& window);
-
-  private:
-    LevelData active_level;
+    GameData&   get_game_data();
 
     GameContext();
-    GameContext(const GameContext&) = delete;
     ~GameContext();
+
+    GameContext(const GameContext&)            = delete;
     GameContext& operator=(const GameContext&) = delete;
   };
 } // namespace Core

@@ -27,7 +27,7 @@ void PlatformObject::render(SDL_Renderer* renderer, const Core::Camera& camera) 
                static_cast<int>(dimension.x),
                static_cast<int>(dimension.y)};
   SDL_RenderCopy(renderer, texture_component.get_texture(), NULL, &rec);
-  // collider_component.render_collision_box(renderer, camera);
+  collider_component.render_collision_box(renderer, camera);
 }
 
 RectOverlap PlatformObject::get_overlap(const SDL_Rect& rect) {

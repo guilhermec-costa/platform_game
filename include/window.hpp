@@ -27,7 +27,7 @@ namespace Core {
     int         get_height() const;
     SDL_Window* get() const;
 
-  private:
+  public:
     void destroy();
 
     SDL_Window* m_window = nullptr;

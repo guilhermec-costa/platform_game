@@ -35,29 +35,30 @@ namespace Core {
     std::cout << "[GameContext] SDL Renderer created\n";
   }
 
-  LevelData& GameContext::get_level() {
-    return active_level;
+  void GameContext::set_active_level(LevelData& level) {
+    game_data.level_data = level;
+  }
+  void GameContext::set_player_data(PlayerData& player) {
+    game_data.player_data = player;
+  }
+  void GameContext::set_world_data(WorldData& world) {
+    game_data.world_data = world;
   }
 
+  LevelData& GameContext::get_active_level() {
+    return game_data.level_data;
+  }
   PlayerData& GameContext::get_player_data() {
     return game_data.player_data;
   }
-
   WorldData& GameContext::get_world_data() {
     return game_data.world_data;
-  }
-
-  LevelData& GameContext::get_level_data() {
-    return game_data.level_data;
-  }
-
-  void GameContext::set_level(const LevelData& level) {
-    active_level = level;
   }
 
   void GameContext::end() {
     if (renderer) {
       SDL_DestroyRenderer(renderer);
+      std::cout << "[GameContext] SDL_Renderer destroyed";
       renderer = nullptr;
     }
     std::cout << "[GameContext] Ended\n";

@@ -28,9 +28,6 @@ namespace Core {
     void          quit();
     void          load_global_assets();
     SDL_Renderer* create_renderer(Window& window);
-    LevelData     load_level(const std::string& level_name);
-    void          load_game_data();
-    void          init_subsytems();
     void          push_layer(std::unique_ptr<GameLayer> layer);
 
   private:
