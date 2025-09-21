@@ -168,20 +168,13 @@ void PlayLayer::handle_keydown(const SDL_KeyboardEvent& key) {
   switch (key.keysym.sym) {
     case SDLK_SPACE:
       player->handle_event(PlayerEvent::JUMP);
-      ctx.audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
       break;
     case SDLK_d: {
       player->handle_event(PlayerEvent::MOVE_RIGHT);
-      if (!ctx.audio_manager.channel_playing(GameAudioChannel::WALK_ON_GRASS)) {
-        ctx.audio_manager.play_sound(GameAudioChannel::WALK_ON_GRASS);
-      }
       break;
     }
     case SDLK_a:
       player->handle_event(PlayerEvent::MOVE_LEFT);
-      if (!ctx.audio_manager.channel_playing(GameAudioChannel::WALK_ON_GRASS)) {
-        ctx.audio_manager.play_sound(GameAudioChannel::WALK_ON_GRASS);
-      }
       break;
   }
 }
@@ -191,14 +184,12 @@ void PlayLayer::handle_keyup(const SDL_KeyboardEvent& key) {
     case SDLK_d: {
       if (!is_key_down(SDL_SCANCODE_A)) {
         player->handle_event(PlayerEvent::STOP_HORIZONTAL);
-        ctx.audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
       }
       break;
     }
     case SDLK_a:
       if (!is_key_down(SDL_SCANCODE_D)) {
         player->handle_event(PlayerEvent::STOP_HORIZONTAL);
-        ctx.audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
       }
       break;
   }

@@ -4,8 +4,10 @@
 #include <SDL2/SDL_render.h>
 
 #include "../../include/level.hpp"
+#include "../asset_manager/audio_manager.hpp"
 #include "../components/animated_sprite_component.hpp"
 #include "../components/collider_component.hpp"
+#include "../game_context.hpp"
 #include "game_object.hpp"
 
 enum class MovementState { IDLE, RUNNING, JUMPING, FALLING };
@@ -56,6 +58,7 @@ private:
   PlayerState                         state;
   MovementState                       movement_state = MovementState::IDLE;
   ActionState                         action_state   = ActionState::NONE;
+  Managers::AudioManager&             audio_manager  = Core::GameContext::instance().audio_manager;
   PlayerData                          m_metadata;
   float                               collision_offset_pct;
 };

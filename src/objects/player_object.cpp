@@ -70,8 +70,9 @@ void PlayerObject::handle_event(PlayerEvent event) {
     case PlayerEvent::MOVE_RIGHT: {
       velocity.x = move_spped;
       animated_sprite.set_flipped(false);
-      if (on_ground)
+      if (on_ground) {
         movement_state = MovementState::RUNNING;
+      }
       break;
     }
 
@@ -86,8 +87,9 @@ void PlayerObject::handle_event(PlayerEvent event) {
 
     case PlayerEvent::STOP_HORIZONTAL: {
       velocity.x = 0;
-      if (on_ground)
+      if (on_ground) {
         movement_state = MovementState::IDLE;
+      }
       break;
     }
   }
@@ -109,10 +111,15 @@ void PlayerObject::move(float dt) {
 void PlayerObject::update_state() {
   if (!on_ground) {
     movement_state = MovementState::JUMPING;
+    audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
   } else if (velocity.x != 0) {
     movement_state = MovementState::RUNNING;
+    if (!audio_manager.channel_playing(GameAudioChannel::WALK_ON_GRASS)) {
+      audio_manager.play_sound(GameAudioChannel::WALK_ON_GRASS);
+    }
   } else {
     movement_state = MovementState::IDLE;
+    audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
   }
 
   if (action_state == ActionState::ATTACKING && animated_sprite.is_finished()) {
