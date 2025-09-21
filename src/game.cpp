@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
+#include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -71,6 +72,7 @@ namespace Core {
         "assets/phases/player_data.json",
         "assets/phases/world_data.json",
         "assets/sounds/walk_grass.wav",
+        "assets/sounds/forest_ambience.wav",
     };
 
     for (const auto& path : assets) {
@@ -78,6 +80,15 @@ namespace Core {
         throw std::runtime_error("Unsupported asset type for path" + path);
       }
     }
+
+    ctx.audio_manager.register_channel({.channel = GameAudioChannel::FOREST_AMBIENCE,
+                                        .path    = "assets/sounds/forest_ambience.wav",
+                                        .volume  = MIX_MAX_VOLUME / 4,
+                                        .loop    = true});
+    ctx.audio_manager.register_channel({.channel = GameAudioChannel::WALK_ON_GRASS,
+                                        .path    = "assets/sounds/walk_grass.wav",
+                                        .volume  = MIX_MAX_VOLUME,
+                                        .loop    = true});
   }
 
   void Game::run() {

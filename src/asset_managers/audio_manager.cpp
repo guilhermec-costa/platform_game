@@ -28,29 +28,34 @@ namespace Managers {
   }
 
   void AudioManager::init(int frequency, Uint16 format, int channels, int chunksize) {
-    if(Mix_OpenAudio(frequency, format, channels, chunksize) < 0) {
+    if (Mix_OpenAudio(frequency, format, channels, chunksize) < 0) {
       throw std::runtime_error("Failed to initialize SDL_mixer: " + std::string(Mix_GetError()));
     }
     std::cout << "[AudioManager] SDL_mixer initialized\n";
   }
 
-  void AudioManager::play_sound(const std::string& path, int loops) {
-    Mix_Chunk* chunk = get_or_load(path);
-    if (chunk) Mix_PlayChannel(-1, chunk, loops);
+  void AudioManager::play_sound(const GameAudioChannel& channel) {
+    auto it = channels.find(channel);
+    if (it == channels.end())
+      return;
+
+    const GameChannelSpecification& chan = it->second;
+
+    Mix_Chunk* chunk = get_or_load(chan.path);
+    if (chunk) {
+      Mix_VolumeChunk(chunk, chan.volume);
+      Mix_PlayChannel(static_cast<int>(chan.channel), chunk, chan.loop ? -1 : 0);
+    }
   }
 
-  int AudioManager::play_loop(const std::string& path) {
-    Mix_Chunk* chunk = get_or_load(path);
-    if(chunk) {
-      return Mix_PlayChannel(-1, chunk, -1);
+  void AudioManager::stop_channel(GameAudioChannel channel) {
+    if (channel != GameAudioChannel::FREE_CHANNEL) {
+      Mix_HaltChannel(static_cast<int>(channel));
     }
-    return -1;
-  };
+  }
 
-  void AudioManager::stop_channel(int channel) {
-    if(channel != -1) {
-      Mix_HaltChannel(channel);
-    }
+  bool AudioManager::channel_playing(GameAudioChannel channel) {
+    return Mix_Playing(static_cast<int>(channel)) != 0;
   }
 
 } // namespace Managers

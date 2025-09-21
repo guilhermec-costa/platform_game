@@ -24,6 +24,8 @@ PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
   for (const auto& p : platforms_data) {
     platforms.push_back(std::make_unique<PlatformObject>(p));
   }
+
+  ctx.audio_manager.play_sound(GameAudioChannel::FOREST_AMBIENCE);
 }
 
 void PlayLayer::update(float dt) {
@@ -166,19 +168,19 @@ void PlayLayer::handle_keydown(const SDL_KeyboardEvent& key) {
   switch (key.keysym.sym) {
     case SDLK_SPACE:
       player->handle_event(PlayerEvent::JUMP);
-      Managers::AudioManager::instance().stop_channel(walk_channel);
+      ctx.audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
       break;
     case SDLK_d: {
       player->handle_event(PlayerEvent::MOVE_RIGHT);
-      if (walk_channel == -1) {
-        walk_channel = Managers::AudioManager::instance().play_loop("assets/sounds/walk_grass.mp3");
+      if (!ctx.audio_manager.channel_playing(GameAudioChannel::WALK_ON_GRASS)) {
+        ctx.audio_manager.play_sound(GameAudioChannel::WALK_ON_GRASS);
       }
       break;
     }
     case SDLK_a:
       player->handle_event(PlayerEvent::MOVE_LEFT);
-      if (walk_channel == -1) {
-        walk_channel = Managers::AudioManager::instance().play_loop("assets/sounds/walk_grass.mp3");
+      if (!ctx.audio_manager.channel_playing(GameAudioChannel::WALK_ON_GRASS)) {
+        ctx.audio_manager.play_sound(GameAudioChannel::WALK_ON_GRASS);
       }
       break;
   }
@@ -189,20 +191,14 @@ void PlayLayer::handle_keyup(const SDL_KeyboardEvent& key) {
     case SDLK_d: {
       if (!is_key_down(SDL_SCANCODE_A)) {
         player->handle_event(PlayerEvent::STOP_HORIZONTAL);
-        if (walk_channel != -1) {
-          Managers::AudioManager::instance().stop_channel(walk_channel);
-          walk_channel = -1;
-        }
+        ctx.audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
       }
       break;
     }
     case SDLK_a:
       if (!is_key_down(SDL_SCANCODE_D)) {
         player->handle_event(PlayerEvent::STOP_HORIZONTAL);
-        if (walk_channel != -1) {
-          Managers::AudioManager::instance().stop_channel(walk_channel);
-          walk_channel = -1;
-        }
+        ctx.audio_manager.stop_channel(GameAudioChannel::WALK_ON_GRASS);
       }
       break;
   }

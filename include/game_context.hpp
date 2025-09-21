@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "asset_manager/audio_manager.hpp"
 #include "camera.hpp"
 #include "level.hpp"
 #include "window.hpp"
@@ -11,10 +12,11 @@ namespace Core {
 
   class GameContext {
   public:
-    Core::Window  window;
-    SDL_Renderer* renderer = nullptr;
-    Camera        camera;
-    GameData      game_data;
+    Core::Window            window;
+    SDL_Renderer*           renderer = nullptr;
+    Camera                  camera;
+    GameData                game_data;
+    Managers::AudioManager& audio_manager = Managers::AudioManager::instance();
 
     static GameContext& instance();
 
