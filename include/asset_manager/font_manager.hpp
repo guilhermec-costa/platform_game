@@ -6,7 +6,7 @@
 namespace Managers {
 class FontManager {
 public:
-  static FontManager& get_instance() {
+  static FontManager& instance() {
     static FontManager instance;
     return instance;
   }

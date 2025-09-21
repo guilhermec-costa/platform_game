@@ -8,14 +8,17 @@
 using namespace Managers;
 
 BackgroundParallax::BackgroundParallax() {
-  bg_layer          = TextureManager::get_texture("assets/images/parallax/bg.png");
-  far_trees_layer   = TextureManager::get_texture("assets/images/parallax/far-trees.png");
-  mid_trees_layer   = TextureManager::get_texture("assets/images/parallax/mid-trees.png");
-  close_trees_layer = TextureManager::get_texture("assets/images/parallax/close-trees.png");
-  layers            = {{.texture = bg_layer, .speed = 0.1f, .offset = 0.0f},
-                       {.texture = far_trees_layer, .speed = 0.3f, .offset = 0.0f},
-                       {.texture = mid_trees_layer, .speed = 0.5f, .offset = 0.0f},
-                       {.texture = close_trees_layer, .speed = 0.9f, .offset = 0.0f}};
+  bg_layer = TextureManagerSingleton::instance().get_asset("assets/images/parallax/bg.png");
+  far_trees_layer =
+      TextureManagerSingleton::instance().get_asset("assets/images/parallax/far-trees.png");
+  mid_trees_layer =
+      TextureManagerSingleton::instance().get_asset("assets/images/parallax/mid-trees.png");
+  close_trees_layer =
+      TextureManagerSingleton::instance().get_asset("assets/images/parallax/close-trees.png");
+  layers = {{.texture = bg_layer, .speed = 0.1f, .offset = 0.0f},
+            {.texture = far_trees_layer, .speed = 0.3f, .offset = 0.0f},
+            {.texture = mid_trees_layer, .speed = 0.5f, .offset = 0.0f},
+            {.texture = close_trees_layer, .speed = 0.9f, .offset = 0.0f}};
 }
 
 void BackgroundParallax::update(float camera_x) {

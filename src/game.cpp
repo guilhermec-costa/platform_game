@@ -21,14 +21,14 @@ Game::Game(const GameSpecification& game_spec) : running(true) {
   ctx.set_level(l);
 
   GameContext::instance().init(game_spec.window_spec);
-  load_textures();
+  load_global_assets();
 
   TTF_Font* font = Managers::FontManager::load_font("assets/fonts/YoungSerif-Regular.ttf", 22);
   if (!font) {
     std::runtime_error("Failed to load font");
   }
   ctx.set_font(font);
-  fps_counter    = FPSCounter();
+  fps_counter = FPSCounter();
 }
 
 void Game::handle_events() {
@@ -53,14 +53,16 @@ void Game::render() {
   SDL_SetRenderDrawColor(ctx.renderer, 0, 0, 0, 255);
   SDL_RenderClear(ctx.renderer);
   for (const auto& layer : layers) {
-    layer->render();
+    if (!layer->is_suspended()) {
+      layer->render();
+    }
   }
   SDL_RenderPresent(ctx.renderer);
 }
 
-SDL_Texture* load_texture_or_die(const std::string& path, SDL_Renderer* renderer) {
-  auto&        tex_manager = Managers::TextureManager::get_instance();
-  SDL_Texture* tex         = tex_manager.get_or_load(path, renderer);
+SDL_Texture* load_texture_or_die(const std::string& path) {
+  auto&        tex_manager = Managers::TextureManagerSingleton::instance();
+  SDL_Texture* tex         = tex_manager.get_or_load(path);
 
   if (!tex) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load texture: %s", path.c_str());
@@ -70,14 +72,14 @@ SDL_Texture* load_texture_or_die(const std::string& path, SDL_Renderer* renderer
   return tex;
 }
 
-void Game::load_textures() {
+void Game::load_global_assets() {
   std::vector<std::string> textures = {
       "assets/images/nigthborne.png",           "assets/images/parallax/bg.png",
       "assets/images/parallax/far-trees.png",   "assets/images/parallax/mid-trees.png",
       "assets/images/parallax/close-trees.png", "assets/images/grass.png"};
 
   for (const auto& path : textures)
-    load_texture_or_die(path, ctx.renderer);
+    load_texture_or_die(path);
 }
 
 Level Game::load_level(const std::string& level_name) {

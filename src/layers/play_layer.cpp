@@ -1,5 +1,4 @@
 #include "../../include/game_layer.hpp"
-#include "../../include/ui/label_element.hpp"
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keyboard.h>
@@ -30,9 +29,8 @@ void PlayLayer::update(float dt) {
   auto& world_data = ctx.get_world_data();
   ground.update(ctx.camera.get_position().x);
   player->update(dt);
-  for (const auto& platform : platforms) {
+  for (const auto& platform : platforms)
     platform->update(dt);
-  }
   check_player_ground_collision();
   check_player_platform_collision();
   check_player_window_collision();

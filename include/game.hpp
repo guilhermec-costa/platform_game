@@ -25,7 +25,7 @@ public:
   }
   void          run();
   void          quit();
-  void          load_textures();
+  void          load_global_assets();
   SDL_Renderer* create_renderer(Window& window);
   Level         load_level(const std::string& level_name);
   void          init_subsytems();

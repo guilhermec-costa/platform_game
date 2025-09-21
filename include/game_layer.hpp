@@ -16,14 +16,20 @@
 class GameLayer {
 protected:
   Core::GameContext& ctx = Core::GameContext::instance();
-public:
-  GameLayer(const GameLayer&)                 = delete;
-  GameLayer()                                 = default;
-  virtual void handle_event(const SDL_Event& event) = 0;
-  virtual void update(float dt)               = 0;
-  virtual void render()                       = 0;
 
-  virtual ~GameLayer() {}
+public:
+  GameLayer(const GameLayer&)                       = delete;
+  GameLayer()                                       = default;
+  virtual void handle_event(const SDL_Event& event) = 0;
+  virtual void update(float dt)                     = 0;
+  virtual void render()                             = 0;
+  void         set_suspended(bool s) { suspended = s; };
+  bool         is_suspended() { return suspended; }
+
+  virtual ~GameLayer() {};
+
+protected:
+  bool suspended = 0;
 };
 
 class PlayLayer : public GameLayer {

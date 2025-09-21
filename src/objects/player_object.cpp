@@ -8,8 +8,9 @@
 
 PlayerObject::PlayerObject(const LevelMetadata::Player& data)
     : m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension), on_ground(true) {
-  auto    texture = Managers::TextureManager::get_texture("assets/images/nigthborne.png");
-  Vector2 tex_dim = Managers::TextureManager::get_texture_dimension(texture);
+  auto texture =
+      Managers::TextureManagerSingleton::instance().get_asset("assets/images/nigthborne.png");
+  Vector2 tex_dim = Managers::TextureManagerSingleton::instance().get_texture_dimension(texture);
 
   collision_offset_pct = data.collision_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};

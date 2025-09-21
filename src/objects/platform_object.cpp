@@ -12,7 +12,7 @@ PlatformObject::PlatformObject(LevelMetadata::Platform data)
   Vector2& pos = data.position;
   Vector2& dim = data.dimension;
 
-  auto texture      = Managers::TextureManager::get_texture("assets/images/grass.png");
+  auto texture = Managers::TextureManagerSingleton::instance().get_asset("assets/images/grass.png");
   texture_component = Components::TextureComponent(texture, pos, dim);
 
   float collision_offset = dim.y * 0.35f;
