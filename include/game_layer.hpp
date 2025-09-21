@@ -39,6 +39,7 @@ protected:
 
 class PlayLayer : public GameLayer {
 private:
+  int                                          walk_channel = -1;
   BackgroundParallax                           bg_parallax;
   Ground                                       ground;
   std::unique_ptr<PlayerObject>                player;

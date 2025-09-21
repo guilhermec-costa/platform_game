@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "audio_manager.hpp"
 #include "font_manager.hpp"
 #include "json_manager.hpp"
 #include "texture_manager.hpp"
@@ -17,6 +18,8 @@ public:
       return Managers::FontManagerSingleton::instance().get_or_load(path);
     } else if (ext == "json") {
       return Managers::JSONManager::instance().get_or_load(path);
+    } else if (ext == "wav") {
+      return Managers::AudioManager::instance().get_or_load(path);
     }
     return nullptr;
   }

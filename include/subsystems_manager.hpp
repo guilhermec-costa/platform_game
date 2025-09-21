@@ -7,12 +7,16 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "asset_manager/audio_manager.hpp"
+
 class SubsystemsManager {
 public:
   static void init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
       throw std::runtime_error("[SDL] Video init failed: " + std::string(SDL_GetError()));
     std::cout << "[SDL] Video initialized\n";
+
+    Managers::AudioManager::instance().init();
 
     if (!(IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) & (IMG_INIT_JPG | IMG_INIT_PNG)))
       throw std::runtime_error("[SDL] Image init failed: " + std::string(IMG_GetError()));

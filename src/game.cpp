@@ -70,6 +70,7 @@ namespace Core {
         "assets/phases/level2.json",
         "assets/phases/player_data.json",
         "assets/phases/world_data.json",
+        "assets/sounds/walk_grass.wav",
     };
 
     for (const auto& path : assets) {

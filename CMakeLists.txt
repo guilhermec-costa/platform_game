@@ -12,10 +12,11 @@ include_directories(vendor)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${SDL2_IMAGE})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${SDL2_IMAGE} ${SDL2_MIXER_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 add_definitions(-DPROJECT_SOURCE_DIR="${CMAKE_SOURCE_DIR}/")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2 SDL2_ttf SDL2_image)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2 SDL2_ttf SDL2_image SDL2_mixer)

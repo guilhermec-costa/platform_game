@@ -17,7 +17,7 @@ namespace Managers {
 
   TTF_Font* FontManagerSingleton::get_or_load(const std::string& path) {
     const std::string normalized_path = asset_path(path);
-    TTF_Font*         font            = TTF_OpenFont(normalized_path.c_str(), 14);
+    TTF_Font*         font            = TTF_OpenFont(normalized_path.c_str(), 22);
     if (!font) {
       std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
       return nullptr;
