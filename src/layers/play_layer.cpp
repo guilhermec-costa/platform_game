@@ -37,7 +37,7 @@ void PlayLayer::update(float dt) {
   check_player_ground_collision();
   check_player_platform_collision();
   check_player_window_collision();
-  ctx.camera.follow(player->position);
+  ctx.camera.follow(player->get_collider_component().position);
   ctx.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
   bg_parallax.update(ctx.camera.get_position().x);
 }
@@ -121,6 +121,7 @@ void PlayLayer::render() {
     platform->render(ctx.renderer, ctx.camera);
   }
   player->render(ctx.renderer, ctx.camera);
+  ctx.camera.render(ctx.renderer);
 }
 
 void PlayLayer::handle_event(const SDL_Event& event) {

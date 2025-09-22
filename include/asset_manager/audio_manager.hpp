@@ -5,7 +5,7 @@
 
 #include "asset_manager.hpp"
 
-enum class GameAudioChannel { FREE_CHANNEL = -1, WALK_ON_GRASS = 0, FOREST_AMBIENCE = 1 };
+enum class GameAudioChannel { FREE_CHANNEL = -1, WALK_ON_GRASS = 0, FOREST_AMBIENCE = 1, SWORD_MISS_ATTACK = 2 };
 
 struct GameChannelSpecification {
   GameAudioChannel channel;

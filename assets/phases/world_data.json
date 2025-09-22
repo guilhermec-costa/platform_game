@@ -1,6 +1,6 @@
 {
   "world": {
-    "ground_tile_side": 86,
+    "ground_tile_side": 100,
     "min_horizontal_x": 0.0,
     "max_horizontal_x": 3000.0
   }

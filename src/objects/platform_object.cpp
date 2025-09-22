@@ -22,8 +22,9 @@ PlatformObject::PlatformObject(LevelData::PlatformData data) :
 void PlatformObject::handle_event() {}
 
 void PlatformObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
-  SDL_Rect rec{static_cast<int>(position.x) - static_cast<int>(camera.get_position().x),
-               static_cast<int>(position.y),
+  const Vector2& camera_pos = camera.get_position();
+  SDL_Rect rec{static_cast<int>(position.x) - static_cast<int>(camera_pos.x),
+               static_cast<int>(position.y) - static_cast<int>(camera_pos.y),
                static_cast<int>(dimension.x),
                static_cast<int>(dimension.y)};
   SDL_RenderCopy(renderer, texture_component.get_texture(), NULL, &rec);

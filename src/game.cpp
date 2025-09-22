@@ -83,12 +83,16 @@ namespace Core {
 
     ctx.audio_manager.register_channel({.channel = GameAudioChannel::FOREST_AMBIENCE,
                                         .path    = "assets/sounds/forest_ambience.wav",
-                                        .volume  = MIX_MAX_VOLUME / 4,
+                                        .volume  = MIX_MAX_VOLUME / 3,
                                         .loop    = true});
     ctx.audio_manager.register_channel({.channel = GameAudioChannel::WALK_ON_GRASS,
                                         .path    = "assets/sounds/walk_grass.wav",
                                         .volume  = MIX_MAX_VOLUME,
                                         .loop    = true});
+    ctx.audio_manager.register_channel({.channel = GameAudioChannel::SWORD_MISS_ATTACK,
+                                        .path    = "assets/sounds/sword_attack.wav",
+                                        .volume  = MIX_MAX_VOLUME,
+                                        .loop    = false});
   }
 
   void Game::run() {

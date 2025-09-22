@@ -54,6 +54,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     case PlayerEvent::ATTACK: {
       if (action_state != ActionState::ATTACKING) {
         action_state = ActionState::ATTACKING;
+        audio_manager.play_sound(GameAudioChannel::SWORD_MISS_ATTACK);
       }
       break;
     }

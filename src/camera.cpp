@@ -10,8 +10,10 @@ namespace Core {
 
   void Camera::follow(const Vector2& target_pos) {
     if (target_pos.x - position.x < left_margin) {
+      std::cout << "analysing left: " << target_pos.x - position.x << "\n";
       position.x = target_pos.x - left_margin;
     } else if (target_pos.x - position.x > right_margin) {
+      std::cout << "analysing right: " << target_pos.x - position.x << "\n";
       position.x = target_pos.x - right_margin;
     }
   }
@@ -27,6 +29,13 @@ namespace Core {
   void Camera::resize(float screen_width) {
     left_margin  = screen_width * LEFT_MARGIN_PCT;
     right_margin = screen_width * RIGHT_MARGIN_PCT;
+    // dimension.y = screen_height;
+  }
+
+  void Camera::render(SDL_Renderer* renderer) {
+    SDL_Rect cam_rect = {(int)position.x, (int)position.y, (int)dimension.x, (int)dimension.y};
+    SDL_SetRenderDrawColor(renderer, 255, 120, 120, SDL_ALPHA_OPAQUE);
+    SDL_RenderDrawRect(renderer, &cam_rect);
   }
 
   const Vector2& Camera::get_position() const {

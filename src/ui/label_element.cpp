@@ -53,10 +53,6 @@ namespace UI {
     SDL_Color     color    = {255, 255, 255, 255};
     SDL_Surface*  surface  = TTF_RenderText_Solid(font, content.c_str(), color);
     texture                = SDL_CreateTextureFromSurface(renderer, surface);
-
-    rect.w = surface->w;
-    rect.h = surface->h;
-
     SDL_FreeSurface(surface);
   }
 
