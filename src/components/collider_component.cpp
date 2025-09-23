@@ -8,9 +8,9 @@ namespace Components {
   ColliderComponent::ColliderComponent() = default;
 
   ColliderComponent::ColliderComponent(Vector2 pos, Vector2 dim, Vector2 collision_offset) :
-  position(pos + collision_offset), dimension(dim), collision_offset(collision_offset) {
-  collision_box = {(int)position.x, (int)position.y, (int)dim.x, (int)dim.y};
-}
+    position(pos + collision_offset), dimension(dim), collision_offset(collision_offset) {
+    collision_box = {(int)position.x, (int)position.y, (int)dim.x, (int)dim.y};
+  }
 
   bool ColliderComponent::check_collision(const SDL_Rect& other) const {
     SDL_Rect self = get_rect();

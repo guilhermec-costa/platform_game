@@ -4,11 +4,7 @@
 #include <SDL2/SDL_render.h>
 
 #include "../../include/level.hpp"
-#include "../asset_manager/audio_manager.hpp"
-#include "../components/animated_sprite_component.hpp"
-#include "../components/collider_component.hpp"
-#include "../game_context.hpp"
-#include "game_object.hpp"
+#include "character_object.hpp"
 
 enum class MovementState { IDLE, RUNNING, JUMPING, FALLING };
 enum class ActionState { NONE, ATTACKING };
@@ -22,39 +18,26 @@ enum class PlayerState {
   ATTACKING,
 };
 
-class PlayerObject : public GameObject {
+class PlayerObject : public CharacterObject {
 public:
   PlayerObject() = delete;
   PlayerObject(const PlayerData& player_data);
 
-  void        handle_event(PlayerEvent event);
-  void        update(float dt) override;
-  void        render(SDL_Renderer* renderer, const Core::Camera& camera) override;
-  void        apply_gravity(float dt);
-  void        move(float dt);
-  void        update_collider();
-  void        update_animation(float dt);
-  void        update_state();
-  void        land_on(float surface_y);
-  void        resize();
-  void        check_player_ground_collision();
-  void        check_player_window_collision();
-  inline void set_on_ground(bool state) {
-    on_ground = state;
-  }
+  void handle_event(PlayerEvent event);
+  void update(float dt) override;
+  void render(SDL_Renderer* renderer, const Core::Camera& camera) override;
+  void resize();
+  void update_state() override;
+  void update_animation(float dt) override;
+  void check_player_ground_collision();
+  void check_player_window_collision();
 
 public:
-  bool  on_ground;
-  float move_spped;
   float jump_force;
-  float gravity;
-  float max_fall_speed;
 
 private:
-  Components::AnimatedSpriteComponent animated_sprite;
-  PlayerState                         state;
-  MovementState                       movement_state = MovementState::IDLE;
-  ActionState                         action_state   = ActionState::NONE;
-  PlayerData                          m_metadata;
-  float                               land_offset_pct;
+  PlayerState   state;
+  MovementState movement_state = MovementState::IDLE;
+  ActionState   action_state   = ActionState::NONE;
+  PlayerData    m_metadata;
 };

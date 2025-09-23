@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #include <SDL2/SDL_render.h>
 
 #include "../camera.hpp"
@@ -15,14 +17,27 @@ public:
   virtual void update(float dt)                                           = 0;
   virtual void render(SDL_Renderer* renderer, const Core::Camera& camera) = 0;
 
-  const Components::ColliderComponent& get_collider_component() {
+  const Components::ColliderComponent& get_collider_component() const {
     return collider_component;
   }
 
+  virtual std::string to_string() const {
+    std::ostringstream oss;
+    oss << "GameObject { "
+        << "position=(" << position.x << ", " << position.y << "), "
+        << "velocity=(" << velocity.x << ", " << velocity.y << "), "
+        << "dimension=(" << dimension.x << ", " << dimension.y << ")";
+
+    const SDL_Rect rect = collider_component.get_rect();
+    oss << ", collider=(" << rect.x << ", " << rect.y << ", " << rect.w << ", " << rect.h << ") }";
+
+    return oss.str();
+  }
+
 protected:
-  Core::GameContext& ctx = Core::GameContext::instance();
-  Managers::AudioManager&             audio_manager  = Core::GameContext::instance().audio_manager;
-  Components::ColliderComponent       collider_component;
+  Core::GameContext&            ctx           = Core::GameContext::instance();
+  Managers::AudioManager&       audio_manager = Core::GameContext::instance().audio_manager;
+  Components::ColliderComponent collider_component;
 
 public:
   Vector2 position;

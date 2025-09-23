@@ -7,7 +7,7 @@
 #include "../../include/game_context.hpp"
 
 PlayerObject::PlayerObject(const PlayerData& data) :
-  m_metadata(data), GameObject(data.start_position, {0, 0}, data.dimension), on_ground(true) {
+  m_metadata(data), CharacterObject(data.position, data.dimension) {
   auto texture =
       Managers::TextureManagerSingleton::instance().get_asset("assets/images/nigthborne.png");
   Vector2 tex_dim = Managers::TextureManagerSingleton::instance().get_texture_dimension(texture);
@@ -15,7 +15,7 @@ PlayerObject::PlayerObject(const PlayerData& data) :
   land_offset_pct = data.land_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
   collider_component = Components::ColliderComponent(
-      data.start_position, collider_dim, {dimension.x * 0.35f, dimension.y * 0.43f});
+      data.position, collider_dim, {dimension.x * 0.35f, dimension.y * 0.43f});
 
   animated_sprite = Components::AnimatedSpriteComponent(
       Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}),
@@ -30,18 +30,14 @@ PlayerObject::PlayerObject(const PlayerData& data) :
   animated_sprite.add_animation(
       static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.03f, false);
 
-  move_spped     = data.attrs.move_speed;
+  move_speed     = data.attrs.move_speed;
   gravity        = data.attrs.gravity;
   jump_force     = data.attrs.jump_force;
   max_fall_speed = data.attrs.max_fall_speed;
 };
 
 void PlayerObject::update(float dt) {
-  apply_gravity(dt);
-  move(dt);
-  update_collider();
-  update_state();
-  update_animation(dt);
+  CharacterObject::update(dt);
   check_player_ground_collision();
   check_player_window_collision();
 }
@@ -75,7 +71,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     }
 
     case PlayerEvent::MOVE_LEFT: {
-      velocity.x = -move_spped;
+      velocity.x = -move_speed;
       animated_sprite.set_flipped(true);
       if (on_ground) {
         movement_state = MovementState::RUNNING;
@@ -84,7 +80,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     }
 
     case PlayerEvent::MOVE_RIGHT: {
-      velocity.x = move_spped;
+      velocity.x = move_speed;
       animated_sprite.set_flipped(false);
       if (on_ground) {
         movement_state = MovementState::RUNNING;
@@ -111,19 +107,6 @@ void PlayerObject::handle_event(PlayerEvent event) {
   }
 }
 
-void PlayerObject::apply_gravity(float dt) {
-  if (!on_ground) {
-    velocity.y += gravity * dt;
-    if (velocity.y > max_fall_speed) {
-      velocity.y = max_fall_speed;
-    }
-  }
-}
-
-void PlayerObject::move(float dt) {
-  position += velocity * dt;
-}
-
 void PlayerObject::update_state() {
   if (!on_ground) {
     movement_state = MovementState::JUMPING;
@@ -141,10 +124,6 @@ void PlayerObject::update_state() {
   if (action_state == ActionState::ATTACKING && animated_sprite.is_finished()) {
     action_state = ActionState::NONE;
   }
-}
-
-void PlayerObject::update_collider() {
-  collider_component.set_position(position);
 }
 
 void PlayerObject::update_animation(float dt) {
@@ -166,13 +145,6 @@ void PlayerObject::update_animation(float dt) {
     }
   }
   animated_sprite.update(dt);
-}
-
-void PlayerObject::land_on(float surface_y) {
-  float new_y = surface_y - dimension.y + (dimension.y * land_offset_pct);
-  position.y  = new_y;
-  velocity.y  = 0;
-  on_ground   = true;
 }
 
 void PlayerObject::resize() {

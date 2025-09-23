@@ -3,7 +3,7 @@
 #include "../../include/asset_manager/texture_manager.hpp"
 
 MonsterObject::MonsterObject(const LevelData::MonsterData& data) :
-  GameObject(data.position, {0, 0}, data.dimension), gravity(500.0f) {
+  CharacterObject(data.position, data.dimension) {
   auto texture = Managers::TextureManagerSingleton::instance().get_asset(
       "assets/images/enemy1_spritesheet.png");
   Vector2 tex_dim = Managers::TextureManagerSingleton::instance().get_texture_dimension(texture);
@@ -23,25 +23,18 @@ MonsterObject::MonsterObject(const LevelData::MonsterData& data) :
       static_cast<int>(MonsterAnimation::IDLE), "idle", 0, 7, 0.099f, true);
   animated_sprite.add_animation(
       static_cast<int>(MonsterAnimation::ATTACK), "attack", 9, 15, 0.099f, false);
+
+  gravity    = data.gravity;
+  move_speed = data.move_speed;
+  std::cout << to_string() << std::endl;
 }
 
-void MonsterObject::update(float dt) {
-  apply_gravity(dt);
-  move(dt);
-  update_collider();
-  update_animation(dt);
-  update_state();
-}
-
-void MonsterObject::apply_gravity(float dt) {
-  velocity.y += gravity * dt;
-  position.y += velocity.y * dt;
-
-  const SDL_Rect& player_rect = collider_component.get_rect();
+void MonsterObject::check_player_ground_collision() {
+  const SDL_Rect& monster_collider_rect = collider_component.get_rect();
   const SDL_Rect& ground_rect =
       Core::GameContext::instance().global_ground.get_collider_component().get_rect();
 
-  if (SDL_HasIntersection(&player_rect, &ground_rect)) {
+  if (SDL_HasIntersection(&monster_collider_rect, &ground_rect)) {
     float ground_top = static_cast<float>(ground_rect.y);
     land_on(ground_top);
   } else {
@@ -49,12 +42,9 @@ void MonsterObject::apply_gravity(float dt) {
   }
 }
 
-void MonsterObject::move(float dt) {
-  position.x += velocity.x * dt;
-}
-
-void MonsterObject::update_collider() {
-  collider_component.set_position(position);
+void MonsterObject::update(float dt) {
+  CharacterObject::update(dt);
+  check_player_ground_collision();
 }
 
 void MonsterObject::update_animation(float dt) {
@@ -69,24 +59,13 @@ void MonsterObject::update_animation(float dt) {
   animated_sprite.update(dt);
 }
 
-void MonsterObject::update_state() {
-  movement_state = MovementState::JUMPING;
-}
+void MonsterObject::update_state() {}
 
-void MonsterObject::land_on(float surface_y) {
-  position.y = surface_y - collider_component.dimension.y;
-  velocity.y = 0;
-}
-
-void MonsterObject::resize() {
-  // caso queira adaptar tamanho conforme escala da tela
-}
+void MonsterObject::resize() {}
 
 void MonsterObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
   animated_sprite.render(renderer, position, camera);
   collider_component.render_collision_box(renderer, camera);
 }
 
-void MonsterObject::handle_event(const SDL_Event& event) {
-  // atualmente não reage a eventos, mas pode reagir a triggers
-}
+void MonsterObject::handle_event(const SDL_Event& event) {}

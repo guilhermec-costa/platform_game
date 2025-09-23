@@ -31,7 +31,7 @@ void PlatformObject::render(SDL_Renderer* renderer, const Core::Camera& camera) 
   collider_component.render_collision_box(renderer, camera);
 }
 
-RectOverlap PlatformObject::get_overlap(const SDL_Rect& rect) {
+const RectOverlap PlatformObject::get_overlap(const SDL_Rect& rect) const {
   const auto& collider_rect  = collider_component.get_rect();
   int         overlap_left   = (rect.x + rect.w) - collider_rect.x;
   int         overlap_right  = (collider_rect.x + collider_rect.w) - rect.x;

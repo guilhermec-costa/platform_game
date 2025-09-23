@@ -1,6 +1,6 @@
 {
   "player": {
-    "start_position": { "x": 0.0, "y": 0.7 },
+    "position": { "x": 0.0, "y": 0.0 },
     "dimension": {
       "height": 380.0,
       "width": 380.0

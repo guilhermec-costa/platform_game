@@ -10,10 +10,10 @@ struct LevelData {
     float   screen_height_pct;
   };
   struct MonsterData {
-    Vector2 position;
-    Vector2 dimension;
-    float   speed        = 50.0f;
-    float   gravity      = 500.0f;
+    Vector2 position     = {0, 0};
+    Vector2 dimension    = {100, 100};
+    float   move_speed   = 50.0f;
+    float   gravity      = 1200.0f;
     float   patrol_min_x = 0.0f;
     float   patrol_max_x = 0.0f;
 
@@ -34,7 +34,7 @@ struct WorldData {
 };
 
 struct PlayerData {
-  Vector2 start_position;
+  Vector2 position;
   Vector2 dimension;
   float   land_offset_pct;
   float   screen_height_pct;

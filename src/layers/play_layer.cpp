@@ -9,6 +9,7 @@
 #include <SDL2/SDL_video.h>
 
 #include "../../include/asset_manager/audio_manager.hpp"
+#include "../../include/asset_manager/json_manager.hpp"
 #include "../../include/game_layer.hpp"
 
 PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
@@ -17,22 +18,15 @@ PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
   const float tile_side   = ctx.get_world_data().ground_tile_side;
   float       tile_height = win_dim.y - tile_side;
 
-  player = std::make_unique<PlayerObject>(ctx.get_player_data());
-
-  const auto& active_level = ctx.get_active_level();
-  for (const auto& p : active_level.platforms) {
-    platforms.push_back(std::make_unique<PlatformObject>(p));
-  }
-  for (const auto& m : active_level.monsters) {
-    monsters.push_back(std::make_unique<MonsterObject>(m));
-  }
+  ctx.global_ground = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
 
   ctx.audio_manager.play_sound(GameAudioChannel::FOREST_AMBIENCE);
-  ctx.global_ground = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
+
+  update_level();
 }
 
 void PlayLayer::update(float dt) {
-  auto& world_data = ctx.get_world_data();
+  const auto& world_data = ctx.get_world_data();
   ctx.global_ground.update(ctx.camera.get_position().x);
   player->update(dt);
   for (const auto& platform : platforms)
@@ -47,82 +41,49 @@ void PlayLayer::update(float dt) {
   bg_parallax.update(ctx.camera.get_position().x);
 }
 
-void PlayLayer::check_monster_platform_collision() {
-  for (auto& m : monsters) {
-    SDL_Rect m_rect = m->get_collider_component().get_rect();
+void PlayLayer::resolve_platform_collision(CharacterObject& obj, const PlatformObject& platform) {
+  SDL_Rect        obj_rect = obj.get_collider_component().get_rect();
+  const SDL_Rect& plt_rect = platform.get_collider_component().get_rect();
 
-    for (const auto& p : platforms) {
-      const SDL_Rect& plt_rect = p->get_collider().get_rect();
+  if (!SDL_HasIntersection(&obj_rect, &plt_rect))
+    return;
 
-      if (SDL_HasIntersection(&m_rect, &plt_rect)) {
-        RectOverlap overlap = p->get_overlap(m_rect);
+  RectOverlap overlap = platform.get_overlap(obj_rect);
 
-        int min_dx = std::min(overlap.left, overlap.right);
-        int min_dy = std::min(overlap.top, overlap.bottom);
+  int min_dx = std::min(overlap.left, overlap.right);
+  int min_dy = std::min(overlap.top, overlap.bottom);
 
-        if (min_dx < min_dy) {
-          if (overlap.left < overlap.right) {
-            m->position.x -= overlap.left;
-            if (m->velocity.x > 0) {
-              m->velocity.x = 0;
-            }
-          } else {
-            m->position.x += overlap.right;
-            if (m->velocity.x < 0) {
-              m->velocity.x = 0;
-            }
-          }
-        } else {
-          if (overlap.top < overlap.bottom) {
-            float plt_top = static_cast<float>(plt_rect.y);
-            m->land_on(plt_top);
-          } else {
-            m->position.y += overlap.bottom;
-            m->velocity.y = 0;
-          }
-        }
-      }
+  if (min_dx < min_dy) {
+    if (overlap.left < overlap.right) {
+      obj.position.x -= overlap.left;
+      if (obj.velocity.x > 0)
+        obj.velocity.x = 0;
+    } else {
+      obj.position.x += overlap.right;
+      if (obj.velocity.x < 0)
+        obj.velocity.x = 0;
+    }
+  } else {
+    if (overlap.top < overlap.bottom) {
+      float plt_top = static_cast<float>(plt_rect.y);
+      obj.land_on(plt_top);
+    } else {
+      obj.position.y += overlap.bottom;
+      obj.velocity.y = 0;
     }
   }
 }
 
-
 void PlayLayer::check_player_platform_collision() {
-  SDL_Rect player_rect = player->get_collider_component().get_rect();
-
   for (const auto& p : platforms) {
-    const SDL_Rect& plt_rect = p->get_collider().get_rect();
+    resolve_platform_collision(*player, *p);
+  }
+}
 
-    if (SDL_HasIntersection(&player_rect, &plt_rect)) {
-      RectOverlap overlap = p->get_overlap(player_rect);
-
-      int min_dx = std::min(overlap.left, overlap.right);
-      int min_dy = std::min(overlap.top, overlap.bottom);
-
-      if (min_dx < min_dy) {
-        if (overlap.left < overlap.right) {
-          player->position.x -= overlap.left;
-          if (player->velocity.x > 0) {
-            player->velocity.x = 0;
-            player->velocity.y = 0;
-          }
-        } else {
-          player->position.x += overlap.right;
-          if (player->velocity.x < 0) {
-            player->velocity.x = 0;
-          }
-        }
-      } else {
-        if (overlap.top < overlap.bottom) {
-          float plt_top     = static_cast<float>(plt_rect.y);
-          auto  player_data = ctx.get_player_data();
-
-          player->land_on(plt_top);
-        } else {
-          player->position.y += overlap.bottom;
-          player->velocity.y = 0;
-        }
-      }
+void PlayLayer::check_monster_platform_collision() {
+  for (auto& m : monsters) {
+    for (const auto& p : platforms) {
+      resolve_platform_collision(*m, *p);
     }
   }
 }
@@ -177,21 +138,36 @@ void PlayLayer::handle_window_event(const SDL_WindowEvent& window) {
   }
 }
 
+void PlayLayer::change_level(int level_id) {
+  auto it = level_asset_mapping.find(level_id);
+  if (it == level_asset_mapping.end())
+    return;
+
+  auto*     level_json     = Managers::JSONManager::instance().get_or_load(it->second);
+  LevelData new_level_data = LevelData::from_json(
+      *level_json, ctx.window.get_height(), ctx.game_data.world_data.max_horizontal_x);
+  ctx.set_active_level(new_level_data);
+
+  update_level();
+}
 void PlayLayer::handle_keydown(const SDL_KeyboardEvent& key) {
+
   if (key.repeat != 0)
     return;
 
   switch (key.keysym.sym) {
-    case SDLK_SPACE:
+    case SDLK_SPACE: {
       player->handle_event(PlayerEvent::JUMP);
       break;
+    }
     case SDLK_d: {
       player->handle_event(PlayerEvent::MOVE_RIGHT);
       break;
     }
-    case SDLK_a:
+    case SDLK_a: {
       player->handle_event(PlayerEvent::MOVE_LEFT);
       break;
+    }
   }
 }
 
@@ -209,6 +185,31 @@ void PlayLayer::handle_keyup(const SDL_KeyboardEvent& key) {
       }
       break;
   }
+}
+
+void PlayLayer::update_level() {
+  platforms.clear();
+  monsters.clear();
+
+  const auto& active_level = ctx.get_active_level();
+
+  for (const auto& p : active_level.platforms) {
+    platforms.push_back(std::make_unique<PlatformObject>(p));
+  }
+
+  for (const auto& m : active_level.monsters) {
+    monsters.push_back(std::make_unique<MonsterObject>(m));
+  }
+
+  player = std::make_unique<PlayerObject>(ctx.get_player_data());
+
+  Vector2     win_dim     = ctx.window.get_dimension();
+  const float tile_side   = ctx.get_world_data().ground_tile_side;
+  float       tile_height = win_dim.y - tile_side;
+
+  ctx.global_ground = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
+
+  std::cout << "Level atualizado!\n";
 }
 
 bool PlayLayer::is_key_down(SDL_Scancode scancode) const {

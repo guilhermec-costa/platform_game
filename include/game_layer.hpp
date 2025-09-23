@@ -1,6 +1,8 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
+#include <unordered_map>
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
@@ -12,6 +14,7 @@
 #include "objects/monster_object.hpp"
 #include "objects/platform_object.hpp"
 #include "objects/player_object.hpp"
+#include "ui/label_element.hpp"
 #include "ui/ui_manager.hpp"
 
 class GameLayer {
@@ -55,8 +58,17 @@ public:
   bool is_key_down(SDL_Scancode scancode) const;
   void update(float dt) override;
   void render() override;
+  void update_level();
   void check_player_platform_collision();
   void check_monster_platform_collision();
+  void resolve_platform_collision(CharacterObject& obj, const PlatformObject& platform);
+  void change_level(int level_id);
+
+private:
+  std::unordered_map<uint8_t, std::string> level_asset_mapping{
+      {1, "assets/phases/level1.json"},
+      {2, "assets/phases/level2.json"},
+  };
 };
 
 class UILayer : public GameLayer {
@@ -68,4 +80,5 @@ public:
 
 private:
   UI::UIManager ui_manager;
+  UI::Label*    level_label = nullptr;
 };
