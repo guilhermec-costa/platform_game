@@ -56,6 +56,7 @@ public:
   void update(float dt) override;
   void render() override;
   void check_player_platform_collision();
+  void check_monster_platform_collision();
 };
 
 class UILayer : public GameLayer {

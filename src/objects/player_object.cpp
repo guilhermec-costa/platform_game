@@ -12,7 +12,7 @@ PlayerObject::PlayerObject(const PlayerData& data) :
       Managers::TextureManagerSingleton::instance().get_asset("assets/images/nigthborne.png");
   Vector2 tex_dim = Managers::TextureManagerSingleton::instance().get_texture_dimension(texture);
 
-  collision_offset_pct = data.collision_offset_pct;
+  land_offset_pct = data.land_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
   collider_component = Components::ColliderComponent(
       data.start_position, collider_dim, {dimension.x * 0.35f, dimension.y * 0.43f});
@@ -169,7 +169,7 @@ void PlayerObject::update_animation(float dt) {
 }
 
 void PlayerObject::land_on(float surface_y) {
-  float new_y = surface_y - dimension.y + (dimension.y * collision_offset_pct);
+  float new_y = surface_y - dimension.y + (dimension.y * land_offset_pct);
   position.y  = new_y;
   velocity.y  = 0;
   on_ground   = true;

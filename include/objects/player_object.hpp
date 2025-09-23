@@ -42,9 +42,6 @@ public:
   inline void set_on_ground(bool state) {
     on_ground = state;
   }
-  inline Components::ColliderComponent& get_collider_component() {
-    return collider_component;
-  }
 
 public:
   bool  on_ground;
@@ -54,13 +51,10 @@ public:
   float max_fall_speed;
 
 private:
-  Components::ColliderComponent       collider_component;
   Components::AnimatedSpriteComponent animated_sprite;
-  Vector2                             collider_offset;
   PlayerState                         state;
   MovementState                       movement_state = MovementState::IDLE;
   ActionState                         action_state   = ActionState::NONE;
-  Managers::AudioManager&             audio_manager  = Core::GameContext::instance().audio_manager;
   PlayerData                          m_metadata;
-  float                               collision_offset_pct;
+  float                               land_offset_pct;
 };

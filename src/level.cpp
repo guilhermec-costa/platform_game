@@ -15,8 +15,8 @@ LevelData LevelData::from_json(const json& j, float screen_height, int world_wid
 
   for (const auto& m : j["monsters"]) {
     MonsterData monster;
-    monster.position.x   = m.at("position").at(0).get<float>();
-    monster.position.y   = m.at("position").at(1).get<float>();
+    monster.position.x   = m.at("position").at(0).get<float>() * world_width;
+    monster.position.y   = m.at("position").at(1).get<float>() * screen_height;
     monster.dimension.x  = m.at("dimension").at(0).get<float>();
     monster.dimension.y  = m.at("dimension").at(1).get<float>();
     monster.speed        = m.value("speed", 50.0f);
@@ -50,7 +50,7 @@ PlayerData PlayerData::from_json(const json& j, float screen_height, float world
                              .gravity        = player_attrs["gravity"].get<float>(),
                              .max_fall_speed = player_attrs["max_fall_speed"].get<float>()};
 
-  player_data.collision_offset_pct = player["collision_offset_pct"].get<float>();
+  player_data.land_offset_pct = player["land_offset_pct"].get<float>();
   return player_data;
 }
 

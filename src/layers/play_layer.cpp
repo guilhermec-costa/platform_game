@@ -9,7 +9,6 @@
 #include <SDL2/SDL_video.h>
 
 #include "../../include/asset_manager/audio_manager.hpp"
-#include "../../include/game_data_manager.hpp"
 #include "../../include/game_layer.hpp"
 
 PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
@@ -42,10 +41,51 @@ void PlayLayer::update(float dt) {
     monster->update(dt);
 
   check_player_platform_collision();
+  check_monster_platform_collision();
   ctx.camera.follow(player->get_collider_component().position);
   ctx.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
   bg_parallax.update(ctx.camera.get_position().x);
 }
+
+void PlayLayer::check_monster_platform_collision() {
+  for (auto& m : monsters) {
+    SDL_Rect m_rect = m->get_collider_component().get_rect();
+
+    for (const auto& p : platforms) {
+      const SDL_Rect& plt_rect = p->get_collider().get_rect();
+
+      if (SDL_HasIntersection(&m_rect, &plt_rect)) {
+        RectOverlap overlap = p->get_overlap(m_rect);
+
+        int min_dx = std::min(overlap.left, overlap.right);
+        int min_dy = std::min(overlap.top, overlap.bottom);
+
+        if (min_dx < min_dy) {
+          if (overlap.left < overlap.right) {
+            m->position.x -= overlap.left;
+            if (m->velocity.x > 0) {
+              m->velocity.x = 0;
+            }
+          } else {
+            m->position.x += overlap.right;
+            if (m->velocity.x < 0) {
+              m->velocity.x = 0;
+            }
+          }
+        } else {
+          if (overlap.top < overlap.bottom) {
+            float plt_top = static_cast<float>(plt_rect.y);
+            m->land_on(plt_top);
+          } else {
+            m->position.y += overlap.bottom;
+            m->velocity.y = 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 
 void PlayLayer::check_player_platform_collision() {
   SDL_Rect player_rect = player->get_collider_component().get_rect();

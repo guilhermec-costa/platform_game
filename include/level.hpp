@@ -36,7 +36,7 @@ struct WorldData {
 struct PlayerData {
   Vector2 start_position;
   Vector2 dimension;
-  float   collision_offset_pct;
+  float   land_offset_pct;
   float   screen_height_pct;
   struct Attributes {
     float move_speed;

@@ -5,7 +5,7 @@
       "height": 380.0,
       "width": 380.0
     },
-    "collision_offset_pct": 0.21,
+    "land_offset_pct": 0.21,
     "attrs": {
       "move_speed": 480.0,
       "jump_force": 760.0,

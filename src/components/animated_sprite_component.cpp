@@ -11,10 +11,7 @@ namespace Components {
     frame_width(frame_width),
     frame_height(frame_height),
     frame_time(frame_time),
-    current_frame(0),
-    elapsed_time(0.0f),
     render_dim(render_dim),
-    horizontally_flipped(false),
     current_animaton_idx(-1) {
 
     int tex_width, tex_height;

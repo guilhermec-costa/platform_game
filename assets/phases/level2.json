@@ -6,8 +6,8 @@
   ],
   "monsters": [
     {
-      "position": [200.0, 400.0],
-      "dimension": [64.0, 64.0],
+      "position": [0.2, 0.2],
+      "dimension": [250, 250],
       "speed": 80.0,
       "gravity": 500.0,
       "patrol_min_x": 100.0,
