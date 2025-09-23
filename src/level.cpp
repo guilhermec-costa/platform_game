@@ -13,6 +13,19 @@ LevelData LevelData::from_json(const json& j, float screen_height, int world_wid
     level.platforms.push_back(platform);
   }
 
+  for (const auto& m : j["monsters"]) {
+    MonsterData monster;
+    monster.position.x   = m.at("position").at(0).get<float>();
+    monster.position.y   = m.at("position").at(1).get<float>();
+    monster.dimension.x  = m.at("dimension").at(0).get<float>();
+    monster.dimension.y  = m.at("dimension").at(1).get<float>();
+    monster.speed        = m.value("speed", 50.0f);
+    monster.gravity      = m.value("gravity", 500.0f);
+    monster.patrol_min_x = m.value("patrol_min_x", 0.0f);
+    monster.patrol_max_x = m.value("patrol_max_x", 0.0f);
+    level.monsters.push_back(monster);
+  };
+
   return level;
 }
 

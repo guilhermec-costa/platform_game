@@ -9,8 +9,20 @@ struct LevelData {
     Vector2 dimension;
     float   screen_height_pct;
   };
+  struct MonsterData {
+    Vector2 position;
+    Vector2 dimension;
+    float   speed        = 50.0f;
+    float   gravity      = 500.0f;
+    float   patrol_min_x = 0.0f;
+    float   patrol_max_x = 0.0f;
+
+    MonsterData() = default;
+  };
+
   std::string               name;
   std::vector<PlatformData> platforms;
+  std::vector<MonsterData>  monsters;
   static LevelData          from_json(const json& j, float screen_height, int world_width);
 };
 

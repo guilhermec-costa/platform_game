@@ -3,6 +3,7 @@
 #include <SDL2/SDL_render.h>
 
 #include "../camera.hpp"
+#include "../game_context.hpp"
 #include "../shared.hpp"
 
 class GameObject {
@@ -13,6 +14,9 @@ public:
     position(pos), velocity(vel), dimension(dimension), direction(0) {}
   virtual void update(float dt)                                           = 0;
   virtual void render(SDL_Renderer* renderer, const Core::Camera& camera) = 0;
+
+protected:
+  const Core::GameContext& ctx = Core::GameContext::instance();
 
 public:
   Vector2 position;

@@ -1,7 +1,17 @@
 {
   "name": "Phase 2",
   "platforms": [
-    { "x": 0.1667, "y": 0.7, "width": 400, "height": 50},
-    { "x": 0.4667, "y": 0.7, "width": 500, "height": 70}
+    { "x": 0.1667, "y": 0.7, "width": 400, "height": 50 },
+    { "x": 0.4667, "y": 0.7, "width": 500, "height": 70 }
+  ],
+  "monsters": [
+    {
+      "position": [200.0, 400.0],
+      "dimension": [64.0, 64.0],
+      "speed": 80.0,
+      "gravity": 500.0,
+      "patrol_min_x": 100.0,
+      "patrol_max_x": 500.0
+    }
   ]
 }

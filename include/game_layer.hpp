@@ -9,7 +9,7 @@
 
 #include "bg_parallax.hpp"
 #include "game_context.hpp"
-#include "ground.hpp"
+#include "objects/monster_object.hpp"
 #include "objects/platform_object.hpp"
 #include "objects/player_object.hpp"
 #include "ui/ui_manager.hpp"
@@ -41,9 +41,9 @@ class PlayLayer : public GameLayer {
 private:
   int                                          walk_channel = -1;
   BackgroundParallax                           bg_parallax;
-  Ground                                       ground;
   std::unique_ptr<PlayerObject>                player;
   std::vector<std::unique_ptr<PlatformObject>> platforms;
+  std::vector<std::unique_ptr<MonsterObject>>  monsters;
 
 public:
   PlayLayer();
@@ -55,8 +55,6 @@ public:
   bool is_key_down(SDL_Scancode scancode) const;
   void update(float dt) override;
   void render() override;
-  void check_player_ground_collision();
-  void check_player_window_collision();
   void check_player_platform_collision();
 };
 

@@ -19,6 +19,9 @@ public:
     return collider;
   }
 
+public:
+  int tile_side = 64;
+
 private:
   void update_collider(float camera_x);
 
@@ -28,5 +31,4 @@ private:
   float                         y             = 0;
   int                           screen_width  = 0;
   int                           screen_height = 0;
-  int                           tile_side     = 64;
 };

@@ -10,10 +10,8 @@ namespace Core {
 
   void Camera::follow(const Vector2& target_pos) {
     if (target_pos.x - position.x < left_margin) {
-      std::cout << "analysing left: " << target_pos.x - position.x << "\n";
       position.x = target_pos.x - left_margin;
     } else if (target_pos.x - position.x > right_margin) {
-      std::cout << "analysing right: " << target_pos.x - position.x << "\n";
       position.x = target_pos.x - right_margin;
     }
   }

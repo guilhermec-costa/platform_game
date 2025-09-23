@@ -42,6 +42,21 @@ void PlayerObject::update(float dt) {
   update_collider();
   update_state();
   update_animation(dt);
+  check_player_ground_collision();
+  check_player_window_collision();
+}
+
+void PlayerObject::check_player_ground_collision() {
+  const SDL_Rect& player_rect = collider_component.get_rect();
+  const SDL_Rect& ground_rect =
+      Core::GameContext::instance().global_ground.get_collider_component().get_rect();
+
+  if (SDL_HasIntersection(&player_rect, &ground_rect)) {
+    float ground_top = static_cast<float>(ground_rect.y);
+    land_on(ground_top);
+  } else {
+    set_on_ground(false);
+  }
 }
 
 void PlayerObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
@@ -163,4 +178,23 @@ void PlayerObject::land_on(float surface_y) {
 void PlayerObject::resize() {
   auto& window = Core::GameContext::instance().window;
   position.y   = m_metadata.screen_height_pct * window.get_height();
+}
+
+void PlayerObject::check_player_window_collision() {
+  const auto& world_data       = ctx.game_data.world_data;
+  float       min_horizontal_x = world_data.min_horizontal_x;
+  float       max_horizontal_x = world_data.max_horizontal_x;
+
+  if (collider_component.position.x < min_horizontal_x) {
+    float delta = min_horizontal_x - collider_component.position.x;
+    position.x += delta;
+    collider_component.position.x = min_horizontal_x;
+  }
+
+  float player_right = collider_component.position.x + collider_component.dimension.x;
+  if (player_right > max_horizontal_x) {
+    float delta = player_right - max_horizontal_x;
+    position.x -= delta;
+    collider_component.position.x -= delta;
+  }
 }

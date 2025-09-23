@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL_render.h>
+
 #include "shared.hpp"
 
 #pragma once
@@ -18,8 +19,12 @@ namespace Core {
     void update(float min_horizontal, float max_horizontal);
     void resize(float screen_width);
     void render(SDL_Renderer* renderer);
-    void set_dimension(const Vector2& dim) { dimension = dim; };
-    void set_position(const Vector2& pos) { dimension = pos; };
+    void set_dimension(const Vector2& dim) {
+      dimension = dim;
+    };
+    void set_position(const Vector2& pos) {
+      dimension = pos;
+    };
 
     const Vector2& get_position() const;
 

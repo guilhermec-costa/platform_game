@@ -5,6 +5,7 @@
 
 #include "asset_manager/audio_manager.hpp"
 #include "camera.hpp"
+#include "ground.hpp"
 #include "level.hpp"
 #include "window.hpp"
 
@@ -17,6 +18,7 @@ namespace Core {
     Camera                  camera;
     GameData                game_data;
     Managers::AudioManager& audio_manager = Managers::AudioManager::instance();
+    Ground                  global_ground;
 
     static GameContext& instance();
 

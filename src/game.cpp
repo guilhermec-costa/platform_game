@@ -61,6 +61,7 @@ namespace Core {
   void Game::load_global_assets() {
     const std::string assets[] = {
         "assets/images/nigthborne.png",
+        "assets/images/enemy1_spritesheet.png",
         "assets/images/parallax/bg.png",
         "assets/images/parallax/far-trees.png",
         "assets/images/parallax/mid-trees.png",

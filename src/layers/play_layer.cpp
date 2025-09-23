@@ -9,6 +9,7 @@
 #include <SDL2/SDL_video.h>
 
 #include "../../include/asset_manager/audio_manager.hpp"
+#include "../../include/game_data_manager.hpp"
 #include "../../include/game_layer.hpp"
 
 PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
@@ -16,27 +17,31 @@ PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
 
   const float tile_side   = ctx.get_world_data().ground_tile_side;
   float       tile_height = win_dim.y - tile_side;
-  ground                  = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
 
   player = std::make_unique<PlayerObject>(ctx.get_player_data());
 
-  auto& platforms_data = ctx.get_active_level().platforms;
-  for (const auto& p : platforms_data) {
+  const auto& active_level = ctx.get_active_level();
+  for (const auto& p : active_level.platforms) {
     platforms.push_back(std::make_unique<PlatformObject>(p));
+  }
+  for (const auto& m : active_level.monsters) {
+    monsters.push_back(std::make_unique<MonsterObject>(m));
   }
 
   ctx.audio_manager.play_sound(GameAudioChannel::FOREST_AMBIENCE);
+  ctx.global_ground = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
 }
 
 void PlayLayer::update(float dt) {
   auto& world_data = ctx.get_world_data();
-  ground.update(ctx.camera.get_position().x);
+  ctx.global_ground.update(ctx.camera.get_position().x);
   player->update(dt);
   for (const auto& platform : platforms)
     platform->update(dt);
-  check_player_ground_collision();
+  for (const auto& monster : monsters)
+    monster->update(dt);
+
   check_player_platform_collision();
-  check_player_window_collision();
   ctx.camera.follow(player->get_collider_component().position);
   ctx.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
   bg_parallax.update(ctx.camera.get_position().x);
@@ -82,44 +87,14 @@ void PlayLayer::check_player_platform_collision() {
   }
 }
 
-void PlayLayer::check_player_ground_collision() {
-  const SDL_Rect& player_rect = player->get_collider_component().get_rect();
-  const SDL_Rect& ground_rect = ground.get_collider_component().get_rect();
-
-  if (SDL_HasIntersection(&player_rect, &ground_rect)) {
-    float ground_top = static_cast<float>(ground_rect.y);
-    player->land_on(ground_top);
-  } else {
-    player->set_on_ground(false);
-  }
-}
-
-void PlayLayer::check_player_window_collision() {
-  auto&       player_collider  = player->get_collider_component();
-  const auto& world_data       = ctx.get_world_data();
-  float       min_horizontal_x = world_data.min_horizontal_x;
-  float       max_horizontal_x = world_data.max_horizontal_x;
-
-  if (player_collider.position.x < min_horizontal_x) {
-    float delta = min_horizontal_x - player_collider.position.x;
-    player->position.x += delta;
-    player_collider.position.x = min_horizontal_x;
-  }
-
-  float player_right = player_collider.position.x + player_collider.dimension.x;
-  if (player_right > max_horizontal_x) {
-    float delta = player_right - max_horizontal_x;
-    player->position.x -= delta;
-    player_collider.position.x -= delta;
-  }
-}
-
 void PlayLayer::render() {
   bg_parallax.render();
-  ground.render();
+  ctx.global_ground.render();
   for (const auto& platform : platforms) {
     platform->render(ctx.renderer, ctx.camera);
   }
+  for (const auto& monster : monsters)
+    monster->render(ctx.renderer, ctx.camera);
   player->render(ctx.renderer, ctx.camera);
   ctx.camera.render(ctx.renderer);
 }
@@ -153,7 +128,7 @@ void PlayLayer::handle_mouse_click_event(const SDL_MouseButtonEvent& button) {
 
 void PlayLayer::handle_window_event(const SDL_WindowEvent& window) {
   if (window.event == SDL_WINDOWEVENT_RESIZED) {
-    ground.resize(window.data1, window.data2);
+    ctx.global_ground.resize(window.data1, window.data2);
     ctx.camera.resize(window.data1);
     for (const auto& platform : platforms) {
       platform->resize();

@@ -37,6 +37,8 @@ public:
   void        update_state();
   void        land_on(float surface_y);
   void        resize();
+  void        check_player_ground_collision();
+  void        check_player_window_collision();
   inline void set_on_ground(bool state) {
     on_ground = state;
   }

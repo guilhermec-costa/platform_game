@@ -23,7 +23,7 @@ void PlatformObject::handle_event() {}
 
 void PlatformObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
   const Vector2& camera_pos = camera.get_position();
-  SDL_Rect rec{static_cast<int>(position.x) - static_cast<int>(camera_pos.x),
+  SDL_Rect       rec{static_cast<int>(position.x) - static_cast<int>(camera_pos.x),
                static_cast<int>(position.y) - static_cast<int>(camera_pos.y),
                static_cast<int>(dimension.x),
                static_cast<int>(dimension.y)};
