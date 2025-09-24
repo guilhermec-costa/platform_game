@@ -14,7 +14,7 @@ void CharacterObject::update(float dt) {
 }
 
 void CharacterObject::update_collider() {
-  collider_component.set_position(position);
+  collider_component->set_position(position);
 }
 
 void CharacterObject::land_on(float surface_y) {

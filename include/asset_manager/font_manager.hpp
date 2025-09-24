@@ -23,3 +23,5 @@ namespace Managers {
     FontManagerSingleton& operator=(const FontManagerSingleton&) = delete;
   };
 } // namespace Managers
+
+using FontManager = Managers::FontManagerSingleton;

@@ -38,20 +38,14 @@ namespace Core {
   void GameContext::set_active_level(LevelData& level) {
     game_data.level_data = level;
   }
-  void GameContext::set_player_data(PlayerData& player) {
-    game_data.player_data = player;
-  }
-  void GameContext::set_world_data(WorldData& world) {
-    game_data.world_data = world;
-  }
 
-  LevelData& GameContext::get_active_level() {
+  const LevelData& GameContext::get_active_level() const {
     return game_data.level_data;
   }
-  PlayerData& GameContext::get_player_data() {
+  const PlayerData& GameContext::get_player_data() const {
     return game_data.player_data;
   }
-  WorldData& GameContext::get_world_data() {
+  const WorldData& GameContext::get_world_data() const {
     return game_data.world_data;
   }
 

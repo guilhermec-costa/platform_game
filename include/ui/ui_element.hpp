@@ -16,20 +16,20 @@ namespace UI {
     virtual void update(float dt)                 = 0;
 
     void set_position(Vector2 pos) {
-      rect.x = pos.x;
-      rect.y = pos.y;
+      render_rect.x = pos.x;
+      render_rect.y = pos.y;
     }
 
     void set_dimension(Vector2 dim) {
-      rect.w = dim.x;
-      rect.h = dim.y;
+      render_rect.w = dim.x;
+      render_rect.h = dim.y;
     }
 
     SDL_Rect get_rect() const {
-      return rect;
+      return render_rect;
     }
 
   protected:
-    SDL_Rect rect{0, 0, 0, 0};
+    SDL_Rect render_rect{0, 0, 0, 0};
   };
 } // namespace UI

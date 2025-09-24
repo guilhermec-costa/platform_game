@@ -18,7 +18,7 @@ public:
   virtual void render(SDL_Renderer* renderer, const Core::Camera& camera) = 0;
 
   const Components::ColliderComponent& get_collider_component() const {
-    return collider_component;
+    return *collider_component.get();
   }
 
   virtual std::string to_string() const {
@@ -28,16 +28,16 @@ public:
         << "velocity=(" << velocity.x << ", " << velocity.y << "), "
         << "dimension=(" << dimension.x << ", " << dimension.y << ")";
 
-    const SDL_Rect rect = collider_component.get_rect();
+    const SDL_Rect rect = collider_component->get_rect();
     oss << ", collider=(" << rect.x << ", " << rect.y << ", " << rect.w << ", " << rect.h << ") }";
 
     return oss.str();
   }
 
 protected:
-  Core::GameContext&            ctx           = Core::GameContext::instance();
-  Managers::AudioManager&       audio_manager = Core::GameContext::instance().audio_manager;
-  Components::ColliderComponent collider_component;
+  Core::GameContext&      ctx           = Core::GameContext::instance();
+  Managers::AudioManager& audio_manager = Core::GameContext::instance().audio_manager;
+  std::unique_ptr<Components::ColliderComponent> collider_component;
 
 public:
   Vector2 position;

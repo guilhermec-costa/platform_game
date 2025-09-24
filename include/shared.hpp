@@ -16,6 +16,10 @@ typedef struct Vector2 {
   Vector2 operator+(float sum) const {
     return Vector2(x + sum, y + sum);
   };
+
+  Vector2 operator-(const Vector2& minus) const {
+    return Vector2(x - minus.x, y - minus.y);
+  }
   Vector2 operator+(const Vector2& vec) const {
     return Vector2(x + vec.x, y + vec.y);
   };

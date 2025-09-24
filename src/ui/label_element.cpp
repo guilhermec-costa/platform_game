@@ -1,22 +1,22 @@
 #include "../../include/ui/label_element.hpp"
 
+#include <SDL2/SDL_render.h>
+
+#include "../../include/asset_manager/font_manager.hpp"
 #include "../../include/game_context.hpp"
 
 namespace UI {
 
   Label::Label(const std::string& text, TTF_Font* font, Vector2 pos, Vector2 dim) :
-    content(text), font(font) {
+    UIElement(), content(text), font(font) {
     set_position(pos);
     set_dimension(dim);
     update_texture();
   }
 
-  Label::Label(const std::string& text, TTF_Font* font) : content(text), font(font) {
-    update_texture();
-  }
-
   Label::~Label() {
     if (texture) {
+      std::cout << "Destroying texture\n";
       SDL_DestroyTexture(texture);
     }
   }
@@ -25,8 +25,8 @@ namespace UI {
     if (!font || !texture)
       return;
 
-    SDL_Rect dst{rect.x, rect.y, rect.w, rect.h};
-    SDL_RenderCopy(renderer, texture, nullptr, &dst);
+    SDL_RenderDrawRect(renderer, &render_rect);
+    SDL_RenderCopy(renderer, texture, nullptr, &render_rect);
   }
 
   void Label::update(float dt) {}
@@ -50,9 +50,24 @@ namespace UI {
       return;
 
     SDL_Renderer* renderer = Core::GameContext::instance().renderer;
-    SDL_Color     color    = {255, 255, 255, 255};
-    SDL_Surface*  surface  = TTF_RenderText_Solid(font, content.c_str(), color);
-    texture                = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Color     color    = {255, 0, 0, 255};
+    SDL_Surface*  surface  = TTF_RenderText_Blended(
+        FontManager::instance().get_asset("assets/fonts/YoungSerif-Regular.ttf"),
+        content.c_str(),
+        color);
+
+    if (!surface) {
+      std::cerr << "Failed to render text surface: " << TTF_GetError() << "\n";
+      return;
+    }
+
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+      std::cerr << "Failed to create texture: " << SDL_GetError() << "\n";
+      SDL_FreeSurface(surface);
+      return;
+    }
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     SDL_FreeSurface(surface);
   }
 

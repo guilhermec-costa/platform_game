@@ -24,3 +24,5 @@ namespace Managers {
   };
 
 } // namespace Managers
+
+using TextureManager = Managers::TextureManagerSingleton;

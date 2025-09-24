@@ -18,7 +18,7 @@ namespace Core {
     Camera                  camera;
     GameData                game_data;
     Managers::AudioManager& audio_manager = Managers::AudioManager::instance();
-    Ground                  global_ground;
+    std::unique_ptr<Ground>                  global_ground;
 
     static GameContext& instance();
 
@@ -26,13 +26,11 @@ namespace Core {
     void init(const Core::WindowSpecification& spec);
     void create_renderer(Core::Window& window);
 
-    void        set_active_level(LevelData& level);
-    void        set_player_data(PlayerData& player);
-    void        set_world_data(WorldData& world);
-    LevelData&  get_active_level();
-    PlayerData& get_player_data();
-    WorldData&  get_world_data();
-    GameData&   get_game_data();
+    void              set_active_level(LevelData& level);
+    const LevelData&  get_active_level() const;
+    const PlayerData& get_player_data() const;
+    const WorldData&  get_world_data() const;
+    const GameData&   get_game_data() const;
 
     GameContext();
     ~GameContext();

@@ -3,14 +3,25 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
+#include "../../include/asset_manager/font_manager.hpp"
 namespace Components {
 
   ColliderComponent::ColliderComponent() = default;
 
-  ColliderComponent::ColliderComponent(Vector2 pos, Vector2 dim, Vector2 collision_offset) :
+  ColliderComponent::ColliderComponent(Vector2            pos,
+                                       Vector2            dim,
+                                       Vector2            collision_offset,
+                                       const std::string& text) :
     position(pos + collision_offset), dimension(dim), collision_offset(collision_offset) {
     collision_box = {(int)position.x, (int)position.y, (int)dim.x, (int)dim.y};
+    label         = std::make_unique<UI::Label>(
+        text,
+        FontManager::instance().get_asset("assets/fonts/YoungSerif-Regular.ttf"),
+        Vector2(pos.x, dim.y),
+        Vector2(100, 100));
   }
+
+  ColliderComponent::~ColliderComponent() {}
 
   bool ColliderComponent::check_collision(const SDL_Rect& other) const {
     SDL_Rect self = get_rect();
@@ -29,8 +40,11 @@ namespace Components {
       collision_box.x -= camera.get_position().x;
       collision_box.y -= camera.get_position().y;
     }
-    SDL_SetRenderDrawColor(renderer, 125, 125, 255, SDL_ALPHA_OPAQUE);
+
+    SDL_SetRenderDrawColor(
+        renderer, drawing_color.r, drawing_color.g, drawing_color.b, drawing_color.a);
     SDL_RenderDrawRect(renderer, &collision_box);
+    label->render(renderer);
   }
 
   void ColliderComponent::set_position(const Vector2& pos) {
@@ -39,6 +53,20 @@ namespace Components {
 
   void ColliderComponent::set_dimension(const Vector2& dim) {
     dimension = dim;
+  }
+
+  void ColliderComponent::flip_to_left() {
+    collision_offset.x = -std::abs(collision_offset.x);
+    position.x         = position.x + collision_offset.x;
+  }
+
+  void ColliderComponent::flip_to_right() {
+    collision_offset.x = std::abs(collision_offset.x);
+    position.x         = position.x + collision_offset.x;
+  }
+
+  void ColliderComponent::set_drawing_color(const SDL_Color color) {
+    drawing_color = color;
   }
 
 } // namespace Components

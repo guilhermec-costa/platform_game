@@ -36,8 +36,9 @@ public:
   float jump_force;
 
 private:
-  PlayerState   state;
-  MovementState movement_state = MovementState::IDLE;
-  ActionState   action_state   = ActionState::NONE;
-  PlayerData    m_metadata;
+  std::unique_ptr<Components::ColliderComponent> sword_collider_component;
+  PlayerState                                    state;
+  MovementState                                  movement_state = MovementState::IDLE;
+  ActionState                                    action_state   = ActionState::NONE;
+  PlayerData                                     m_metadata;
 };

@@ -1,10 +1,12 @@
 #include "../../include/objects/player_object.hpp"
 
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
 #include "../../include/asset_manager/texture_manager.hpp"
 #include "../../include/game_context.hpp"
+#include "../../include/components/component_factory.hpp"
 
 PlayerObject::PlayerObject(const PlayerData& data) :
   m_metadata(data), CharacterObject(data.position, data.dimension) {
@@ -14,8 +16,11 @@ PlayerObject::PlayerObject(const PlayerData& data) :
 
   land_offset_pct = data.land_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
-  collider_component = Components::ColliderComponent(
-      data.position, collider_dim, {dimension.x * 0.35f, dimension.y * 0.43f});
+  collider_component = ComponentFactory::make_collider(data.position, collider_dim, Vector2{dimension.x * 0.35f, dimension.y * 0.43f});
+
+  sword_collider_component = ComponentFactory::make_collider(
+      collider_component->position, collider_component->dimension, Vector2{100, 0}, "Sword Collider");
+  sword_collider_component->set_drawing_color({0, 0, 255, SDL_ALPHA_OPAQUE});
 
   animated_sprite = Components::AnimatedSpriteComponent(
       Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}),
@@ -38,14 +43,15 @@ PlayerObject::PlayerObject(const PlayerData& data) :
 
 void PlayerObject::update(float dt) {
   CharacterObject::update(dt);
+  sword_collider_component->set_position(collider_component->position);
   check_player_ground_collision();
   check_player_window_collision();
 }
 
 void PlayerObject::check_player_ground_collision() {
-  const SDL_Rect& player_rect = collider_component.get_rect();
+  const SDL_Rect& player_rect = collider_component->get_rect();
   const SDL_Rect& ground_rect =
-      Core::GameContext::instance().global_ground.get_collider_component().get_rect();
+      Core::GameContext::instance().global_ground->get_collider_component().get_rect();
 
   if (SDL_HasIntersection(&player_rect, &ground_rect)) {
     float ground_top = static_cast<float>(ground_rect.y);
@@ -56,7 +62,8 @@ void PlayerObject::check_player_ground_collision() {
 }
 
 void PlayerObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
-  collider_component.render_collision_box(renderer, camera);
+  collider_component->render_collision_box(renderer, camera);
+  sword_collider_component->render_collision_box(renderer, camera);
   animated_sprite.render(renderer, position, camera);
 }
 
@@ -73,6 +80,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     case PlayerEvent::MOVE_LEFT: {
       velocity.x = -move_speed;
       animated_sprite.set_flipped(true);
+      sword_collider_component->flip_to_left();
       if (on_ground) {
         movement_state = MovementState::RUNNING;
       }
@@ -82,6 +90,7 @@ void PlayerObject::handle_event(PlayerEvent event) {
     case PlayerEvent::MOVE_RIGHT: {
       velocity.x = move_speed;
       animated_sprite.set_flipped(false);
+      sword_collider_component->flip_to_right();
       if (on_ground) {
         movement_state = MovementState::RUNNING;
       }
@@ -157,16 +166,16 @@ void PlayerObject::check_player_window_collision() {
   float       min_horizontal_x = world_data.min_horizontal_x;
   float       max_horizontal_x = world_data.max_horizontal_x;
 
-  if (collider_component.position.x < min_horizontal_x) {
-    float delta = min_horizontal_x - collider_component.position.x;
+  if (collider_component->position.x < min_horizontal_x) {
+    float delta = min_horizontal_x - collider_component->position.x;
     position.x += delta;
-    collider_component.position.x = min_horizontal_x;
+    collider_component->position.x = min_horizontal_x;
   }
 
-  float player_right = collider_component.position.x + collider_component.dimension.x;
+  float player_right = collider_component->position.x + collider_component->dimension.x;
   if (player_right > max_horizontal_x) {
     float delta = player_right - max_horizontal_x;
     position.x -= delta;
-    collider_component.position.x -= delta;
+    collider_component->position.x -= delta;
   }
 }

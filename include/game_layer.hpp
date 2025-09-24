@@ -15,7 +15,6 @@
 #include "objects/platform_object.hpp"
 #include "objects/player_object.hpp"
 #include "ui/label_element.hpp"
-#include "ui/ui_manager.hpp"
 
 class GameLayer {
 protected:
@@ -37,7 +36,7 @@ public:
   virtual ~GameLayer() {};
 
 protected:
-  bool suspended = 0;
+  bool suspended = false;
 };
 
 class PlayLayer : public GameLayer {
@@ -79,6 +78,5 @@ public:
   void render() override;
 
 private:
-  UI::UIManager ui_manager;
-  UI::Label*    level_label = nullptr;
+  UI::Label level_label;
 };

@@ -5,6 +5,7 @@
 
 #include "../../include/asset_manager/texture_manager.hpp"
 #include "../../include/game_context.hpp"
+#include "../../include/components/component_factory.hpp"
 
 PlatformObject::PlatformObject(LevelData::PlatformData data) :
   m_metadata(data), GameObject(data.position, {0, 0}, data.dimension) {
@@ -16,7 +17,7 @@ PlatformObject::PlatformObject(LevelData::PlatformData data) :
   texture_component = Components::TextureComponent(texture, pos, dim);
 
   float collision_offset = dim.y * 0.35f;
-  collider_component     = Components::ColliderComponent({pos.x, pos.y + collision_offset},
+  collider_component     = ComponentFactory::make_collider({pos.x, pos.y + collision_offset},
                                                          {dim.x, dim.y - collision_offset});
 }
 void PlatformObject::handle_event() {}
@@ -28,11 +29,11 @@ void PlatformObject::render(SDL_Renderer* renderer, const Core::Camera& camera) 
                static_cast<int>(dimension.x),
                static_cast<int>(dimension.y)};
   SDL_RenderCopy(renderer, texture_component.get_texture(), NULL, &rec);
-  collider_component.render_collision_box(renderer, camera);
+  collider_component->render_collision_box(renderer, camera);
 }
 
 const RectOverlap PlatformObject::get_overlap(const SDL_Rect& rect) const {
-  const auto& collider_rect  = collider_component.get_rect();
+  const auto& collider_rect  = collider_component->get_rect();
   int         overlap_left   = (rect.x + rect.w) - collider_rect.x;
   int         overlap_right  = (collider_rect.x + collider_rect.w) - rect.x;
   int         overlap_top    = (rect.y + rect.h) - collider_rect.y;
@@ -42,7 +43,7 @@ const RectOverlap PlatformObject::get_overlap(const SDL_Rect& rect) const {
 
 void PlatformObject::update(float dt) {
   float collision_offset = dimension.y * 0.35f;
-  collider_component.set_position({position.x, position.y + collision_offset});
+  collider_component->set_position({position.x, position.y + collision_offset});
 }
 
 void PlatformObject::resize() {

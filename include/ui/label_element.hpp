@@ -11,6 +11,7 @@ namespace UI {
 
   class Label : public UIElement {
   public:
+    Label() = default;
     Label(const std::string& text, TTF_Font* font, Vector2 pos, Vector2 dim);
     Label(const std::string& text, TTF_Font* font);
 

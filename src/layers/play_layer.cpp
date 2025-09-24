@@ -18,7 +18,7 @@ PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
   const float tile_side   = ctx.get_world_data().ground_tile_side;
   float       tile_height = win_dim.y - tile_side;
 
-  ctx.global_ground = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
+  ctx.global_ground = std::make_unique<Ground>(win_dim.x, win_dim.y, tile_height, tile_side);
 
   ctx.audio_manager.play_sound(GameAudioChannel::FOREST_AMBIENCE);
 
@@ -27,7 +27,7 @@ PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
 
 void PlayLayer::update(float dt) {
   const auto& world_data = ctx.get_world_data();
-  ctx.global_ground.update(ctx.camera.get_position().x);
+  ctx.global_ground->update(ctx.camera.get_position().x);
   player->update(dt);
   for (const auto& platform : platforms)
     platform->update(dt);
@@ -90,7 +90,7 @@ void PlayLayer::check_monster_platform_collision() {
 
 void PlayLayer::render() {
   bg_parallax.render();
-  ctx.global_ground.render();
+  ctx.global_ground->render();
   for (const auto& platform : platforms) {
     platform->render(ctx.renderer, ctx.camera);
   }
@@ -129,7 +129,7 @@ void PlayLayer::handle_mouse_click_event(const SDL_MouseButtonEvent& button) {
 
 void PlayLayer::handle_window_event(const SDL_WindowEvent& window) {
   if (window.event == SDL_WINDOWEVENT_RESIZED) {
-    ctx.global_ground.resize(window.data1, window.data2);
+    ctx.global_ground->resize(window.data1, window.data2);
     ctx.camera.resize(window.data1);
     for (const auto& platform : platforms) {
       platform->resize();
@@ -206,8 +206,6 @@ void PlayLayer::update_level() {
   Vector2     win_dim     = ctx.window.get_dimension();
   const float tile_side   = ctx.get_world_data().ground_tile_side;
   float       tile_height = win_dim.y - tile_side;
-
-  ctx.global_ground = Ground(win_dim.x, win_dim.y, tile_height, tile_side);
 
   std::cout << "Level atualizado!\n";
 }
