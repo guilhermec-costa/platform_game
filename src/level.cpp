@@ -7,8 +7,8 @@ LevelData LevelData::from_json(const json& j) {
 
   for (const auto& p : j["platforms"]) {
     LevelData::PlatformData platform{
-        .position  = {p["x"].get<float>(), p["y"].get<float>()},
-        .dimension = {p["width"].get<float>(), p["height"].get<float>()},
+        .position          = {p["x"].get<float>(), p["y"].get<float>()},
+        .dimension         = {p["width"].get<float>(), p["height"].get<float>()},
         .screen_height_pct = p["y"].get<float>()};
     level.platforms.push_back(platform);
   }
@@ -36,8 +36,8 @@ PlayerData PlayerData::from_json(const json& j) {
   auto       player_dimension = player["dimension"];
   auto       player_attrs     = player["attrs"];
 
-  player_data.position = Vector2{player_position["x"].get<float>(),
-                                 player_position["y"].get<float>()};
+  player_data.position =
+      Vector2{player_position["x"].get<float>(), player_position["y"].get<float>()};
 
   player_data.screen_height_pct = player_position["y"].get<float>();
 

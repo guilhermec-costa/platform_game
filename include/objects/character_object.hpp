@@ -3,6 +3,19 @@
 #include "../components/animated_sprite_component.hpp"
 #include "game_object.hpp"
 
+enum class MovementState { IDLE, RUNNING, JUMPING, FALLING, WALKING };
+
+enum class ActionState { NONE, ATTACKING };
+
+enum class CharacterEvent { JUMP, MOVE_LEFT, MOVE_RIGHT, STOP_HORIZONTAL, ATTACK };
+
+enum class CharacterState {
+  IDLEING,
+  RUNNING,
+  JUMPING,
+  ATTACKING,
+};
+
 class CharacterObject : public GameObject {
 public:
   CharacterObject(const Vector2& pos, const Vector2& dim);
@@ -22,10 +35,12 @@ public:
 
 protected:
   Components::AnimatedSpriteComponent animated_sprite;
-  float                               gravity    = 1200.0f;
-  float                               move_speed = 50.0f;
-  ;
-  float on_ground       = false;
-  float land_offset_pct = 0.22f;
-  float max_fall_speed  = 800.0f;
+  float                               gravity         = 1200.0f;
+  float                               move_speed      = 50.0f;
+  float                               on_ground       = false;
+  float                               land_offset_pct = 0.22f;
+  float                               max_fall_speed  = 800.0f;
+  CharacterState                      state           = CharacterState::IDLEING;
+  MovementState                       movement_state  = MovementState::IDLE;
+  ActionState                         action_state    = ActionState::NONE;
 };

@@ -31,34 +31,33 @@ namespace Components {
     void update(float dt);
     void render(SDL_Renderer* renderer, const Vector2& pos, const Core::Camera& camera);
 
-    void add_animation(int                animation_idx,
-                       const std::string& name,
+    void add_animation(const std::string& name,
                        int                start_frame,
                        int                end_frame,
                        float              frame_time,
                        bool               loop = true);
 
     bool is_finished() const;
-    void play_animation(int animation_idx);
+    void play_animation(const std::string& name);
 
     void set_flipped(bool flipped);
     void set_scale(const Vector2& scale);
 
   private:
-    TextureComponent                   texture;
-    Vector2                            render_dim;
-    std::unordered_map<int, Animation> animations;
-    int                                frame_width          = 0;
-    int                                frame_height         = 0;
-    int                                num_frames           = 0;
-    int                                current_frame        = 0;
-    int                                num_columns          = 0;
-    int                                num_rows             = 0;
-    float                              frame_time           = 0.0f;
-    float                              elapsed_time         = 0.0f;
-    bool                               horizontally_flipped = false;
-    int                                current_animaton_idx = -1;
-    Vector2 scale{0.0f,0.0f};
+    TextureComponent                           texture;
+    Vector2                                    render_dim;
+    std::unordered_map<std::string, Animation> animations;
+    int                                        frame_width          = 0;
+    int                                        frame_height         = 0;
+    int                                        num_frames           = 0;
+    int                                        current_frame        = 0;
+    int                                        num_columns          = 0;
+    int                                        num_rows             = 0;
+    float                                      frame_time           = 0.0f;
+    float                                      elapsed_time         = 0.0f;
+    bool                                       horizontally_flipped = false;
+    std::string                                current_animation_name;
+    Vector2                                    scale{0.0f, 0.0f};
   };
 
 } // namespace Components

@@ -12,7 +12,7 @@ namespace Components {
     frame_height(frame_height),
     frame_time(frame_time),
     render_dim(render_dim),
-    current_animaton_idx(-1) {
+    current_animation_name("") {
 
     int tex_width, tex_height;
     SDL_QueryTexture(texture.get_texture(), nullptr, nullptr, &tex_width, &tex_height);
@@ -22,12 +22,11 @@ namespace Components {
   }
 
   void AnimatedSpriteComponent::update(float dt) {
-    if (current_animaton_idx == -1) {
+    if (current_animation_name.empty())
       return;
-    }
 
     elapsed_time += dt;
-    Animation& anim = animations[current_animaton_idx];
+    Animation& anim = animations.at(current_animation_name);
     if (elapsed_time >= anim.default_frame_time) {
       elapsed_time = 0.0f;
       current_frame++;
@@ -40,6 +39,14 @@ namespace Components {
         }
       }
     }
+  }
+
+  bool AnimatedSpriteComponent::is_finished() const {
+    if (current_animation_name.empty())
+      return true;
+
+    const Animation& anim = animations.at(current_animation_name);
+    return (current_frame == anim.end_frame && elapsed_time >= anim.default_frame_time);
   }
 
   void AnimatedSpriteComponent::render(SDL_Renderer*       renderer,
@@ -63,30 +70,19 @@ namespace Components {
     }
   }
 
-  void AnimatedSpriteComponent::add_animation(int                animation_idx,
-                                              const std::string& name,
-                                              int                start_frame,
-                                              int                end_frame,
-                                              float              frame_time,
-                                              bool               loop) {
-    animations[animation_idx] = {name, start_frame, end_frame, frame_time, loop};
+  void AnimatedSpriteComponent::add_animation(
+      const std::string& name, int start_frame, int end_frame, float frame_time, bool loop) {
+    animations[name] = {name, start_frame, end_frame, frame_time, loop};
   }
 
-  bool AnimatedSpriteComponent::is_finished() const {
-    if (current_animaton_idx == -1) {
-      return true;
-    }
-    const Animation& anim = animations.at(current_animaton_idx);
-    return (current_frame == anim.end_frame && elapsed_time >= anim.default_frame_time);
-  }
-
-  void AnimatedSpriteComponent::play_animation(int animation_idx) {
-    if (current_animaton_idx == animation_idx) {
+  void AnimatedSpriteComponent::play_animation(const std::string& name) {
+    if (current_animation_name == name)
       return;
-    }
-    current_animaton_idx = animation_idx;
-    current_frame        = animations[animation_idx].start_frame;
-    elapsed_time         = 0.0f;
+
+    current_animation_name = name;
+    const Animation& anim  = animations.at(name);
+    current_frame          = anim.start_frame;
+    elapsed_time           = 0.0f;
   }
 
   void AnimatedSpriteComponent::set_flipped(bool flipped) {

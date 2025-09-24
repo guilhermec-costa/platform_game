@@ -5,9 +5,9 @@
 #include <SDL2/SDL_render.h>
 
 #include "../../include/asset_manager/texture_manager.hpp"
+#include "../../include/components/component_factory.hpp"
 #include "../../include/game_context.hpp"
 #include "../../include/logger.hpp"
-#include "../../include/components/component_factory.hpp"
 
 PlayerObject::PlayerObject(const PlayerData& data) :
   m_metadata(data), CharacterObject(data.position, data.dimension) {
@@ -17,10 +17,16 @@ PlayerObject::PlayerObject(const PlayerData& data) :
 
   land_offset_pct = data.land_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
-  collider_component = ComponentFactory::make_collider(data.position, collider_dim, Vector2{dimension.x * 0.35f, dimension.y * 0.43f}, "Player Collider");
+  collider_component =
+      ComponentFactory::make_collider(data.position,
+                                      collider_dim,
+                                      Vector2{dimension.x * 0.35f, dimension.y * 0.43f},
+                                      "Player Collider");
 
-  sword_collider_component = ComponentFactory::make_collider(
-      collider_component->position, collider_component->dimension, Vector2{100, 0}, "Sword Collider");
+  sword_collider_component = ComponentFactory::make_collider(collider_component->position,
+                                                             collider_component->dimension,
+                                                             Vector2{100, 0},
+                                                             "Sword Collider");
   sword_collider_component->set_drawing_color({0, 0, 255, SDL_ALPHA_OPAQUE});
 
   animated_sprite = Components::AnimatedSpriteComponent(
@@ -30,11 +36,10 @@ PlayerObject::PlayerObject(const PlayerData& data) :
       0.1,
       data.dimension);
 
-  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::IDLE), "idle", 0, 8, 0.099f);
-  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::RUN), "run", 8, 12, 0.1f);
-  animated_sprite.add_animation(static_cast<int>(PlayerAnimation::JUMP), "jump", 0, 8, 0.1f);
-  animated_sprite.add_animation(
-      static_cast<int>(PlayerAnimation::ATTACK), "attack", 15, 25, 0.03f, false);
+  animated_sprite.add_animation("idle", 0, 8, 0.099f);
+  animated_sprite.add_animation("run", 8, 12, 0.1f);
+  animated_sprite.add_animation("jump", 0, 8, 0.1f);
+  animated_sprite.add_animation("attack", 15, 25, 0.03f, false);
 
   move_speed     = data.attrs.move_speed;
   gravity        = data.attrs.gravity;
@@ -138,17 +143,17 @@ void PlayerObject::update_state() {
 
 void PlayerObject::update_animation(float dt) {
   if (action_state == ActionState::ATTACKING) {
-    animated_sprite.play_animation((int)PlayerAnimation::ATTACK);
+    animated_sprite.play_animation("attack");
   } else {
     switch (movement_state) {
       case MovementState::JUMPING:
-        animated_sprite.play_animation((int)PlayerAnimation::JUMP);
+        animated_sprite.play_animation("jump");
         break;
       case MovementState::RUNNING:
-        animated_sprite.play_animation((int)PlayerAnimation::RUN);
+        animated_sprite.play_animation("run");
         break;
       case MovementState::IDLE:
-        animated_sprite.play_animation((int)PlayerAnimation::IDLE);
+        animated_sprite.play_animation("idle");
         break;
       default:
         break;
@@ -158,18 +163,18 @@ void PlayerObject::update_animation(float dt) {
 }
 
 void PlayerObject::resize() {
-    LOG_INFO("Resizing player");
-    auto& window = Core::GameContext::instance().window;
-    const auto& world_data = Core::GameContext::instance().game_data.world_data;
+  LOG_INFO("Resizing player");
 
-    float scale_x = window.get_width() / world_data.max_horizontal_x;
-    float scale_y = window.get_height() / 600.0f;
+  auto&       window     = Core::GameContext::instance().window;
+  const auto& world_data = Core::GameContext::instance().game_data.world_data;
 
-    collider_component->set_position(Vector2{position.x * scale_x, position.y * scale_y});
-    animated_sprite.set_scale(Vector2{scale_x, scale_y});
+  // escala apenas horizontal
+  float scale_x = static_cast<float>(window.get_width()) / world_data.max_horizontal_x;
+
+  // ajusta posição e escala horizontal
+  collider_component->set_scale(Vector2{position.x * scale_x, position.y}); // Y não muda
+  animated_sprite.set_scale(Vector2{scale_x, 1.0f});                        // escala só X
 }
-
-
 
 void PlayerObject::check_player_window_collision() {
   const auto& world_data       = ctx.game_data.world_data;

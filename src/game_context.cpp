@@ -1,4 +1,5 @@
 #include "../include/game_context.hpp"
+
 #include "../include/logger.hpp"
 
 namespace Core {

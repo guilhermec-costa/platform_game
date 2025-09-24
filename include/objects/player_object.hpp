@@ -6,17 +6,7 @@
 #include "../../include/level.hpp"
 #include "character_object.hpp"
 
-enum class MovementState { IDLE, RUNNING, JUMPING, FALLING };
-enum class ActionState { NONE, ATTACKING };
-
 enum class PlayerEvent { JUMP, MOVE_LEFT, MOVE_RIGHT, STOP_HORIZONTAL, ATTACK };
-enum class PlayerAnimation { RUN, JUMP, IDLE, ATTACK };
-enum class PlayerState {
-  IDLEING,
-  RUNNING,
-  JUMPING,
-  ATTACKING,
-};
 
 class PlayerObject : public CharacterObject {
 public:
@@ -37,8 +27,5 @@ public:
 
 private:
   std::unique_ptr<Components::ColliderComponent> sword_collider_component;
-  PlayerState                                    state;
-  MovementState                                  movement_state = MovementState::IDLE;
-  ActionState                                    action_state   = ActionState::NONE;
   PlayerData                                     m_metadata;
 };

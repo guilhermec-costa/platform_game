@@ -5,9 +5,6 @@
 #include "../level.hpp"
 #include "character_object.hpp"
 
-enum class MonsterAnimation { IDLE, ATTACK, WALKING };
-enum class MonsterMovementState { IDLE, WALKING };
-
 class MonsterObject : public CharacterObject {
 public:
   MonsterObject() = delete;
@@ -22,7 +19,6 @@ public:
   void resize();
 
 private:
-  MonsterMovementState movement_state = MonsterMovementState::IDLE;
   float patrol_min_x, patrol_max_x = 0;
-  int direction = 1;
+  int   direction = 1;
 };

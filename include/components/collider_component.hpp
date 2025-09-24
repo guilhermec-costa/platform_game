@@ -17,7 +17,7 @@ namespace Components {
     ColliderComponent();
     ColliderComponent(Vector2            pos,
                       Vector2            dim,
-                      Vector2            collision_offset = {0, 0},
+                      Vector2            collision_offset = {0.0f, 0.0f},
                       const std::string& name             = "test");
     ~ColliderComponent();
 
@@ -32,9 +32,11 @@ namespace Components {
     void set_dimension(const Vector2& dim);
     void flip_to_left();
     void flip_to_right();
+    void set_scale(const Vector2& scale);
 
   public:
     Vector2                    position;
+    Vector2                    scale{1.0f,1.0f};
     Vector2                    dimension;
     SDL_Rect                   collision_box;
     Vector2                    collision_offset{0, 0};

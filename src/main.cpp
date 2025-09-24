@@ -9,7 +9,6 @@
 #include "../include/game.hpp"
 #include "../include/logger.hpp"
 
-
 int main() {
   Core::Logger::init();
   LOG_INFO("Hello world");

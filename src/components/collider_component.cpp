@@ -29,26 +29,33 @@ namespace Components {
   }
 
   SDL_Rect ColliderComponent::get_rect() const {
-    return SDL_Rect{(int)position.x, (int)position.y, (int)dimension.x, (int)dimension.y};
+    return SDL_Rect{static_cast<int>(position.x * scale.x),
+                    static_cast<int>(position.y * scale.y),
+                    static_cast<int>(dimension.x * scale.x),
+                    static_cast<int>(dimension.y * scale.y)};
   }
 
-void ColliderComponent::render_collision_box(SDL_Renderer* renderer, const Core::Camera& camera, const bool follow_camera) {
+  void ColliderComponent::render_collision_box(SDL_Renderer*       renderer,
+                                               const Core::Camera& camera,
+                                               const bool          follow_camera) {
+    // usa get_rect já escalado
     collision_box = get_rect();
     if (follow_camera) {
-        collision_box.x -= camera.get_position().x;
-        collision_box.y -= camera.get_position().y;
+      collision_box.x -= camera.get_position().x;
+      collision_box.y -= camera.get_position().y;
     }
 
-    SDL_SetRenderDrawColor(renderer, drawing_color.r, drawing_color.g, drawing_color.b, drawing_color.a);
+    SDL_SetRenderDrawColor(
+        renderer, drawing_color.r, drawing_color.g, drawing_color.b, drawing_color.a);
     SDL_RenderDrawRect(renderer, &collision_box);
 
-    Vector2 label_pos = {position.x, position.y - 20};
+    Vector2 label_pos = {position.x * scale.x, position.y * scale.y - 20};
     if (follow_camera)
-        label_pos -= camera.get_position();
+      label_pos -= camera.get_position();
     label->set_position(label_pos);
-
     label->render(renderer);
-} 
+  }
+
   void ColliderComponent::set_position(const Vector2& pos) {
     position = pos + collision_offset;
   }
@@ -69,6 +76,10 @@ void ColliderComponent::render_collision_box(SDL_Renderer* renderer, const Core:
 
   void ColliderComponent::set_drawing_color(const SDL_Color color) {
     drawing_color = color;
+  }
+
+  void ColliderComponent::set_scale(const Vector2& s) {
+    scale = s;
   }
 
 } // namespace Components

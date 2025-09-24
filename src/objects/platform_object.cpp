@@ -4,8 +4,8 @@
 #include <SDL2/SDL_render.h>
 
 #include "../../include/asset_manager/texture_manager.hpp"
-#include "../../include/game_context.hpp"
 #include "../../include/components/component_factory.hpp"
+#include "../../include/game_context.hpp"
 
 PlatformObject::PlatformObject(LevelData::PlatformData data) :
   m_metadata(data), GameObject(data.position, {0, 0}, data.dimension) {
@@ -18,7 +18,7 @@ PlatformObject::PlatformObject(LevelData::PlatformData data) :
 
   float collision_offset = dim.y * 0.35f;
   collider_component     = ComponentFactory::make_collider({pos.x, pos.y + collision_offset},
-                                                         {dim.x, dim.y - collision_offset});
+                                                           {dim.x, dim.y - collision_offset});
 }
 void PlatformObject::handle_event() {}
 

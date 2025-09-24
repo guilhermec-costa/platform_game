@@ -36,7 +36,7 @@ typedef struct Vector2 {
     return *this;
   };
 
-  Vector2 operator *=(const Vector2& vec) {
+  Vector2 operator*=(const Vector2& vec) {
     x *= vec.x;
     y *= vec.y;
     return *this;

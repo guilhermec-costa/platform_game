@@ -18,7 +18,7 @@ namespace Core {
     Camera                  camera;
     GameData                game_data;
     Managers::AudioManager& audio_manager = Managers::AudioManager::instance();
-    std::unique_ptr<Ground>                  global_ground;
+    std::unique_ptr<Ground> global_ground;
 
     static GameContext& instance();
 
