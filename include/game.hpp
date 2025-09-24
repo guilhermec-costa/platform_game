@@ -8,6 +8,7 @@
 #include "fps_counter.hpp"
 #include "game_context.hpp"
 #include "game_layer.hpp"
+#include "logger.hpp"
 
 namespace Core {
 
@@ -22,7 +23,8 @@ namespace Core {
 
     void set_fps(int fps) {
       target_fps = fps;
-      std::cout << "[Game] Game FPS setted to " << fps << "\n";
+
+      LOG_INFO("[Game] Game FPS setted to {}", fps);
     }
     void          run();
     void          quit();

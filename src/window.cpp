@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
+#include "../include/logger.hpp"
+
 namespace Core {
 
   Window::Window(const WindowSpecification& spec) {
@@ -19,7 +21,7 @@ namespace Core {
     if (!m_window) {
       throw std::runtime_error(std::string("SDL Error: ") + SDL_GetError());
     }
-    std::cout << "[Window] SDL Window created\n";
+    LOG_INFO("[Window] SDL Window created");
   }
 
   Window::~Window() {
@@ -56,7 +58,7 @@ namespace Core {
   void Window::destroy() {
     if (m_window) {
       SDL_DestroyWindow(m_window);
-      std::cout << "[GameContext] SDL Window destroyed\n";
+      LOG_INFO("[GameContext] SDL Window destroyed");
       m_window = nullptr;
     }
   }

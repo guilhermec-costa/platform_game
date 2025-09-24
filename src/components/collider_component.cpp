@@ -17,8 +17,8 @@ namespace Components {
     label         = std::make_unique<UI::Label>(
         text,
         FontManager::instance().get_asset("assets/fonts/YoungSerif-Regular.ttf"),
-        Vector2(pos.x, dim.y),
-        Vector2(100, 100));
+        Vector2(pos.x, dim.y - 20),
+        Vector2(80, 80));
   }
 
   ColliderComponent::~ColliderComponent() {}
@@ -32,21 +32,23 @@ namespace Components {
     return SDL_Rect{(int)position.x, (int)position.y, (int)dimension.x, (int)dimension.y};
   }
 
-  void ColliderComponent::render_collision_box(SDL_Renderer*       renderer,
-                                               const Core::Camera& camera,
-                                               const bool          follow_camera) {
+void ColliderComponent::render_collision_box(SDL_Renderer* renderer, const Core::Camera& camera, const bool follow_camera) {
     collision_box = get_rect();
     if (follow_camera) {
-      collision_box.x -= camera.get_position().x;
-      collision_box.y -= camera.get_position().y;
+        collision_box.x -= camera.get_position().x;
+        collision_box.y -= camera.get_position().y;
     }
 
-    SDL_SetRenderDrawColor(
-        renderer, drawing_color.r, drawing_color.g, drawing_color.b, drawing_color.a);
+    SDL_SetRenderDrawColor(renderer, drawing_color.r, drawing_color.g, drawing_color.b, drawing_color.a);
     SDL_RenderDrawRect(renderer, &collision_box);
-    label->render(renderer);
-  }
 
+    Vector2 label_pos = {position.x, position.y - 20};
+    if (follow_camera)
+        label_pos -= camera.get_position();
+    label->set_position(label_pos);
+
+    label->render(renderer);
+} 
   void ColliderComponent::set_position(const Vector2& pos) {
     position = pos + collision_offset;
   }

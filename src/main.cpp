@@ -7,8 +7,13 @@
 #include <SDL2/SDL_timer.h>
 
 #include "../include/game.hpp"
+#include "../include/logger.hpp"
+
 
 int main() {
+  Core::Logger::init();
+  LOG_INFO("Hello world");
+
   Core::GameSpecification game_spec;
   game_spec.window_spec.title  = "Genius Game platform";
   game_spec.window_spec.height = 600;

@@ -4,6 +4,8 @@
 
 #include <SDL2/SDL_mixer.h>
 
+#include "../../include/logger.hpp"
+
 namespace Managers {
 
   AudioManager& AudioManager::instance() {
@@ -31,7 +33,7 @@ namespace Managers {
     if (Mix_OpenAudio(frequency, format, channels, chunksize) < 0) {
       throw std::runtime_error("Failed to initialize SDL_mixer: " + std::string(Mix_GetError()));
     }
-    std::cout << "[AudioManager] SDL_mixer initialized\n";
+    LOG_INFO("[AudioManager] SDL_mixer initialized");
   }
 
   void AudioManager::play_sound(const GameAudioChannel& channel) {

@@ -4,6 +4,7 @@
 
 #include "../../include/asset_manager/font_manager.hpp"
 #include "../../include/game_context.hpp"
+#include "../../include/logger.hpp"
 
 namespace UI {
 
@@ -16,7 +17,7 @@ namespace UI {
 
   Label::~Label() {
     if (texture) {
-      std::cout << "Destroying texture\n";
+      LOG_DEBUG("Destroying texture");
       SDL_DestroyTexture(texture);
     }
   }
@@ -50,7 +51,7 @@ namespace UI {
       return;
 
     SDL_Renderer* renderer = Core::GameContext::instance().renderer;
-    SDL_Color     color    = {255, 0, 0, 255};
+    SDL_Color     color    = {255, 255, 255, 255};
     SDL_Surface*  surface  = TTF_RenderText_Blended(
         FontManager::instance().get_asset("assets/fonts/YoungSerif-Regular.ttf"),
         content.c_str(),
@@ -67,6 +68,8 @@ namespace UI {
       SDL_FreeSurface(surface);
       return;
     }
+    render_rect.w = surface->w;
+    render_rect.h = surface->h;
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     SDL_FreeSurface(surface);
   }

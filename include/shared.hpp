@@ -29,6 +29,12 @@ typedef struct Vector2 {
     return *this;
   };
 
+  Vector2 operator-=(const Vector2& vec) {
+    x -= vec.x;
+    y -= vec.y;
+    return *this;
+  };
+
   friend std::ostream& operator<<(std::ostream& os, const Vector2& v) {
     os << "X: " << v.x << " | Y: " << v.y << "\n";
     return os;

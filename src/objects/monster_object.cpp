@@ -2,6 +2,7 @@
 
 #include "../../include/asset_manager/texture_manager.hpp"
 #include "../../include/components/component_factory.hpp"
+#include "../../include/logger.hpp"
 
 MonsterObject::MonsterObject(const LevelData::MonsterData& data) :
   CharacterObject(data.position, data.dimension) {
@@ -27,7 +28,7 @@ MonsterObject::MonsterObject(const LevelData::MonsterData& data) :
 
   gravity    = data.gravity;
   move_speed = data.move_speed;
-  std::cout << to_string() << std::endl;
+  LOG_TRACE(to_string());
 }
 
 void MonsterObject::check_player_ground_collision() {

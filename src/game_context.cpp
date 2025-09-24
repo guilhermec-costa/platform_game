@@ -1,4 +1,5 @@
 #include "../include/game_context.hpp"
+#include "../include/logger.hpp"
 
 namespace Core {
 
@@ -32,7 +33,7 @@ namespace Core {
     if (!renderer) {
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     }
-    std::cout << "[GameContext] SDL Renderer created\n";
+    LOG_INFO("[GameContext] SDL Renderer created");
   }
 
   void GameContext::set_active_level(LevelData& level) {
@@ -52,9 +53,9 @@ namespace Core {
   void GameContext::end() {
     if (renderer) {
       SDL_DestroyRenderer(renderer);
-      std::cout << "[GameContext] SDL_Renderer destroyed";
+      LOG_INFO("[GameContext] SDL_Renderer destroyed");
       renderer = nullptr;
     }
-    std::cout << "[GameContext] Ended\n";
+    LOG_INFO("[GameContext] Ended");
   }
 } // namespace Core

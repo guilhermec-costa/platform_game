@@ -11,6 +11,7 @@
 #include "../../include/asset_manager/audio_manager.hpp"
 #include "../../include/asset_manager/json_manager.hpp"
 #include "../../include/game_layer.hpp"
+#include "../../include/logger.hpp"
 
 PlayLayer::PlayLayer() : GameLayer(), bg_parallax() {
   Vector2 win_dim = ctx.window.get_dimension();
@@ -207,7 +208,7 @@ void PlayLayer::update_level() {
   const float tile_side   = ctx.get_world_data().ground_tile_side;
   float       tile_height = win_dim.y - tile_side;
 
-  std::cout << "Level atualizado!\n";
+  LOG_INFO("Level updated!\n");
 }
 
 bool PlayLayer::is_key_down(SDL_Scancode scancode) const {

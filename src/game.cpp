@@ -20,7 +20,7 @@ namespace Core {
 
     WorldData  world  = GameDataManager::load_world();
     PlayerData player = GameDataManager::load_player(world);
-    LevelData  level1 = GameDataManager::load_level("assets/phases/level2.json", world);
+    LevelData  level1 = GameDataManager::load_level("assets/phases/level1.json", world);
     ctx.set_active_level(level1);
     ctx.game_data = GameData{player, world, level1};
   }
@@ -119,7 +119,7 @@ namespace Core {
   }
 
   void Game::quit() {
-    std::cout << "[Game] Quitting the game\n";
+    LOG_INFO("[Game] Quitting the game");
     running = false;
     ctx.end();
   }
