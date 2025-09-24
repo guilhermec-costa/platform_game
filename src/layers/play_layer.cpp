@@ -145,8 +145,7 @@ void PlayLayer::change_level(int level_id) {
     return;
 
   auto*     level_json     = Managers::JSONManager::instance().get_or_load(it->second);
-  LevelData new_level_data = LevelData::from_json(
-      *level_json, ctx.window.get_height(), ctx.game_data.world_data.max_horizontal_x);
+  LevelData new_level_data = LevelData::from_json(*level_json);
   ctx.set_active_level(new_level_data);
 
   update_level();

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <ostream>
+#include <sstream>
 
 typedef struct Vector2 {
   float x, y;
@@ -35,9 +36,21 @@ typedef struct Vector2 {
     return *this;
   };
 
+  Vector2 operator *=(const Vector2& vec) {
+    x *= vec.x;
+    y *= vec.y;
+    return *this;
+  }
+
   friend std::ostream& operator<<(std::ostream& os, const Vector2& v) {
     os << "X: " << v.x << " | Y: " << v.y << "\n";
     return os;
+  };
+
+  std::string to_string() {
+    std::ostringstream oss;
+    oss << "X: " << x << " | Y: " << y << "\n";
+    return oss.str();
   };
 
 } Vector2;

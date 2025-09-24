@@ -6,6 +6,7 @@
 
 #include "../../include/asset_manager/texture_manager.hpp"
 #include "../../include/game_context.hpp"
+#include "../../include/logger.hpp"
 #include "../../include/components/component_factory.hpp"
 
 PlayerObject::PlayerObject(const PlayerData& data) :
@@ -16,7 +17,7 @@ PlayerObject::PlayerObject(const PlayerData& data) :
 
   land_offset_pct = data.land_offset_pct;
   Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
-  collider_component = ComponentFactory::make_collider(data.position, collider_dim, Vector2{dimension.x * 0.35f, dimension.y * 0.43f});
+  collider_component = ComponentFactory::make_collider(data.position, collider_dim, Vector2{dimension.x * 0.35f, dimension.y * 0.43f}, "Player Collider");
 
   sword_collider_component = ComponentFactory::make_collider(
       collider_component->position, collider_component->dimension, Vector2{100, 0}, "Sword Collider");
@@ -157,9 +158,18 @@ void PlayerObject::update_animation(float dt) {
 }
 
 void PlayerObject::resize() {
-  auto& window = Core::GameContext::instance().window;
-  position.y   = m_metadata.screen_height_pct * window.get_height();
+    LOG_INFO("Resizing player");
+    auto& window = Core::GameContext::instance().window;
+    const auto& world_data = Core::GameContext::instance().game_data.world_data;
+
+    float scale_x = window.get_width() / world_data.max_horizontal_x;
+    float scale_y = window.get_height() / 600.0f;
+
+    collider_component->set_position(Vector2{position.x * scale_x, position.y * scale_y});
+    animated_sprite.set_scale(Vector2{scale_x, scale_y});
 }
+
+
 
 void PlayerObject::check_player_window_collision() {
   const auto& world_data       = ctx.game_data.world_data;

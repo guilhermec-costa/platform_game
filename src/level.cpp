@@ -1,13 +1,13 @@
 #include "../include/level.hpp"
 
-LevelData LevelData::from_json(const json& j, float screen_height, int world_width) {
+LevelData LevelData::from_json(const json& j) {
   LevelData level;
 
   level.name = j["name"];
 
   for (const auto& p : j["platforms"]) {
     LevelData::PlatformData platform{
-        .position  = {p["x"].get<float>() * world_width, p["y"].get<float>() * screen_height},
+        .position  = {p["x"].get<float>(), p["y"].get<float>()},
         .dimension = {p["width"].get<float>(), p["height"].get<float>()},
         .screen_height_pct = p["y"].get<float>()};
     level.platforms.push_back(platform);
@@ -15,8 +15,8 @@ LevelData LevelData::from_json(const json& j, float screen_height, int world_wid
 
   for (const auto& m : j["monsters"]) {
     MonsterData monster;
-    monster.position.x   = m.at("position").at(0).get<float>() * world_width;
-    monster.position.y   = m.at("position").at(1).get<float>() * screen_height;
+    monster.position.x   = m.at("position").at(0).get<float>();
+    monster.position.y   = m.at("position").at(1).get<float>();
     monster.dimension.x  = m.at("dimension").at(0).get<float>();
     monster.dimension.y  = m.at("dimension").at(1).get<float>();
     monster.move_speed   = m.value("speed", 50.0f);
@@ -29,15 +29,15 @@ LevelData LevelData::from_json(const json& j, float screen_height, int world_wid
   return level;
 }
 
-PlayerData PlayerData::from_json(const json& j, float screen_height, float world_width) {
+PlayerData PlayerData::from_json(const json& j) {
   PlayerData player_data;
   auto       player           = j["player"];
   auto       player_position  = player["position"];
   auto       player_dimension = player["dimension"];
   auto       player_attrs     = player["attrs"];
 
-  player_data.position = Vector2{player_position["x"].get<float>() * world_width,
-                                 player_position["y"].get<float>() * screen_height};
+  player_data.position = Vector2{player_position["x"].get<float>(),
+                                 player_position["y"].get<float>()};
 
   player_data.screen_height_pct = player_position["y"].get<float>();
 

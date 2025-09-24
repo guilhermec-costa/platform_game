@@ -93,4 +93,9 @@ namespace Components {
     horizontally_flipped = flipped;
   }
 
+  void AnimatedSpriteComponent::set_scale(const Vector2& s) {
+    scale = s;
+    render_dim *= s;
+  }
+
 } // namespace Components

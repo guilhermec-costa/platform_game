@@ -30,7 +30,6 @@ namespace Core {
     const LevelData&  get_active_level() const;
     const PlayerData& get_player_data() const;
     const WorldData&  get_world_data() const;
-    const GameData&   get_game_data() const;
 
     GameContext();
     ~GameContext();

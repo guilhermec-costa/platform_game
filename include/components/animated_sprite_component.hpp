@@ -42,6 +42,7 @@ namespace Components {
     void play_animation(int animation_idx);
 
     void set_flipped(bool flipped);
+    void set_scale(const Vector2& scale);
 
   private:
     TextureComponent                   texture;
@@ -57,6 +58,7 @@ namespace Components {
     float                              elapsed_time         = 0.0f;
     bool                               horizontally_flipped = false;
     int                                current_animaton_idx = -1;
+    Vector2 scale{0.0f,0.0f};
   };
 
 } // namespace Components

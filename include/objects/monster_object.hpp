@@ -4,9 +4,9 @@
 
 #include "../level.hpp"
 #include "character_object.hpp"
-#include "player_object.hpp"
 
-enum class MonsterAnimation { IDLE, ATTACK };
+enum class MonsterAnimation { IDLE, ATTACK, WALKING };
+enum class MonsterMovementState { IDLE, WALKING };
 
 class MonsterObject : public CharacterObject {
 public:
@@ -22,5 +22,7 @@ public:
   void resize();
 
 private:
-  MovementState movement_state = MovementState::IDLE;
+  MonsterMovementState movement_state = MonsterMovementState::IDLE;
+  float patrol_min_x, patrol_max_x = 0;
+  int direction = 1;
 };

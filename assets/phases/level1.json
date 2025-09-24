@@ -1,34 +1,34 @@
 {
   "name": "Phase 1",
   "platforms": [
-    { "x": 0.1667, "y": 0.75, "width": 200, "height": 50 },
-    { "x": 0.3, "y": 0.75, "width": 200, "height": 50 },
-    { "x": 0.45, "y": 0.75, "width": 300, "height": 50 }
+    { "x": 150, "y": 300, "width": 200, "height": 50 },
+    { "x": 600, "y": 300, "width": 200, "height": 50 },
+    { "x": 1000, "y": 300, "width": 300, "height": 50 }
   ],
   "monsters": [
     {
-      "position": [0.1, 0.25],
+      "position": [100, 200],
       "dimension": [250, 250],
-      "speed": 80.0,
+      "speed": 120.0,
       "gravity": 500.0,
-      "patrol_min_x": 100.0,
-      "patrol_max_x": 500.0
+      "patrol_min_x": 100,
+      "patrol_max_x": 500
     },
     {
-      "position": [0.2, 0.25],
+      "position": [300, 200],
       "dimension": [250, 250],
-      "speed": 80.0,
+      "speed": 120.0,
       "gravity": 500.0,
-      "patrol_min_x": 100.0,
-      "patrol_max_x": 500.0
+      "patrol_min_x": 100,
+      "patrol_max_x": 500
     },
     {
-      "position": [0.3, 0.25],
+      "position": [500, 200],
       "dimension": [250, 250],
-      "speed": 80.0,
+      "speed": 120.0,
       "gravity": 500.0,
-      "patrol_min_x": 100.0,
-      "patrol_max_x": 500.0
+      "patrol_min_x": 100,
+      "patrol_max_x": 500
     }
   ]
 }

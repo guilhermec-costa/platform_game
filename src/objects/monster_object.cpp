@@ -5,14 +5,14 @@
 #include "../../include/logger.hpp"
 
 MonsterObject::MonsterObject(const LevelData::MonsterData& data) :
-  CharacterObject(data.position, data.dimension) {
+  CharacterObject(data.position, data.dimension), patrol_min_x(data.patrol_min_x), patrol_max_x(data.patrol_max_x) {
   auto texture = Managers::TextureManagerSingleton::instance().get_asset(
       "assets/images/enemy1_spritesheet.png");
   Vector2 tex_dim = Managers::TextureManagerSingleton::instance().get_texture_dimension(texture);
 
   Vector2 collider_dim{dimension.x * 0.5f, dimension.y * 0.7f};
   collider_component = ComponentFactory::make_collider(
-      data.position, collider_dim, Vector2{dimension.x * 0.25f, dimension.y * 0.1f});
+      data.position, collider_dim, Vector2{dimension.x * 0.25f, dimension.y * 0.1f}, "Monster");
 
   animated_sprite = Components::AnimatedSpriteComponent(
       Components::TextureComponent(texture, {0, 0}, {tex_dim.x, tex_dim.y}),
@@ -24,7 +24,7 @@ MonsterObject::MonsterObject(const LevelData::MonsterData& data) :
   animated_sprite.add_animation(
       static_cast<int>(MonsterAnimation::IDLE), "idle", 0, 7, 0.099f, true);
   animated_sprite.add_animation(
-      static_cast<int>(MonsterAnimation::ATTACK), "attack", 9, 15, 0.099f, false);
+      static_cast<int>(MonsterAnimation::WALKING), "walking", 8, 15, 0.1f);
 
   gravity    = data.gravity;
   move_speed = data.move_speed;
@@ -45,23 +45,47 @@ void MonsterObject::check_player_ground_collision() {
 }
 
 void MonsterObject::update(float dt) {
-  CharacterObject::update(dt);
-  check_player_ground_collision();
+    velocity.x = move_speed * direction;
+    LOG_TRACE("Monster velocity: {}", velocity.to_string());
+    position.x += velocity.x * dt;
+
+    if (position.x < patrol_min_x) {
+        position.x = patrol_min_x;
+        direction = 1;
+    } else if (position.x > patrol_max_x) {
+        position.x = patrol_max_x;
+        direction = -1;
+    }
+
+    velocity.y += gravity * dt;
+    position.y += velocity.y * dt;
+    check_player_ground_collision();
+
+    collider_component->set_position(position);
+
+    update_animation(dt);
 }
 
 void MonsterObject::update_animation(float dt) {
-  animated_sprite.set_flipped(velocity.x < 0);
   switch (movement_state) {
-    case MovementState::IDLE:
-      animated_sprite.play_animation((int)MonsterAnimation::IDLE);
-      break;
-    default:
-      break;
+      case MonsterMovementState::WALKING: {
+        animated_sprite.play_animation((int)MonsterAnimation::WALKING);
+        break;
+      }
+      case MonsterMovementState::IDLE: {
+        animated_sprite.play_animation((int)MonsterAnimation::IDLE);
+        break;
+      }
   }
+  animated_sprite.set_flipped(velocity.x < 0);
   animated_sprite.update(dt);
 }
 
-void MonsterObject::update_state() {}
+void MonsterObject::update_state() {
+  if(std::abs(velocity.x) > 0) {
+    movement_state = MonsterMovementState::WALKING;
+  }
+}
 
 void MonsterObject::resize() {}
 

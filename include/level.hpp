@@ -23,7 +23,7 @@ struct LevelData {
   std::string               name;
   std::vector<PlatformData> platforms;
   std::vector<MonsterData>  monsters;
-  static LevelData          from_json(const json& j, float screen_height, int world_width);
+  static LevelData          from_json(const json& j);
 };
 
 struct WorldData {
@@ -45,7 +45,7 @@ struct PlayerData {
     float max_fall_speed;
   } attrs;
 
-  static PlayerData from_json(const json& j, float screen_height, float world_width);
+  static PlayerData from_json(const json& j);
 };
 
 struct GameData {
