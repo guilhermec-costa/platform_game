@@ -36,7 +36,7 @@ namespace Components {
 
   public:
     Vector2                    position;
-    Vector2                    scale{1.0f,1.0f};
+    Vector2                    scale = {1.0f, 1.0f};
     Vector2                    dimension;
     SDL_Rect                   collision_box;
     Vector2                    collision_offset{0, 0};

@@ -14,7 +14,6 @@ public:
   void update(float dt) override;
   void render(SDL_Renderer* renderer, const Core::Camera& camera) override;
   void update_animation(float dt) override;
-  void check_player_ground_collision();
   void update_state() override;
   void resize();
 

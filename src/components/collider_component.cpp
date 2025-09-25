@@ -38,7 +38,6 @@ namespace Components {
   void ColliderComponent::render_collision_box(SDL_Renderer*       renderer,
                                                const Core::Camera& camera,
                                                const bool          follow_camera) {
-    // usa get_rect já escalado
     collision_box = get_rect();
     if (follow_camera) {
       collision_box.x -= camera.get_position().x;

@@ -35,15 +35,15 @@ void PlayLayer::update(float dt) {
   for (const auto& monster : monsters)
     monster->update(dt);
 
-  check_player_platform_collision();
-  check_monster_platform_collision();
+  check_objects_ground_collision();
+  check_objects_platforms_collision();
   ctx.camera.follow(player->get_collider_component().position);
   ctx.camera.update(world_data.min_horizontal_x, world_data.max_horizontal_x);
   bg_parallax.update(ctx.camera.get_position().x);
 }
 
 void PlayLayer::resolve_platform_collision(CharacterObject& obj, const PlatformObject& platform) {
-  SDL_Rect        obj_rect = obj.get_collider_component().get_rect();
+  const SDL_Rect        obj_rect = obj.get_collider_component().get_rect();
   const SDL_Rect& plt_rect = platform.get_collider_component().get_rect();
 
   if (!SDL_HasIntersection(&obj_rect, &plt_rect))
@@ -75,15 +75,29 @@ void PlayLayer::resolve_platform_collision(CharacterObject& obj, const PlatformO
   }
 }
 
-void PlayLayer::check_player_platform_collision() {
-  for (const auto& p : platforms) {
-    resolve_platform_collision(*player, *p);
+void PlayLayer::resolve_global_ground_collision(CharacterObject& obj) {
+  const SDL_Rect& obj_rect = obj.get_collider_component().get_rect();
+  const SDL_Rect& ground_rect = ctx.global_ground->get_collider_component().get_rect();
+
+  if (SDL_HasIntersection(&obj_rect, &ground_rect)) {
+    float ground_top = static_cast<float>(ground_rect.y);
+    obj.land_on(ground_top);
+  } else {
+    obj.set_on_ground(false);
   }
 }
 
-void PlayLayer::check_monster_platform_collision() {
+void PlayLayer::check_objects_ground_collision() {
+  resolve_global_ground_collision(*player);
   for (auto& m : monsters) {
-    for (const auto& p : platforms) {
+    resolve_global_ground_collision(*m);
+  }
+}
+
+void PlayLayer::check_objects_platforms_collision() {
+  for (const auto& p : platforms) {
+    resolve_platform_collision(*player, *p);
+    for (auto& m : monsters) {
       resolve_platform_collision(*m, *p);
     }
   }

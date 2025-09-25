@@ -10,6 +10,13 @@
 #include "../include/logger.hpp"
 
 int main() {
+#ifdef SPDLOG_COMPILED_LIB
+  std::cout << "Usando versão COMPILADA do spdlog\n";
+#else
+  std::cout << "Usando versão HEADER-ONLY do spdlog\n";
+#endif
+  spdlog::info("Hello World");
+
   Core::Logger::init();
   LOG_INFO("Hello world");
 

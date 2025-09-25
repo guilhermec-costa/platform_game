@@ -19,7 +19,6 @@ public:
   void resize();
   void update_state() override;
   void update_animation(float dt) override;
-  void check_player_ground_collision();
   void check_player_window_collision();
 
 public:

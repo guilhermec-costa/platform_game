@@ -8,27 +8,30 @@
   "monsters": [
     {
       "position": [225, 50],
-      "dimension": [250, 250],
+      "dimension": [300, 250],
       "speed": 120.0,
       "gravity": 500.0,
       "patrol_min_x": 150,
-      "patrol_max_x": 300
+      "patrol_max_x": 300,
+      "collider": { "x": 350, "y": 100, "width": 120, "height": 170}
     },
     {
       "position": [675, 50],
-      "dimension": [250, 250],
+      "dimension": [300, 250],
       "speed": 120.0,
       "gravity": 500.0,
       "patrol_min_x": 600,
-      "patrol_max_x": 750
+      "patrol_max_x": 750,
+      "collider": { "x": 675, "y": 50, "width": 300, "height": 250 }
     },
     {
       "position": [1125, 50],
-      "dimension": [250, 250],
+      "dimension": [300, 250],
       "speed": 120.0,
       "gravity": 500.0,
       "patrol_min_x": 1000,
-      "patrol_max_x": 1250
+      "patrol_max_x": 1250,
+      "collider": { "x": 1125, "y": 50, "width": 300, "height": 250 }
     }
   ]
 }

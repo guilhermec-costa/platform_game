@@ -10,23 +10,27 @@
 #include "../../include/logger.hpp"
 
 PlayerObject::PlayerObject(const PlayerData& data) :
-  m_metadata(data), CharacterObject(data.position, data.dimension) {
-  auto texture =
-      Managers::TextureManagerSingleton::instance().get_asset("assets/images/nigthborne.png");
-  Vector2 tex_dim = Managers::TextureManagerSingleton::instance().get_texture_dimension(texture);
+    m_metadata(data),
+    CharacterObject(data.position, data.dimension) {
+
+  auto texture = Managers::TextureManagerSingleton::instance()
+                     .get_asset("assets/images/nigthborne.png");
+  Vector2 tex_dim = Managers::TextureManagerSingleton::instance()
+                        .get_texture_dimension(texture);
 
   land_offset_pct = data.land_offset_pct;
-  Vector2 collider_dim{dimension.x * 0.32f, dimension.y * 0.37f};
-  collider_component =
-      ComponentFactory::make_collider(data.position,
-                                      collider_dim,
-                                      Vector2{dimension.x * 0.35f, dimension.y * 0.43f},
-                                      "Player Collider");
 
-  sword_collider_component = ComponentFactory::make_collider(collider_component->position,
-                                                             collider_component->dimension,
-                                                             Vector2{100, 0},
-                                                             "Sword Collider");
+  collider_component = ComponentFactory::make_collider(
+      data.collider.position,
+      data.collider.dimension,
+      Vector2{dimension.x * 0.35f, dimension.y * 0.43f},
+      "Player Collider");
+
+  sword_collider_component = ComponentFactory::make_collider(
+      collider_component->position,
+      collider_component->dimension,
+      Vector2{100, 0},
+      "Sword Collider");
   sword_collider_component->set_drawing_color({0, 0, 255, SDL_ALPHA_OPAQUE});
 
   animated_sprite = Components::AnimatedSpriteComponent(
@@ -50,21 +54,7 @@ PlayerObject::PlayerObject(const PlayerData& data) :
 void PlayerObject::update(float dt) {
   CharacterObject::update(dt);
   sword_collider_component->set_position(collider_component->position);
-  check_player_ground_collision();
   check_player_window_collision();
-}
-
-void PlayerObject::check_player_ground_collision() {
-  const SDL_Rect& player_rect = collider_component->get_rect();
-  const SDL_Rect& ground_rect =
-      Core::GameContext::instance().global_ground->get_collider_component().get_rect();
-
-  if (SDL_HasIntersection(&player_rect, &ground_rect)) {
-    float ground_top = static_cast<float>(ground_rect.y);
-    land_on(ground_top);
-  } else {
-    set_on_ground(false);
-  }
 }
 
 void PlayerObject::render(SDL_Renderer* renderer, const Core::Camera& camera) {
@@ -168,12 +158,10 @@ void PlayerObject::resize() {
   auto&       window     = Core::GameContext::instance().window;
   const auto& world_data = Core::GameContext::instance().game_data.world_data;
 
-  // escala apenas horizontal
   float scale_x = static_cast<float>(window.get_width()) / world_data.max_horizontal_x;
 
-  // ajusta posição e escala horizontal
-  collider_component->set_scale(Vector2{position.x * scale_x, position.y}); // Y não muda
-  animated_sprite.set_scale(Vector2{scale_x, 1.0f});                        // escala só X
+  collider_component->set_scale(Vector2{position.x * scale_x, position.y});
+  animated_sprite.set_scale(Vector2{scale_x, 1.0f});
 }
 
 void PlayerObject::check_player_window_collision() {

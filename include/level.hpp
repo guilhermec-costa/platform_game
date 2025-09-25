@@ -3,6 +3,11 @@
 #include "asset_manager/json_alias.hpp"
 #include "shared.hpp"
 
+struct ColliderData {
+  Vector2 position;
+  Vector2 dimension;
+};
+
 struct LevelData {
   struct PlatformData {
     Vector2 position;
@@ -10,12 +15,13 @@ struct LevelData {
     float   screen_height_pct;
   };
   struct MonsterData {
-    Vector2 position     = {0, 0};
-    Vector2 dimension    = {100, 100};
-    float   move_speed   = 50.0f;
-    float   gravity      = 1200.0f;
-    float   patrol_min_x = 0.0f;
-    float   patrol_max_x = 0.0f;
+    Vector2      position     = {0, 0};
+    Vector2      dimension    = {100, 100};
+    float        move_speed   = 50.0f;
+    float        gravity      = 1200.0f;
+    float        patrol_min_x = 0.0f;
+    float        patrol_max_x = 0.0f;
+    ColliderData collider;
 
     MonsterData() = default;
   };
@@ -44,6 +50,7 @@ struct PlayerData {
     float gravity;
     float max_fall_speed;
   } attrs;
+  ColliderData collider;
 
   static PlayerData from_json(const json& j);
 };

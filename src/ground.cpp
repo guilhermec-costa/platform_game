@@ -21,6 +21,7 @@ void Ground::render() {
     SDL_Rect rect = {x, static_cast<int>(y), tile_side, tile_side};
     SDL_RenderCopy(ctx.renderer, ground_tile, nullptr, &rect);
   }
+  // collider.render_collision_box(ctx.renderer, ctx.camera);
 }
 
 void Ground::resize(int new_width, int new_height) {

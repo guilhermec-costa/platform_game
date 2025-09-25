@@ -58,9 +58,10 @@ public:
   void update(float dt) override;
   void render() override;
   void update_level();
-  void check_player_platform_collision();
-  void check_monster_platform_collision();
   void resolve_platform_collision(CharacterObject& obj, const PlatformObject& platform);
+  void resolve_global_ground_collision(CharacterObject& obj);
+  void check_objects_ground_collision();
+  void check_objects_platforms_collision();
   void change_level(int level_id);
 
 private:

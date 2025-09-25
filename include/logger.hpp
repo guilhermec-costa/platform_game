@@ -12,7 +12,7 @@ namespace Core {
       if (!s_instance) {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         console_sink->set_level(spdlog::level::trace);
-        console_sink->set_pattern("[%T] [%^%l%$] %v");
+        console_sink->set_pattern("[%T]  [%^%l%$] %v");
 
         s_instance = std::make_shared<spdlog::logger>("game_logger", console_sink);
         s_instance->set_level(spdlog::level::trace);

@@ -5,6 +5,12 @@
       "height": 380.0,
       "width": 380.0
     },
+    "collider": {
+      "x": 0.0,
+      "y": 0.0,
+      "width": 150.0,
+      "height": 140.0
+    },
     "land_offset_pct": 0.21,
     "attrs": {
       "move_speed": 480.0,
